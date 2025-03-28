@@ -1,0 +1,56 @@
+<router-outlet></router-outlet>
+
+<nav class="navbar">
+    <div class="navbar-left">
+        <span class="navbar-brand">
+            NABEEY
+        </span>
+    </div>
+
+    <div class="navlink-container">
+        <div class="navbar-right">
+            <a class="nav-link" routerLink="/category">All Contents</a>
+            <a class="nav-link" routerLink="/categories" *ngIf="userRole !== 'User'">Categories</a>
+            <a class="nav-link profile-link" [matMenuTriggerFor]="contentMenu">
+             <span class="mr-2">Mavzular</span>
+              <mat-icon class="!text-yellow-400">folder</mat-icon>
+          </a>
+          
+          <mat-menu #contentMenu="matMenu">
+              <button mat-menu-item routerLink="/article">
+                  <mat-icon class="!text-blue-300">article</mat-icon>
+                  <span>Maqolalar</span>
+              </button>
+              <button mat-menu-item routerLink="/books">
+                  <mat-icon class="!text-blue-300">menu_book</mat-icon>
+                  <span>Kitoblar</span>
+              </button>
+              <button mat-menu-item routerLink="/videos">
+                  <mat-icon class="!text-blue-300">videocam</mat-icon>
+                  <span>Videolar</span>
+              </button>
+          </mat-menu>
+          
+
+            <a class="nav-link" routerLink="/questions" *ngIf="userRole !== 'User'">Savollar</a>
+            <a class="nav-link" routerLink="/quiz">Viktorina</a>
+
+              <a class="nav-link profile-link" [matMenuTriggerFor]="profileMenu">
+                <mat-icon>person</mat-icon> Profile 
+              </a>
+              
+              <mat-menu #profileMenu="matMenu">
+                <button mat-menu-item routerLink="/profile">
+                  <mat-icon>account_circle</mat-icon>
+                  <span>Account</span>  
+                </button>
+                
+                <button mat-menu-item (click)="openConfirmationLog()">
+                  <mat-icon>exit_to_app</mat-icon>
+                  <span>Log Out</span>
+                </button>
+              </mat-menu>
+
+        </div>
+    </div>
+</nav>

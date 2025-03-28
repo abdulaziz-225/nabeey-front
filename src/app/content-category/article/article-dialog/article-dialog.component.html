@@ -1,0 +1,45 @@
+<h3 class="!m-0 p-2">Maqola qo'shing</h3>
+
+<form [formGroup]="articleForm" class="p-4 max-w-lg mx-auto">
+    <div class="mb-4">
+      <mat-form-field class="w-full">
+        <mat-label>Maqola</mat-label>
+        <input matInput formControlName="text" placeholder="Maqolangiz" />
+        <mat-error *ngIf="articleForm.get('text')?.hasError('required')">
+          Maqolangizni kiriting
+        </mat-error>
+      </mat-form-field>
+    </div>
+  
+    <div>
+      <mat-form-field class="w-full">
+        <mat-label>Kategoriya</mat-label>
+        <mat-select formControlName="categoryId" placeholder="Select category">
+          <mat-option *ngFor="let category of categories" [value]="category.id">
+            {{ category.name }}
+          </mat-option>
+
+        </mat-select>
+        <mat-error *ngIf="articleForm.get('categoryId')?.hasError('required')">
+          Kategoriya tanlash majburiy!
+        </mat-error>
+      </mat-form-field>
+    </div>
+  
+    <div class="!mt-0 mb-6 image-upload">
+        <img [src]="imagePreview" alt="Article Image" class="profile-image" *ngIf="imagePreview">
+        <label class="custom-file-upload"> {{ imagePreview ? "Rasmni Almashtirish" : "Rasm Qo'yish" }}
+        <input type="file" (change)="onFileSelected($event)" />
+    </label>
+    </div>
+  
+    <div class=" gap-[10px] flex justify-end mb-3">
+      <button mat-raised-button class="!bg-gray-300" (click)="onClose()">
+        Bekor Qilish
+      </button>
+      <button mat-raised-button color="primary" [disabled]="articleForm.invalid" (click)="createArticle()">
+        Qo'shish
+      </button>
+    </div>
+  </form>
+  

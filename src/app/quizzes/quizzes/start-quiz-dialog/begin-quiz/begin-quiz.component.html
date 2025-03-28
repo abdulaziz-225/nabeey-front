@@ -1,0 +1,87 @@
+<div class="w-full h-full flex justify-center items-center bg-gray-200">
+    <!-- X tugmachasi tepada -->
+    <p class="absolute top-2 right-40 text-xl cursor-pointer text-gray-500 flex items-center gap-2"  *ngIf="!isQuizFinished" (click)=" goToHome()">
+        <span class="text-2xl">&#10006;</span> Testni Yakunlash
+      </p>
+      
+  
+    <ng-container *ngIf="countdown > 0" class="text-center">
+      <h2 class="!text-8xl !font-bold !text-center animate__animated animate__bounceIn">{{ countdown }}</h2>
+    </ng-container>
+
+    <ng-container *ngIf="showLetsGoMessage" class="text-center">
+        <h2 class="!text-5xl !font-bold animate__animated  animate__zoomIn animate__delay-0.5s animate__faster">Qani ketdik!</h2>
+      </ng-container>
+
+    <div class="bg-white p-6 rounded-lg shadow-lg w-[70%]" *ngIf="!isQuizFinished && !showLetsGoMessage && countdown === 0">
+  
+      <ng-container>
+        <h2 class="text-4xl font-bold text-center">{{ data.book.title }} Testi</h2>
+        <p class="text-gray-600 text-xl text-center">Savol {{ currentQuestionIndex + 1 }} / {{ data.book.questions.length }}</p>
+        
+         <!-- Timer -->
+    <div class="relative w-full bg-gray-300 h-3 mt-2 rounded-full">
+        <div 
+          class="absolute h-3 bg-blue-500 rounded-full transition-all"
+          [style.width]="(timeLeft / 30) * 100 + '%'">
+        </div>
+      </div>
+      <p class="text-right text-sm text-gray-500 mt-1">{{ timeLeft }} sek</p>
+
+        <div class="mt-6 text-center">
+          <p class="text-2xl font-semibold animate__animated animate__fadeIn">{{ currentQuestion.text }}</p>
+
+          <ul class="mt-4 space-y-4 w-[70%] mx-auto">
+            <li *ngFor="let answer of currentQuestion.answers"
+                (click)="checkAnswer(answer.isTrue, answer.text)"
+                class="border p-4 rounded-lg cursor-pointer text-xl transition-all duration-300"
+                [ngClass]="{
+                  'bg-emerald-100 border text-green-600': selectedAnswer === answer.text && answer.isTrue,
+                  'bg-red-100 text-red-700': selectedAnswer === answer.text && !answer.isTrue,
+                  'bg-sky-50 border-sky-300': selectedAnswer !== answer.text
+                }">
+              {{ answer.text }}
+            </li>
+          </ul>
+          
+        </div>
+  
+        <div class="mt-6 flex justify-end gap-4">
+          <button mat-button color="primary" class="text-xl px-6 py-3" [disabled]="!selectedAnswer" (click)="nextQuestion()">
+            Keyingi
+          </button>
+
+        </div>
+      </ng-container>
+    </div>
+  </div>
+
+  <div *ngIf="isQuizFinished" class="h-screen w-screen flex flex-col justify-center items-center text-white result-screen"
+  [ngClass]="quizResult.bg">
+  
+  <!-- GIF -->
+  <img [src]="quizResult.gif" alt="Natija holati" class="w-[320px] h-[220px] md:w-[350px] md:h-[250px] mb-4 animate__animated animate__bounceIn">
+
+  <!-- Natija xabari -->
+  <h2 class="text-5xl md:text-6xl font-extrabold text-center animate__animated animate__rubberBand 
+             leading-snug md:leading-normal tracking-wide max-w-2xl"
+      style="white-space: pre-line;">
+    {{ quizResult.message }}
+  </h2>
+
+  <!-- Tugmalar -->
+  <div class="mt-6 flex gap-4">
+    <button (click)="restartQuiz()" 
+      class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition-all duration-300">
+      🔄 Qayta ishlash
+    </button>
+
+    <button (click)="goToHome()" 
+      class="bg-gray-600 hover:bg-gray-700 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition-all duration-300">
+      🔙 Asosiy sahifaga qaytish
+    </button>
+  </div>
+</div>
+
+
+  

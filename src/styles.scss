@@ -1,0 +1,57 @@
+/* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.container {
+    width: 80%;
+    margin: auto;
+    overflow: hidden;
+  }
+
+  .space-error {
+    height: 14px;
+}
+
+.image-upload {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+
+  .profile-image {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+  }
+
+  input[type="file"] {
+    margin-top: 10px;
+  }
+}
+
+.custom-file-upload {
+  display: inline-block;
+  margin-top: 2px;
+  padding: 6px 12px;
+  cursor: pointer;
+  background-color: #4c7cf3;
+  color: white;
+  border-radius: 4px;
+}
+
+.custom-file-upload input {
+  display: none;
+}

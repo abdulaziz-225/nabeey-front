@@ -1,0 +1,56 @@
+
+<div class="container">
+    <p class="py-4 text-center font-medium text-[20px]"> {{ isEdit ? 'Edit Category' : 'Add Category' }}</p>
+  
+    <div class="!p-0">
+    
+      <div class="text-center mb-3">
+        <img 
+          [src]="imagePreview ? imagePreview : 'assets/Default_pfp.svg.png'" 
+          alt="Category Image" 
+          class="rounded-full mx-auto"
+          style="width: 100px; height: 100px;">
+      </div>
+    
+      <!-- Form Fields -->
+      <form [formGroup]="categoryForm" class="space-y-3">
+
+        <div class="mb-4">
+          <mat-form-field class="w-full">
+            <mat-label>Nom</mat-label>
+            <input matInput formControlName="name" placeholder="Kategoriya Nomi" />
+            <mat-error *ngIf="categoryForm.get('name')?.hasError('required')">
+              Nom kiritng.
+            </mat-error>
+          </mat-form-field>
+        </div>
+        
+        <div>
+          <mat-form-field class="w-full">
+            <mat-label>Ta'rif</mat-label>
+            <input matInput formControlName="description" placeholder="Ma'lumot bering" />
+            <mat-error *ngIf="categoryForm.get('description')?.hasError('required')">
+              Qisqacha ma'lumot bering
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-group">
+          <label for="image" class="block font-medium text-gray-700 custom-file-upload w-full text-center !m-0"> {{imagePreview ? 'Rasm Almashtirish' : "Rasm Qo'yish"}}
+          <input type="file" id="image" class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md 
+          file:border-0 file:text-sm file:bg-indigo-50 file:text-indigo-600 hover:file:bg-indigo-100" (change)="onFileSelected($event)">
+        </label>
+        </div>
+      </form>
+    </div>
+
+    <div class=" gap-[10px] flex justify-end mb-3 mt-7">
+      <button mat-raised-button class="!bg-gray-300" (click)="onClose()">
+        Bekor Qilish
+      </button>
+      <button mat-raised-button color="primary" [disabled]="categoryForm.invalid" (click)="save()">
+        Qo'shish
+      </button>
+    </div>
+  
+  

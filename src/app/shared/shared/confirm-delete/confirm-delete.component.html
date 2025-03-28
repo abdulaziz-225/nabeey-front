@@ -1,0 +1,11 @@
+<div class="wrapper"> 
+
+    <h1 mat-dialog-title class="!m-0">Tasdiqlang!!!</h1>
+    <div mat-dialog-content class="mat-dialog-content">
+      <p>{{data.message}}</p>
+    </div>
+    <div class="flex justify-evenly gap-x-2 px-3">
+      <button mat-raised-button color="primary" (click)="onCancel()">Bekor Qilish</button>
+      <button mat-raised-button color="warn" (click)="onConfirm()">O'chirish</button>
+    </div>
+  </div>

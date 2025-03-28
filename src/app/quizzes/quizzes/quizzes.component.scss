@@ -1,0 +1,44 @@
+.correct {
+    background-color: green;
+    color: white;
+  }
+  
+  .incorrect {
+    background-color: red;
+    color: white;
+  }
+  
+  .default {
+    background-color: white;
+    color: black;
+  }
+
+  .navbar{
+    display: flex;
+    align-items: center;
+    background-color: #4c7cf3;
+    color: #fff;
+    padding: 22px 25px;
+    position: relative;
+}
+
+.navbar-brand{
+    font-size: 20px;
+    padding-left: 135px;
+    color: #fff;
+  }
+
+  .circle-button{
+    position: absolute  ;
+    background-color: red;
+    border-radius: 50%;
+    height: 34px;
+    width: 34px;
+    top: 15px;
+    left: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+  }

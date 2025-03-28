@@ -1,0 +1,14 @@
+<app-home></app-home>
+
+<button mat-butto class="bg-gray-500 m-2 text-white py-2 px-4 rounded-[6px]" (click)="openDialog(false)" *ngIf="userRole === 'Admin'">Kitob Qo'shish</button>
+
+<p class="p-0 font-medium italic text-center text-2xl" [ngClass]="{'!mt-7': userRole === 'User'}">O'zizga kerakli bo'lgan kitoblarni yuklab olishingiz yoki <br> boshqalarga manfaatli bo'ladigan kitoblarni yuklashingiz mumkin.</p>
+<div class="container flex justify-around flex-wrap gap-y-5 py-7">
+
+    <ng-container *ngFor="let book of books let i = index">
+        <app-book [book]="book" (edit)="openDialog(true, i)" (delete)="confirmDeleteBook(book.id)">
+            
+        </app-book>
+        
+    </ng-container>
+</div>

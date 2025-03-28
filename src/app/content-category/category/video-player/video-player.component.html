@@ -1,0 +1,20 @@
+<div class="pt-2"> 
+  <div class="px-4 bg-white rounded-lg w-[430px]">
+      <iframe
+        class="w-full h-[350px] rounded-lg"
+        [src]="embedLink | safeUrl"
+        frameborder="0"
+        allowfullscreen>
+      </iframe>
+      
+      
+    </div>
+    <p class="px-4 pt-2 font-medium text-2xl"> {{video.description}} </p>
+
+    <div class="w-full overflow-hidden flex items-center justify-end gap-x-5" *ngIf="userRole === 'Admin'">
+                
+      <!-- <button class="bg-blue-500 text-white w-[50px] h-[40px] rounded" (click)="onEdit()"> <mat-icon>edit</mat-icon></button> -->
+      <button class="bg-red-500 text-white w-[50px] h-[40px] rounded mr-4" (click)="onDelete()"> <mat-icon>delete</mat-icon></button>
+ </div>
+    </div>
+  

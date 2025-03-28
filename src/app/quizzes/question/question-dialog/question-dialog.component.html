@@ -1,0 +1,29 @@
+<div class="container">
+<h2 class="pt-3">{{ isEdit ? 'Savolni tahrirlash' : 'Savol tuzish' }}</h2>
+
+<div  class="!p-0">
+
+    <form [formGroup]="questionForm" class="space-y-3">
+
+        <div class="mb-4">
+          <mat-form-field class="w-full !max-h-[80px]">
+            <mat-label>Savol</mat-label>
+            <input matInput formControlName="text" placeholder="Enter text" />
+            <mat-error *ngIf="questionForm.get('text')?.hasError('required')">
+                Savol tuzing!!
+            </mat-error>
+          </mat-form-field>
+        </div> 
+    </form>
+</div>
+
+<div class=" gap-[10px] flex justify-end mb-3 mt-7">
+    <button mat-raised-button class="!bg-gray-300" (click)="onClose()">
+      Bekor Qilish
+    </button>
+    <button mat-raised-button color="primary" [disabled]="questionForm.invalid" (click)="save()">
+      Qo'shish
+    </button>
+  </div>
+</div>
+

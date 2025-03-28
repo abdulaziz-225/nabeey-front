@@ -1,0 +1,57 @@
+<h3 class="!m-0 p-2">Video qo'shish</h3>
+
+<form [formGroup]="videoForm" class="p-4 max-w-lg mx-auto">
+    <div class="mb-2">
+      <mat-form-field class="w-full">
+        <mat-label>Sarlavha</mat-label>
+        <input matInput formControlName="title" placeholder="Enter text" />
+        <mat-error *ngIf="videoForm.get('title')?.hasError('required')">
+           Sarlavha maydonini to'ldirish shart!
+        </mat-error>
+      </mat-form-field>
+
+    </div>
+    <mat-form-field class="w-full">
+      <mat-label>Tavsif</mat-label>
+      <input matInput formControlName="description" placeholder="Enter text" />
+      <mat-error *ngIf="videoForm.get('description')?.hasError('required')">
+        Tavsif maydonini to'ldirish shart!
+      </mat-error>
+    </mat-form-field>
+
+    <div class="mb-2">
+    </div>
+
+    <div class="mb-2">
+      <mat-form-field class="w-full">
+        <mat-label>Videonign linki</mat-label>
+        <input matInput formControlName="videoLink" placeholder="Enter text" />
+        <mat-error *ngIf="videoForm.get('videoLink')?.hasError('required')">
+          VideoLink maydonini to'ldirish shart!
+        </mat-error>
+      </mat-form-field>
+    </div>
+  
+    <div>
+      <mat-form-field class="w-full">
+        <mat-label>Category</mat-label>
+        <mat-select formControlName="categoryId" placeholder="Select category">
+          <mat-option *ngFor="let category of contentCategories" [value]="category.id">
+            {{ category.name }}
+          </mat-option>
+
+        </mat-select>
+        <mat-error *ngIf="videoForm.get('categoryId')?.hasError('required')">
+          Category maydonini to'ldirish shart!
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class=" gap-[10px] flex justify-end mb-3">
+        <button mat-raised-button class="!bg-gray-300" (click)="onClose()">
+          Bekor Qilish
+        </button>
+        <button mat-raised-button color="primary" [disabled]="videoForm.invalid" (click)="createVideo()">
+          Qo'shish
+        </button>
+      </div>

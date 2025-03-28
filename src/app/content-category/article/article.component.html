@@ -1,0 +1,49 @@
+
+  
+<div class="py-5"> 
+  <div class="w-[500px]   bg-gray-100 py-6 px-12 rounded-[14px] mt-5">
+    <h3 class="!text-[22px]">Maqolalar</h3>
+    <div class="flex flex-col w-full gap-[15px] mb-[25px]">
+      <div  class="card flex flex-col gap-2 w-full overflow-hidden !bg-white p-6 
+            rounded-[14px] border border-gray-200" 
+            [class]="{opened: isOpened, closed: !isOpened}"
+            >
+        
+        <div class="w-full flex items-center justify-between">
+          <div class="flex flex-col">
+            <div class="flex justify-center items-center gap-2 mb-2">
+              <img  
+                [src]="articles.user?.asset?.filePath || 'assets/Default_pfp.svg.png'"
+                alt="image" class="rounded-circle" width="50" height="50">
+              <h3 class="text-gray-700 text-[16px] !mb-0">
+                {{ articles.user?.lastName }} {{ articles.user?.firstName }}
+              </h3>
+            </div>
+            <p class="text-gray-500 text-sm !mb-0">
+              Category: <span class="text-black">{{ articles.category?.name }}</span>
+            </p>
+          </div>
+  
+          <div> 
+            <button (click)="isOpened = !isOpened" matRipple class="rounded-[6px] overflow-hidden py-2 px-3 bg-gray-100 
+                flex justify-center items-center"> 
+              <mat-icon>{{ isOpened ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}</mat-icon>
+            </button>
+          </div>
+        </div>
+        
+        <p class="w-full overflow-auto flex justify-start text-gray-700 text-sm h-22">
+          {{ articles.text }}
+        </p>
+        
+        <hr>
+        <div class="w-full overflow-hidden flex items-center justify-end gap-x-5" *ngIf="userRole === 'Admin'">
+                
+          <button class="bg-blue-500 text-white w-[50px] h-[40px] rounded" (click)="onEdit()"> <mat-icon>edit</mat-icon></button>
+          <button class="bg-red-500 text-white w-[50px] h-[40px] rounded" (click)="onDelete()"> <mat-icon>delete</mat-icon></button>
+     </div>
+      </div> 
+  
+    </div>
+  </div>
+</div>

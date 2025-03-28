@@ -1,0 +1,56 @@
+<section> 
+  <div class="login">
+    <div class="content">
+        <form [formGroup]="signUpForm">
+          <h2>Ro'yhatdan o'tish uchun ma'lumotlaringizni kiriting! </h2>
+            <div class="form">
+              <mat-form-field appearance="fill">
+                <mat-label>Ism</mat-label>
+                <input matInput type="text" formControlName="FirstName"/>
+                <mat-error *ngIf="signUpForm.get('FirstName')?.hasError('required')">Ismingizni kiriting.  </mat-error>
+                <mat-error *ngIf="signUpForm.get('FirstName')?.hasError('minlength')">Ismingiz 2 harfdan iborat emasligini yosh bola ham biladi, to'gri kiriting!</mat-error>
+                <mat-error *ngIf="signUpForm.get('FirstName')?.hasError('pattern')">Ismingiz lotin harflarida bo'lishi kerak!
+                </mat-error>
+              </mat-form-field>
+                  <div class="space-error" 
+                    *ngIf="signUpForm.get('FirstName')?.hasError('minlength') && signUpForm.get('FirstName')?.touched">
+                  </div>
+
+                  
+              <mat-form-field appearance="fill">
+                <mat-label>Familya</mat-label>
+                <input matInput type="text" formControlName="LastName"/>
+                <mat-error *ngIf="signUpForm.get('LastName')?.hasError('required')">Familyangizni kiriting.  </mat-error>
+              </mat-form-field>
+              <mat-form-field appearance="fill">
+                <mat-label>Email</mat-label>
+                <input matInput type="text" formControlName="Email"/>
+                <mat-error *ngIf="signUpForm.get('Email')?.hasError('required')">Emailingizni kiriting.  </mat-error>
+                <mat-error *ngIf="signUpForm.get('Email')?.hasError('email')">Emailni email tipida kiritng.  </mat-error>
+              </mat-form-field>
+
+                <mat-form-field appearance="fill">
+                  <mat-label>Telefon raqam</mat-label>
+                  <input matInput type="text" formControlName="Phone" [mask]="'(00) 000-00-00'" placeholder="(12) 345-67-89"/>
+                  <mat-error *ngIf="signUpForm.get('Phone')?.hasError('required')">Telefon raqamingizni kiriting.  </mat-error>
+                  <!-- <mat-error *ngIf="signUpForm.get('phone')?.hasError('phone')">Enter a valid phone. </mat-error> -->
+                </mat-form-field>
+        
+                <mat-form-field appearance="fill">
+                  <mat-label>Parol</mat-label>
+                  <input matInput formControlName="Password" [type]="hide ? 'password' : 'text'">
+                  <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                    <mat-icon class="visibility-Icon">{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
+                  </button>
+                  <mat-error *ngIf="signUpForm.get('Password')?.hasError('required')"> Parol yarating.  </mat-error>
+                </mat-form-field>
+              
+                <div class="inputBox">
+                  <button type="sumbit" class="btn-SignIn" (click)="signUp()"
+                   [ngClass]="{isValid: !signUpForm.valid}" [disabled]="!signUpForm.valid">Ro'yhatdan O'tish</button>
+                </div>
+              </div>
+        </form>
+    </div>
+</div>
+</section>

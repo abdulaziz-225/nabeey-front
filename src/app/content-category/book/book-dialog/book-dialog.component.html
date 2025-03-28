@@ -1,0 +1,84 @@
+<h3 class="!m-0 p-2">Kitob qo'shing</h3>
+
+<form [formGroup]="bookForm" class="p-4 max-w-lg mx-auto">
+
+<div class="flex gap-x-[15px]"> 
+    <div class="mb-4">
+      <mat-form-field class="w-full">
+        <mat-label>Sarlavha</mat-label>
+        <input matInput formControlName="title" placeholder="Sarlavha kiriting" />
+        <mat-error *ngIf="bookForm.get('title')?.hasError('required')">
+          Sarlavha kiritish majburiy
+        </mat-error>
+      </mat-form-field>
+    </div>
+  
+
+    <div>
+      <mat-form-field class="w-full">
+        <mat-label>Muallif egasi</mat-label>
+        <input matInput formControlName="author" placeholder="Muallifning ismi" />
+        <mat-error *ngIf="bookForm.get('author')?.hasError('required')">
+          Muallif egasi majburiy
+        </mat-error>
+      </mat-form-field>
+    </div>
+</div>
+
+<div class="flex gap-x-[15px]"> 
+    <div>
+      <mat-form-field class="w-full">
+        <mat-label>Ta'rif</mat-label>
+        <input matInput formControlName="description" placeholder="Kitob haqida ma'lumot" />
+        <mat-error *ngIf="bookForm.get('description')?.hasError('required')">
+          Qisqacha ma'lumot bering!!!
+        </mat-error>
+      </mat-form-field>
+    </div>
+  
+    <div>
+      <mat-form-field class="w-full">
+        <mat-label>Kategoriya</mat-label>
+        <mat-select formControlName="categoryId" placeholder="Select category">
+          <mat-option *ngFor="let category of categories" [value]="category.id">
+            {{ category.name }}
+          </mat-option>
+
+        </mat-select>
+        <mat-error *ngIf="bookForm.get('categoryId')?.hasError('required')">
+          Kategoriya tanglang!!!
+        </mat-error>
+      </mat-form-field>
+    </div>
+</div>
+
+<div class="flex gap-x-[55px] justify-center"> 
+    <div class="!mt-0 mb-6 image-upload">
+      <img [src]="imagePreview" alt="Article Image" class="profile-image" *ngIf="imagePreview">
+      <label class="custom-file-upload">{{book?.id? "Rasm Almashtirish" : "Rasm Qo'yish"}}
+        <input type="file" (change)="onFilesSelected($event, 'image')" accept="image/*" />
+      </label>
+    </div>
+    
+    <div class="!mt-0 mb-6 image-upload">
+      <a [href]="filePreview" target="_blank"  class="text-blue-500 text-[18px] flex justify-center
+      border rounded-md p-2 bg-blue-50 w-[130px] h-[100px] mb-[10px] text-center items-center mx-auto" *ngIf="filePreview">
+        Faylni ko'rish
+      </a>
+      <label class="custom-file-upload  !flex !justify-center">{{book?.id? "Fayl Almashtirish" : "Fayl Qo'yish"}}
+        <input type="file" (change)="onFilesSelected($event, 'file')" accept=".pdf,.doc,.docx,.txt"/>
+      </label>
+
+    </div>
+  </div>
+  
+  
+    <div class=" gap-[10px] flex justify-end mb-3">
+      <button mat-raised-button class="!bg-gray-300" (click)="onClose()">
+        Bekor Qilish
+      </button>
+      <button mat-raised-button color="primary" [disabled]="bookForm.invalid" (click)="createBook()">
+        Qo'shish
+      </button>
+    </div>
+  </form>

@@ -1,0 +1,43 @@
+
+<section class="w-[380px]">
+    <div class="login bg-white rounded-[10px] py-8" [ngClass]="{isLogin: isSignUp}">
+        <div class="content mx-auto w-[80%]">
+            <form [formGroup]="loginForm">
+              <h2 class="text-[#949ca9] text-center">KitobxonTest sahifasiga kirish</h2>
+                <div class="form w-full flex flex-col gap-3">
+
+                    <mat-form-field appearance="fill">
+                      <mat-label>Telefon Nomer </mat-label>
+                      <input matInput type="text" formControlName="phone" [mask]="'(00) 000-00-00'" placeholder="(99) 999-99-99"/>
+                      <mat-error *ngIf="loginForm.get('phone')?.hasError('required')">Nomeringizni kiriting.  </mat-error>
+                      <mat-error *ngIf="loginForm.get('phone')?.hasError('pattern')">Telfon maydonini formatda ko'rsatilganidek kiriting. </mat-error>
+                  
+                    </mat-form-field>
+            
+                    <mat-form-field appearance="fill">
+                      <mat-label>Parol</mat-label>
+                      <input matInput id="password" formControlName="password" [type]="hide ? 'password' : 'text'">
+                      <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                        <mat-icon class="visibility-Icon">{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
+                      </button>
+                      <mat-error *ngIf="loginForm.get('password')?.hasError('required')"> Parolingizni kiriting  </mat-error>
+                  
+                    </mat-form-field>
+                  
+            
+                    <div class="links relative flex justify-between">
+                      <p class="!m-0 text-[#949ca9] text-[16px]">Sizda akkaunt yo'qmi?</p>  
+                       <a  class="text-[cornflowerblue] cursor-pointer" (click)="isSignUp = !isSignUp">Ro'yhatdan o'tish</a>
+                    </div>
+            
+                    <div class="inputBox relative">
+                      <button type="sumbit" class="btn-SignIn" (click)="login()" [ngClass]="{'opacity-40 !cursor-not-allowed': !loginForm.valid}" 
+                      [disabled]="!loginForm.valid">Kirish</button>
+                    </div>
+                  </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<app-sign-up *ngIf="isSignUp" (signUpClose)="signUpClose($event)"></app-sign-up>

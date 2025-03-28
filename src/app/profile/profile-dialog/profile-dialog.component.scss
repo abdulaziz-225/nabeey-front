@@ -1,0 +1,17 @@
+.separate{
+    // margin: 0 auto;
+    column-gap: 20px !important;
+    // flex-direction: column;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+  }
+
+  .flexEnd{
+    // flex-grow: 0 1;
+    justify-content: end;
+    margin-top: 20px;
+  }
+  
+  

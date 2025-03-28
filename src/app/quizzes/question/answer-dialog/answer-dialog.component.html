@@ -1,0 +1,28 @@
+<h2 mat-dialog-title>Variant qo'shish</h2>
+
+<form [formGroup]="answerForm" (ngSubmit)="createAnswer()" class="flex-col flex px-6">
+  <mat-form-field class="full-width">
+    <mat-label>Variant teksti</mat-label>
+    <input matInput formControlName="text">
+  </mat-form-field>
+
+  <mat-form-field class="full-width">
+    <mat-label>BU javob to'g'rimi?</mat-label>
+    <mat-select formControlName="isTrue">
+      <mat-option [value]="true">To'g'ri</mat-option>
+      <mat-option [value]="false">Notog'ri</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <div *ngIf="isEdit" class="flex justify-evenly gap-x-10 items-center mx-2"> <p class="!mb-0 "> 
+    <span class="font-medium text-xl"> "{{answer.text}}"</span>  variantini o'chirish</p>
+    <button class="!bg-red-500 !rounded flex justify-center items-center py-2 px-4" (click)="onDelete(answer.id)"> 
+      <mat-icon class="!text-white">delete</mat-icon>
+    </button>
+  </div>
+
+  <div mat-dialog-actions class="!mb-4">
+    <button mat-button type="button" (click)="onClose()">Bekor Qilish</button>
+    <button mat-button color="primary" type="submit">Tuzish</button>
+  </div>
+</form>

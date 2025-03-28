@@ -1,0 +1,109 @@
+<app-home></app-home>
+
+
+<div class="container"> 
+
+  <div class="" *ngFor="let question of questions let i = index">
+    <div class="!border-2 rounded-[10px] mb-10 p-4 bg-stone-50" *ngIf="!question?.linkedQuiz?.quiz?.name" [ngClass]="getBorderColor(i)">
+<div  class=" flex justify-between items-center  mb-3 rounded pl-3 pr-6 max-h-[200px]">
+  <div class="p-4 flex my-3 gap-x-5 border  bg-gray-200  max-w-[550px] rounded w-full items-center">
+    <div class="w-[410px] flex items-center gap-x-4">
+
+      <span> {{i+1}}-savol </span>
+      <p class="font-medium text-base !m-0 max-w-[295px]">{{ question.text }}</p>
+    </div>
+
+    <div class="ml-auto flex gap-2">
+      <button mat-button class="!bg-blue-500 !text-white  rounded" (click)="openDialog(true, question)">
+        <!-- <img src="assets/edit.svg" alt="Tahrirlash" width="22" height="22" /> -->
+         <mat-icon>edit</mat-icon>
+      </button>
+      <button mat-button class="!bg-red-500 !text-white  rounded" (click)="confirmDelete(question.id)">
+        <!-- <img src="assets/trash.svg" alt="Tahrirlash" width="22" height="22" /> -->
+      <mat-icon>delete</mat-icon>
+      </button>
+      </div>
+
+  </div> 
+  
+  <div class="p-4 rounded w-[303px]">
+    <p class="!m-0 text-lg font-medium" *ngIf="question.answers.length == 0">Hali variant qo'shilgani yo'q!!</p>
+
+    <div *ngIf="question.answers.length > 0">
+      <h3 class="text-lg font-semibold !m-0 mt-2">
+        <ng-container *ngFor="let answer of question.answers; let answerIndex = index">
+          <span 
+            [ngClass]="{'bg-green-100': answer.isTrue, 'bg-red-100': !answer.isTrue}" 
+            class="px-2 rounded mr-2" 
+            (click)="openAnswerDialog(question.id, true, answerIndex)">
+            
+            {{ answer.isTrue ?  answer.text : answer.text }}
+          </span>
+        </ng-container>
+      </h3>
+    </div>
+    
+    
+  </div> 
+
+  <button mat-button class="!bg-green-500 !text-white rounded !py-3 !px-5" (click)="openAnswerDialog(question.id, false)">
+    Savolga variant qo'shish</button>     
+  </div>
+
+  <div class="flex justify-center itmes-center">
+    <div class="flex gap-x-10 items-center h-[48px]" *ngIf="question.linkedQuiz">
+      <p  class="!m-0">{{i+1}}-savol <span class="text-lg font-medium italic">{{question.linkedQuiz.quiz.name}}</span>ga bog'langan</p>
+      <button mat-raised-button color="warn" (click)="confirmQuizQuestionDelete(question.linkedQuiz.id)">
+        O'chirish
+      </button>
+    </div>
+
+    <button mat-button class="!bg-blue-500 !text-white text-[16px] rounded !py-4 !px-7 
+      mb-3 flex justify-center items-center" 
+      (click)="openQuizquestionDialog(question.id)" 
+      *ngIf="!question.linkedQuiz">
+      Savollarni Quizlarga bog'lash
+    </button>
+  </div>
+</div>
+  
+    
+  </div>
+  <div class="flex justify-between px-20 py-3 mb-10">
+  
+    <button mat-button class="!bg-gray-500 !m-2 !text-white !py-2 !px-4 !rounded-[6px]" (click)="openDialog(false)">Savol qo'shish</button>
+    <!-- <button mat-button class="!bg-green-500 !m-2 !text-white !py-2 !px-4 !rounded-[6px]">Javoblarni ko'rish</button> -->
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- ADD NEW ANSWER BUTTON -->
+
+<!-- <div class="flex gap-2">
+<button mat-button class="!bg-green-500 !text-white w-[100px] rounded" (click)="openAnswerDialog(false, question.id)">Add Answer</button>
+</div> -->
+
+<!-- ANSWER LIST SECTION -->
+<!-- <div *ngFor="let answer of question.answers">
+<h2>{{ answer.text }}</h2>
+<div class="flex gap-2">
+  <button mat-button class="!bg-blue-500 !text-white" (click)="openAnswerDialog(true, question.id, answer)">Edit</button>
+</div>
+</div> -->

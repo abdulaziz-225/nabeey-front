@@ -1,0 +1,64 @@
+section .login {
+    padding: 32px 0;
+    background-color: #fff;
+     background-clip: border-box; 
+    border-radius: 10px;
+    width: 415px;
+  }
+  
+  section .login .content {
+    width: 80%;
+    margin: 0 auto;
+  }
+  
+  section .login .content h2 {
+    color: #949ca9;
+    text-align: center;
+    padding-bottom: 12px;
+  }
+  
+  section .login .content .form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  
+  }
+  
+  section .login .content .form .inputBox {
+    position: relative;
+    width: 100%;
+  }
+  
+  section .login .content .form .inputBox input {
+    position: relative;
+    width: 90%;
+    border: none;
+    outline: none;
+    padding: 13px 10px 13.5px;
+    border-radius: 4px;
+    color: #000;
+    font-weight: 500;
+    font-size: 1em;
+  }
+  
+  .btn-SignIn {
+    width: 100%;
+    padding: 12px 0;
+    text-decoration: none;
+    border-radius: 5px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-size: 16px;
+    margin: 0 auto;
+    color: #ffffff;
+    background-color: #4c7cf3; 
+    // border-color: #4c7cf3; 
+    box-shadow: 0 2px 6px 0 rgba(76, 124, 243, 0.5);
+  }
+
+.isValid{
+  opacity: 0.5;
+  cursor: not-allowed;
+}

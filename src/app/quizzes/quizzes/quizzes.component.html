@@ -1,0 +1,31 @@
+<nav class="navbar">
+  <div class="navbar-left">
+      <button class="circle-button" (click)="goBack()">
+  <mat-icon>keyboard_backspace</mat-icon>
+      </button>
+<span class="navbar-brand">Nabeey sahifasiga qaytish</span>
+  </div>
+</nav>
+  
+<button class="!bg-gray-500 m-4 !text-white py-2 px-4 rounded-[6px]" mat-raised-button
+ [ngClass]="{'opacity-30' : currentQuizId || checkStatusQuiz}" [disabled]="currentQuizId || checkStatusQuiz" (click)="openDialog(false)">Viktorina Yaratish</button> 
+
+
+  <div class="container mx-auto mt-8">  
+    <h1 class="text-2xl font-bold text-center mb-4">Testlar</h1>
+    <div class=" gap-x-10 flex justify-center ">
+      <div *ngFor="let quiz of quizzes let i = index" class="border p-4 rounded shadow w-[400px]">
+        <h2 class="text-xl font-semibold  !mb-0 ">{{ quiz.name }}</h2>
+        <div class="flex justify-between">
+
+          <p class="text-gray-600">{{ quiz.description }}</p>
+
+        </div>
+          <div class="gap-3 flex">
+
+            <button class="bg-blue-500 text-white w-[50px] h-[40px] rounded" (click)="openDialog(true, i)"
+  >       <mat-icon>edit</mat-icon></button>
+            <button class="bg-red-500 text-white w-[50px] h-[40px] rounded" (click)="confirmDelete(quiz.id)"
+  >       <mat-icon>delete</mat-icon></button>
+        </div>
+        </div>

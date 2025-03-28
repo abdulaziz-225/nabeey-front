@@ -1,0 +1,19 @@
+<app-home></app-home>
+
+<button mat-butto class="bg-gray-500 m-2 text-white py-2 px-4 rounded-[6px]" (click)="openDialog()" *ngIf="userRole === 'Admin'">
+ Video Qo'shish
+</button>
+
+<p class="font-medium italic text-center text-2xl" [ngClass]="{'!mt-7': userRole === 'User'}">Qiziqarli videolarni tomosha qilishingiz va <br> o'zingiz qolgan foydalanuvchilar uchun ham video qo'shishingiz mumkin</p>
+<div class="container flex justify-around flex-wrap gap-y-5 py-7">
+
+    <div class=" flex flex-wrap gap-x-[70px] gap-y-10 justify-center">
+    <ng-container *ngFor="let video of videos">
+        <div class="border-2 rounded py-3">
+
+            <app-video-player [video]="video" (delete)="confirmVideoDelete(video.id)"></app-video-player>
+            <!-- <p class="px-4 pt-2 font-medium text-2xl"> {{video.description}} </p> -->
+        </div>
+    </ng-container>
+</div>
+</div>

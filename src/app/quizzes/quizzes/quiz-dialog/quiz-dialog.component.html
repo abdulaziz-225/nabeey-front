@@ -1,0 +1,72 @@
+<p class="!m-0 !mt-4 p-2 text-[20px] font-medium text-center">Test Tuzing!!</p>
+
+<form [formGroup]="quizForm" class="p-4 max-w-lg mx-auto">
+
+<div class="flex gap-x-[15px]"> 
+    <div class="mb-4">
+      <mat-form-field class="w-full">
+        <mat-label>Quiz Nomi</mat-label>
+        <input matInput formControlName="name" placeholder="Enter text" />
+        <mat-error *ngIf="quizForm.get('name')?.hasError('required')">
+          Nom qo'yish majburiy!
+        </mat-error>
+      </mat-form-field>
+    </div>
+  
+
+    <div>
+      <mat-form-field class="w-full">
+        <mat-label>Author</mat-label>
+        <input matInput formControlName="description" placeholder="Enter text" />
+        <mat-error *ngIf="quizForm.get('description')?.hasError('required')">
+          Author is required
+        </mat-error>
+      </mat-form-field>
+    </div>
+</div>
+
+<div class="flex gap-x-[15px]"> 
+
+    <div>
+      <mat-form-field class="w-full">
+        <mat-label>Savollar soni</mat-label>
+        <input matInput formControlName="questionCount" placeholder="1-100 oralang" type="number" min="1" max="100" />
+        <mat-error *ngIf="quizForm.get('questionCount')?.hasError('required')">
+          Savollar soni kiritilishi shart
+        </mat-error>
+        <mat-error *ngIf="quizForm.get('questionCount')?.hasError('max')">
+          Savollar soni 100 dan oshmasligi kerak
+        </mat-error>
+        <mat-error *ngIf="quizForm.get('questionCount')?.hasError('pattern')">
+          Nisbiy raqamlar kiritilishi mumkin emas
+        </mat-error>
+      </mat-form-field>
+    </div>
+    
+  
+    <div>
+      <mat-form-field class="w-full">
+        <mat-label>Category</mat-label>
+        <mat-select formControlName="contentCategoryId" placeholder="Select category">
+          <mat-option *ngFor="let category of categories" [value]="category.id">
+            {{ category.name }}
+          </mat-option>
+
+        </mat-select>
+        <mat-error *ngIf="quizForm.get('contentCategoryId')?.hasError('required')">
+          Category is required
+        </mat-error>
+      </mat-form-field>
+    </div>
+</div>
+  
+  
+    <div class=" gap-[10px] flex justify-end mb-3">
+      <button mat-raised-button class="!bg-gray-300" (click)="onClose()">
+        Bekor Qilish
+      </button>
+      <button mat-raised-button color="primary" [disabled]="quizForm.invalid" (click)="saveQuiz()">
+        Qo'shish
+      </button>
+    </div>
+  </form>

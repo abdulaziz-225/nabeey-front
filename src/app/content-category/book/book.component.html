@@ -1,0 +1,34 @@
+<div class="py-5"> 
+<div *ngIf="book" class="p-4 bg-slate-50 rounded-md ">
+
+    <h2 class="text-2xl font-bold mb-2 !mb-0"> <span class="text-xl font-semibold">Kitob nomi:</span> {{ book.title }}</h2>
+
+    <p class="text-gray-600"> <span class="font-semibold text-[18px] pr-1"> Kitoning turi:</span> {{ book.description }}</p>
+  
+    <div class="mt-4 flex gap-10 items-center text-center">
+
+      <div class="">
+        <a [href]="book.file.filePath" target="_blank" download  class="text-blue-500 text-[18px] border rounded-md p-2 bg-blue-50 ">
+          Faylni ko'rish
+        </a>
+        
+        <div class="flex !mt-4" *ngIf="userRole === 'Admin'">
+
+          <button mat-raised-button color="primary" class="!mr-2" (click)="onEdit()">
+            Tahrirlash
+          </button>
+  
+          <button mat-raised-button color="warn" (click)="onDelete()">
+            O'chirish
+          </button>
+        </div>
+
+   
+      </div>
+
+      <img [src]="book.image.filePath" [alt]="book.title" class="w-32 h-32 object-cover rounded-md shadow" />
+    </div>
+
+  </div>
+  </div>
+  

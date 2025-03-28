@@ -1,0 +1,38 @@
+:host {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    min-height: 100vh;
+    background: #F0F4F9; 
+  }
+
+  
+  section .login {
+     background-clip: border-box; 
+  }
+  
+  .btn-SignIn {
+    width: 100%;
+    padding: 12px 0;
+    text-decoration: none;
+    border-radius: 5px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-size: 16px;
+    margin: 0 auto;
+    color: #ffffff;
+    background-color: #4c7cf3; 
+    box-shadow: 0 2px 6px 0 rgba(76, 124, 243, 0.5);
+  }
+
+@media(max-width: 905px){
+  :host{
+    display: grid;
+    gap: 30px;
+  }
+
+  .isLogin{
+    display: none;
+  }
+}

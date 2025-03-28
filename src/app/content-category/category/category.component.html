@@ -1,0 +1,74 @@
+<app-home></app-home>
+  
+  <p class="!mt-4  text-lg !ms-[10px] text-black">Ushbu contentga tegishli bo'lgan infolar</p>
+
+<mat-form-field appearance="fill" class="d-flex gap-1 pb-[30px] px-4">
+  <mat-label>Select Content</mat-label>
+  <mat-select (selectionChange)="setVisibleContent($event.value)">
+    <mat-option value="all">All Contents</mat-option>
+    <mat-option value="articles">Articles</mat-option>
+    <mat-option value="books">Books</mat-option>
+    <mat-option value="videos">Videos</mat-option>
+  </mat-select>
+</mat-form-field>
+
+
+  <mat-tab-group>
+    <mat-tab *ngFor="let category of contentCategories" [label]="category.name">  
+
+      <div class="container"> 
+      <div class="category-content">
+
+
+        <div *ngIf="visibleContent === 'articles' || visibleContent === 'all'">
+          <h3 class="!text-2xl !font-semibold !text-gray-800 !mb-0 text-center !pt-7 border-b-2 border-neutral-200 !pb-2"
+          *ngIf="category.articles.length >0"
+          >Ushbu category'iga oid barcha maqolalar!</h3>
+          <p  *ngIf="visibleContent === 'articles' && category.articles.length == 0"
+        class="!text-2xl !font-semibold !text-gray-800 !mb-0 text-center flex justify-center items-center h-64 mx-auto" >
+           Ushbu category'ga oid maqolalar yo'q!
+         </p>
+         <div class="flex flex-wrap justify-center gap-x-10">
+
+           <div *ngFor="let article of articles let i = index">
+               <app-article [articles]="article" *ngIf="category.name === article.category.name" 
+               (delete)="confirmArticleDelete(article.id)" (edit)="openArticleDialog(true, i)">
+             </app-article>
+           </div>
+         </div>
+          
+        </div>
+        
+        <div *ngIf="visibleContent === 'books' || visibleContent === 'all'" class="!pb-5">
+          <h3 *ngIf="category.books.length > 0" class="!text-2xl !font-semibold !text-gray-800 !mb-0 text-center !pt-7
+             border-b-2 border-blue-500 !pb-2">Ushbu category'iga oid barcha kitoblar!</h3>
+
+             <div class="flex justify-center gap-x-[60px]">
+
+              <div *ngIf="visibleContent === 'books' && category.books.length == 0" class="flex justify-center items-center h-64 mx-auto">
+                <p class="!text-2xl !font-semibold !text-gray-800 text-center">Ushbu category'ga oid kitoblar yo'q!</p>
+              </div>
+              
+               <div *ngFor="let book of category.books let i = index">
+                 <app-book [book]="book" (edit)="openBookDialog(true, i)" (delete)="confirmDeleteBook(book.id)"></app-book>
+               </div>
+             </div>
+        </div>
+
+        <div *ngIf="visibleContent === 'videos' || visibleContent === 'all'">
+          <h3 *ngIf="category.videos.length > 0" class="!text-2xl !font-semibold !text-gray-800 !mb-0 text-center 
+            !pt-7 border-b-2 border-blue-500 !pb-2">Ushbu category'iga oid barcha videolar</h3>
+          <div class="flex justify-around flex-wrap gap-y-5 pb-7">
+            <div *ngFor="let video of category.videos">
+              <div class="border-2 rounded py-3 mt-6">
+              <app-video-player [video]="video" (delete)="confirmVideoDelete(video.id)"></app-video-player>
+            </div>
+            </div>
+          </div>
+          
+        </div>
+
+      </div>
+    </div>
+    </mat-tab>
+  </mat-tab-group>

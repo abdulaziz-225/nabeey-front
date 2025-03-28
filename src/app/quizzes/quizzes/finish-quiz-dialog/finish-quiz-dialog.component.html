@@ -1,0 +1,8 @@
+<h2 mat-dialog-title>Testni yakunlash</h2>
+<mat-dialog-content>
+  <p>Siz "{{ data.quizName }}" testini yakunlashni xohlaysizmi?</p>
+</mat-dialog-content>
+<mat-dialog-actions align="end" class="!mb-4 !mr-2">
+    <button mat-button (click)="closeDialog(false)" class="!bg-red-500 !text-white">Yo'q</button>
+    <button mat-button color="primary" class="!bg-blue-500 !text-white" (click)="closeDialog(true)">Ha</button>
+</mat-dialog-actions>

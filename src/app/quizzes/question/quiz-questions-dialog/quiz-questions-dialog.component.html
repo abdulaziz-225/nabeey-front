@@ -1,0 +1,20 @@
+<h2 mat-dialog-title>Savolni quizga bog'lash</h2>
+
+<form [formGroup]="qQuestionForm" (ngSubmit)="createQQuestion()" class="flex-col flex px-10">
+
+
+  <mat-form-field class="full-width">
+    <mat-label>Qaysi Quizga qo'shmoqchisiz?</mat-label>
+    <mat-select formControlName="quizId">
+      <mat-option *ngFor="let quiz of quizzes" [value]="quiz.id"> 
+        {{quiz.name}}
+      </mat-option>
+      <!-- <mat-option [value]="false">Notog'ri</mat-option> -->
+    </mat-select>
+  </mat-form-field>
+
+  <div mat-dialog-actions class="!mb-4">
+    <button mat-button type="button" (click)="onClose()">Bekor Qilish</button>
+    <button mat-button color="primary" type="submit">Tuzish</button>
+  </div>
+</form>

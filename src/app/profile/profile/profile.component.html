@@ -1,0 +1,78 @@
+  <nav class="navbar">
+    <div class="navbar-left">
+        <button class="circle-button" (click)="goBack()">
+    <mat-icon>keyboard_backspace</mat-icon>
+        </button>
+  <span class="navbar-brand">Nabeey sahifasiga qaytish</span>
+    </div>
+  </nav>
+
+  <div class="profile-container">
+    <div class="profile-header">
+      <img [src]="profiles.asset.filePath" alt="Profile Image" class="profile-image" />
+      <div class="profile-info" *ngIf="profiles">
+
+
+        <p class="text-sm-[20px]"> Ismi: <span> {{ profiles.firstName }} </span>
+          <a class="cursor-pointer ml-20 py-2 px-4 bg-gray-300 rounded text-xl fs-5" (click)="openDialog()">
+            Edit Profile
+          </a>
+        </p>  
+
+      <p>Email: {{ profiles.email }}</p>
+      <p>Phone: {{ profiles.phone }}</p>
+    </div>
+  </div>
+
+  <!-- <button mat-raised-button color="primary" (click)="openDialog()">
+    Edit Profile
+  </button> -->
+</div>
+
+<div class="container">
+<div class="mx-20 my-20">
+  <hr class=" font-bold">
+  <!-- <ng-container *ngFor="let article of articles">
+
+    <app-article [article]="article"></app-article>
+  </ng-container> -->
+  <div class="flex flex-wrap ml-5">
+
+
+  <div class="border border-gray-300 rounded-lg p-4 mb-4 w-[280px] ml-10 mt-5"  *ngFor="let article of articles">
+    <!-- User Asset and Name -->
+    <div class="flex items-center justify-between">
+      <div class="flex items-center space-x-2">
+        <img [src]="article.user.asset.filePath" alt="User Image" class="w-10 h-10 rounded-full">
+        <span class="font-semibold">{{ article.user.firstName }}</span>
+      </div>
+      
+      <button mat-icon-button [matMenuTriggerFor]="menu">
+        <mat-icon class="!text-black">more_vert</mat-icon>
+      </button>
+
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="editDialog(true, article)">
+          <mat-icon>edit</mat-icon>
+          <span>Edit</span>
+        </button>
+        <button mat-menu-item (click)="confirmDeleteArticle(article.id)">
+          <mat-icon>delete</mat-icon>
+          <span>Delete</span>
+        </button>
+      </mat-menu>
+    </div>
+  
+    <!-- Article Content -->
+    <div class="mt-4 h-[240px] w-[240px]">
+      <!-- Article Image -->
+      <img *ngIf="article.image" [src]="article.image.filePath " alt="Article Image" class="h-full w-full mb-2 flex items-center justify-center">
+  
+      <!-- Article Text -->
+    </div>
+    <p class="text-gray-700 pt-6"> <span class="!text-black font-semibold"> Article</span> {{ article.text }}</p>
+  </div>
+</div>
+  
+</div>
+</div>
