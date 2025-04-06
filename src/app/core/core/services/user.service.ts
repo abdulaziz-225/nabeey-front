@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { User } from '../models/user';
 import { map, Observable, of, switchMap } from 'rxjs';
+import { environment } from 'src/app/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
-  private apiUrl: string = 'https://localhost:7267/api';
+  private apiUrl: string = environment.apiUrl;
   constructor(private http: HttpClient) {}
 
   set accessToken(token: string) {

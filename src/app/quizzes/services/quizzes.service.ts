@@ -3,13 +3,14 @@ import { Injectable } from '@angular/core';
 import { QuizQuestions } from '../models/quiz-question';
 import { map, Observable } from 'rxjs';
 import { Quiz } from '../models/quiz';
+import { environment } from 'src/app/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class QuizzesService {
 
-  private apiUrl = 'https://localhost:7267/api'
+  private apiUrl: string = environment.apiUrl;
 
   constructor(private http: HttpClient) { }
 

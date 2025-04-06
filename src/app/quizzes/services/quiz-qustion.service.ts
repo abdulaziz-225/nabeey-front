@@ -3,27 +3,28 @@ import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { Quiz } from '../models/quiz';
 import { QuizQuestions } from '../models/quiz-question';
+import { environment } from 'src/app/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class QuizQustionService {
-  private apiUrl = 'https://localhost:7267/api/quiz-questions'
+  private apiUrl: string = environment.apiUrl;
   constructor(private http: HttpClient) { }
 
   loadQuestionsByQuizId(quizId: number): Observable<Quiz[]> {
-    return this.http.get<any>(`${this.apiUrl}/get-by-quizId/${quizId}`).pipe(
+    return this.http.get<any>(`${this.apiUrl}/quiz-questions/get-by-quizId/${quizId}`).pipe(
       map(response => response.data)
     );
   }
   loadQuizQuestionsById(id: number): Observable<Quiz[]> {
-    return this.http.get<any>(`${this.apiUrl}/get/${id}`).pipe(
+    return this.http.get<any>(`${this.apiUrl}/quiz-questions/get/${id}`).pipe(
       map(response => response.data)
     );
   }
 
   quizQuestionDelete(id:number){
-    return this.http.delete(`${this.apiUrl}/delete/${id}`)
+    return this.http.delete(`${this.apiUrl}/quiz-questions/delete/${id}`)
   }
 
   // loadAllQuizQuestions(): Observable<any[]>{
@@ -38,7 +39,7 @@ export class QuizQustionService {
   
     return new Observable(observer => {
       const fetchPage = () => {
-        this.http.get<any>(`${this.apiUrl}/get-all?PageIndex=${pageIndex}&PageSize=${pageSize}`)
+        this.http.get<any>(`${this.apiUrl}/quiz-questions/get-all?PageIndex=${pageIndex}&PageSize=${pageSize}`)
           .subscribe(response => {
             if (response.data.length > 0) {
               allQuizQuestions.push(...response.data);
@@ -57,7 +58,7 @@ export class QuizQustionService {
   
 
   createQuizQuestions(data: QuizQuestions){
-    return   this.http.post(`${this.apiUrl}/create`, data)
+    return   this.http.post(`${this.apiUrl}/quiz-questions/create`, data)
     }
 
 }

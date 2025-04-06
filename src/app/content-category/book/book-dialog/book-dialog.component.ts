@@ -64,6 +64,8 @@ export class BookDialogComponent implements OnInit{
       author: ['',],
       description: ['', ],
       categoryId: [3, ],
+      year: [''],
+      genre: [''],
       file: ['', ],
       image: ['',],
     })

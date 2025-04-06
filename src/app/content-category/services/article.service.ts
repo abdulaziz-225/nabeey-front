@@ -2,26 +2,27 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Article, ArticleApiResponse, DetailedArticle } from '../models/article';
+import { environment } from 'src/app/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ArticleService {
 
-  private apiUrl = 'https://localhost:7267/api/article'
+  private apiUrl: string = environment.apiUrl;
 
   constructor(private http: HttpClient) { }
 
   loadArticles(): Observable<ArticleApiResponse>{
-    return this.http.get<ArticleApiResponse>(`${this.apiUrl}/get-all`);
+    return this.http.get<ArticleApiResponse>(`${this.apiUrl}/article/get-all`);
   }
 
   loadArticle(id:number): Observable<ArticleApiResponse>{
-    return this.http.get<ArticleApiResponse>(`${this.apiUrl}/get/${id}`)
+    return this.http.get<ArticleApiResponse>(`${this.apiUrl}/article/get/${id}`)
   }
   
   loadArticleByUser(user:number): Observable<ArticleApiResponse>{
-    return this.http.get<ArticleApiResponse>(`${this.apiUrl}/get-by-user/${user}`)
+    return this.http.get<ArticleApiResponse>(`${this.apiUrl}/article/get-by-user/${user}`)
     }  
 
   createArticle(data: Article){
@@ -32,7 +33,7 @@ export class ArticleService {
     if (data.image) {
       formData.append('image', data.image); 
     }
-    return this.http.post(`${this.apiUrl}/create`, formData)
+    return this.http.post(`${this.apiUrl}/article/create`, formData)
   }
 
   editArticle(data: Article){
@@ -44,11 +45,11 @@ export class ArticleService {
     if (data.image) {
       formData.append('image', data.image); 
     }
-    return this.http.put(`${this.apiUrl}/update`, formData)
+    return this.http.put(`${this.apiUrl}/article/update`, formData)
   }
 
   deleteArticle(id:number){
-    return this.http.delete(`${this.apiUrl}/delete/${id}`)
+    return this.http.delete(`${this.apiUrl}/article/delete/${id}`)
   }
   
 }

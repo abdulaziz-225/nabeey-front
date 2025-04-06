@@ -4,7 +4,8 @@
 <div class="container"> 
 
   <div class="" *ngFor="let question of questions let i = index">
-    <div class="!border-2 rounded-[10px] mb-10 p-4 bg-stone-50" *ngIf="!question?.linkedQuiz?.quiz?.name" [ngClass]="getBorderColor(i)">
+    <!-- *ngIf="!question?.linkedQuiz?.quiz?.name"  -->
+    <div class="!border-2 rounded-[10px] mb-10 p-4 bg-stone-50"[ngClass]="getBorderColor(i)">
 <div  class=" flex justify-between items-center  mb-3 rounded pl-3 pr-6 max-h-[200px]">
   <div class="p-4 flex my-3 gap-x-5 border  bg-gray-200  max-w-[550px] rounded w-full items-center">
     <div class="w-[410px] flex items-center gap-x-4">

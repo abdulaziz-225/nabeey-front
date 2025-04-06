@@ -23,11 +23,11 @@ export class AuthGuard implements CanActivate {
 
       if(parseUserId){
         if(parseUserRole === 'User'){
-          const allowedRoutes = ['/profile', '/article', '/videos', '/category', '/books', '/quiz'];
+          const allowedRoutes = ['/profile', '/article', '/videos', '/category', '/books', '/quiz', '/home'];
           if(allowedRoutes.includes(state.url)){
             return true
           } else{
-            this.router.navigate(['/category']); 
+            this.router.navigate(['/home']); 
             return false;
           }
         } else{

@@ -2,18 +2,19 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Book } from '../models/book';
+import { environment } from 'src/app/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BookService {
 
-  private apiUrl = 'https://localhost:7267/api/books'
+  private apiUrl: string = environment.apiUrl;
 
   constructor(private http: HttpClient) { }
 
   loadBooks(): Observable<any>{
-    return this.http.get(`${this.apiUrl}/get-all`)
+    return this.http.get(`${this.apiUrl}/books/get-all`)
   }
 
   createBook(data: Book){
@@ -23,6 +24,8 @@ export class BookService {
     .set('author', data.author)
     .set('description', data.description)
     .set('categoryId', data.categoryId)
+    .set('year', data.year)
+    .set('genre', data.genre)
       
     const formData = new FormData();
     if (data.file instanceof File) {
@@ -32,7 +35,7 @@ export class BookService {
         formData.append('image', data.image, data.image.name);
     }
 
-    return this.http.post(`${this.apiUrl}/create`, formData, {params:queryParams})
+    return this.http.post(`${this.apiUrl}/books/create`, formData, {params:queryParams})
   }
 
   updateBook(data: any) {
@@ -43,6 +46,8 @@ export class BookService {
     .set('author', data.author)
     .set('description', data.description)
     .set('categoryId', data.categoryId)
+    .set('year', data.year)
+    .set('genre', data.genre)
 
     const formData = new FormData();
 
@@ -55,11 +60,11 @@ export class BookService {
 
     // console.log('this from service', [...(<any>queryParams).entries()]); 
 
-    return this.http.put(`${this.apiUrl}/update`, formData, {params: queryParams});
+    return this.http.put(`${this.apiUrl}/books/update`, formData, {params: queryParams});
 }
   
   deleteBook(id:number){
-    return this.http.delete(`${this.apiUrl}/delete/${id}`)
+    return this.http.delete(`${this.apiUrl}/books/delete/${id}`)
   }
 
 }

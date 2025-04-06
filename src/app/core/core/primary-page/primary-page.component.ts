@@ -116,4 +116,12 @@ export class PrimaryPageComponent implements OnInit{
       }
     });
   }
+
+  scrollToKitobxon() {
+    const element = document.getElementById('kitobxon');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+  
 }

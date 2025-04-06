@@ -33,7 +33,7 @@ export class CategoryDialogComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.formBuilder()
+    this.formBuilder();
 
     if(this.isEdit && this.category?.id) {
       this.categoryForm.patchValue(this.category);
@@ -51,7 +51,7 @@ export class CategoryDialogComponent implements OnInit {
 
   formBuilder(){
     this.categoryForm = this.fb.group({
-      id: [this.category.id],
+      id: [this.category?.id],
       name: ['', Validators.required],
       description: ['', Validators.required],
       image: ['']

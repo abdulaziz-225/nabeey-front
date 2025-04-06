@@ -11,7 +11,9 @@ export class BookComponent {
   @Output() edit = new EventEmitter<any>();
   @Output() delete = new EventEmitter<any>();
 
-  userRole!: string | null
+  userRole!: string | null;
+  expandedBookId: number | null = null;
+
   
   constructor(){
     const userRole = localStorage.getItem('role');
@@ -19,10 +21,15 @@ export class BookComponent {
     if(userRole != null){
       parseUserRole = JSON.parse(userRole)
     }
-   
+    
     this.userRole = parseUserRole
     
   }
+
+  toggleDescription(bookId: number) {
+    this.expandedBookId = this.expandedBookId === bookId ? null : bookId;
+  }
+  
   onEdit() {
     this.edit.emit(this.book);
   }

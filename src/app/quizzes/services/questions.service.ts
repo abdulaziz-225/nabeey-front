@@ -2,13 +2,14 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Question } from '../models/question';
 import { map, Observable } from 'rxjs';
+import { environment } from 'src/app/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class QuestionsService {
 
-  private apiUrl = 'https://localhost:7267/api/questions';
+  private apiUrl: string = environment.apiUrl;
 
   constructor(private http: HttpClient) { }
 
@@ -20,7 +21,7 @@ export class QuestionsService {
       let pageIndex = 1;
   
       const fetchPage = () => {
-        this.http.get<any>(`${this.apiUrl}/get-all?PageIndex=${pageIndex}&PageSize=${pageSize}`)
+        this.http.get<any>(`${this.apiUrl}/questions/get-all?PageIndex=${pageIndex}&PageSize=${pageSize}`)
           .subscribe(response => {
             if (pageIndex === 1) {
               allQuestions.length = 0; // Eski ma’lumotlarni o‘chirib tashlaymiz
@@ -41,14 +42,13 @@ export class QuestionsService {
     });
   }
   
-  
 
     createQuestions(data: Question){
       let formData = new FormData;
       formData.append('text', data.text);
       formData.append('image', data.image)
 
-    return  this.http.post(`${this.apiUrl}/create`, formData)
+    return  this.http.post(`${this.apiUrl}/questions/create`, formData)
     }
 
     updateQuestions(data: Question){
@@ -57,11 +57,11 @@ export class QuestionsService {
       formData.append('text', data.text);
       formData.append('image', data.image)
 
-    return  this.http.put(`${this.apiUrl}/update`, formData)
+    return  this.http.put(`${this.apiUrl}/questions/update`, formData)
     }
 
     deleteQuestion(id: number){
-    return  this.http.delete(`${this.apiUrl}/delete/${id}`)
+    return  this.http.delete(`${this.apiUrl}/questions/delete/${id}`)
     }
 
 }

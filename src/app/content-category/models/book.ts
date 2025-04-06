@@ -5,7 +5,9 @@ export interface Book{
     description: string;
     file: FileData;
     image: FileData;
-    categoryId: string
+    categoryId: string;
+    year: string;
+    genre: string
 }
 
 export interface FileData {

@@ -1,10 +1,24 @@
 <div class="py-5"> 
-<div *ngIf="book" class="p-4 bg-slate-50 rounded-md ">
+<div *ngIf="book" class="p-4 bg-slate-50 rounded-md w-[350px]">
 
     <h2 class="text-2xl font-bold mb-2 !mb-0"> <span class="text-xl font-semibold">Kitob nomi:</span> {{ book.title }}</h2>
+     
+    <div>
+      <p class="text-2xl font-bold mb-2 !mb-0"> <span class="text-xl font-semibold">Kiob yili:</span> {{ book.year }}</p>
+      <p class="text-2xl font-bold mb-2 !mb-0"> <span class="text-xl font-semibold">Kiob janri:</span> {{ book.genre }}</p>
+    </div>
+    
+    <div class="flex items-center mt-2">
+      <p class="text-sm text-gray-700 flex-1"
+         [class.line-clamp-2]="expandedBookId !== book.id">
+        {{ book.description }}
+      </p>
+      <mat-icon class="cursor-pointer text-gray-600 ml-2"
+                (click)="toggleDescription(book.id)">
+        {{ expandedBookId === book.id ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}
+      </mat-icon>
+    </div>
 
-    <p class="text-gray-600"> <span class="font-semibold text-[18px] pr-1"> Kitoning turi:</span> {{ book.description }}</p>
-  
     <div class="mt-4 flex gap-10 items-center text-center">
 
       <div class="">
