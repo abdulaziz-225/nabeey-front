@@ -10,6 +10,23 @@
         </mat-error>
       </mat-form-field>
     </div>
+    <div class="mb-4">
+      <mat-form-field class="w-full">
+        <mat-label>Title</mat-label>
+        <input matInput formControlName="title" placeholder="Title" />
+        <mat-error *ngIf="articleForm.get('title')?.hasError('required')">
+          Maqolangizni kiriting
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="w-full">
+        <mat-label>Link</mat-label>
+        <input matInput formControlName="link" placeholder="Link" />
+        <mat-error *ngIf="articleForm.get('link')?.hasError('required')">
+          Maqolangizni kiriting
+        </mat-error>
+      </mat-form-field>
+    </div>
+  
   
     <div>
       <mat-form-field class="w-full">

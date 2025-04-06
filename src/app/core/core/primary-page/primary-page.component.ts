@@ -1,11 +1,13 @@
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { Component, OnInit } from '@angular/core';
 import { BookService } from 'src/app/content-category/services/book.service';
 import { QuizQustionService } from 'src/app/quizzes/services/quiz-qustion.service';
 import { StartQuizDialogComponent } from 'src/app/quizzes/quizzes/start-quiz-dialog/start-quiz-dialog.component';
 import { BeginQuizComponent } from 'src/app/quizzes/quizzes/start-quiz-dialog/begin-quiz/begin-quiz.component';
 import { FormControl } from '@angular/forms';
 import { debounceTime } from 'rxjs';
+import { ArticleService } from 'src/app/content-category/services/article.service';
+import { DetailedArticle } from 'src/app/content-category/models/article';
 
 @Component({
   selector: 'app-primary-page',
@@ -15,16 +17,37 @@ import { debounceTime } from 'rxjs';
 export class PrimaryPageComponent implements OnInit{
 
   books: any[] = [];
+  articles: DetailedArticle [] = [];
   filteredBooks: any[] = [];
   searchControl = new FormControl('');
   expandedBookId: number | null = null;
+  currentBookPage: number = 1;
+  itemsPerPageBooks: number = 6;
+  currentArticlePage: number = 1;
+  itemsPerPageArticles: number = 3;
+  paginatedBooks: any[] = [];
+  paginatedArticles: DetailedArticle[] = [];
   
   constructor(private bookService: BookService, private quizQuestionService: QuizQustionService,
-    private dialog: MatDialog, private cdRef: ChangeDetectorRef
+    private dialog: MatDialog, private articleService: ArticleService
   ){
 
   }
+  get totalBookPages(): number {
+    return Math.ceil(this.filteredBooks.length / this.itemsPerPageBooks);
+  }
+  get totalBookPagesArray(): number[] {
+    return Array(this.totalBookPages).fill(0).map((_, i) => i + 1);
+  }
 
+  get totalArticlePages(): number {
+    return Math.ceil(this.articles.length / this.itemsPerPageArticles);
+  }
+
+
+  get totalArticlePagesArray(): number[] {
+    return Array(this.totalArticlePages).fill(0).map((_, i) => i + 1);
+  }
 
   toggleDescription(bookId: number) {
     this.expandedBookId = this.expandedBookId === bookId ? null : bookId;
@@ -32,6 +55,8 @@ export class PrimaryPageComponent implements OnInit{
 
   ngOnInit(): void {
     this.loadBooks();
+    this.loadAllArticles()
+    
     this.searchControl.valueChanges.pipe(debounceTime(300)).subscribe(value => {
       console.log("Qidiruv qiymati:", value);
       this.updateFilteredBooks(value || ''); // Agar value null bo‘lsa, bo‘sh string bo‘lsin
@@ -39,34 +64,6 @@ export class PrimaryPageComponent implements OnInit{
     
   }
 
-  // loadBooks() {
-  //   this.bookService.loadBooks().subscribe(booksResponse => {
-  //     this.quizQuestionService.loadAllQuizQuestions().subscribe(quizQuestions => {
-        
-  //       this.books = booksResponse.data.map((book: any) => {
-  //         const matchingQuiz = quizQuestions.find((quizObj: any) => quizObj.quiz.name === book.title);
-          
-  //         if (matchingQuiz) {
-  //           book.quiz = matchingQuiz.quiz;
-  //           book.questions = quizQuestions
-  //             .filter((q: any) => q.quiz.id === matchingQuiz.quiz.id)
-  //             .map((q: any) => q.question);
-  //         } else {
-  //           book.questions = []; // Testi yo‘q kitoblar uchun bo‘sh array
-  //         }
-          
-  //         return book;
-  //       });
-  
-  //       // Faqat testi bor kitoblarni olish
-  //       this.books = this.books.filter(book => book.questions.length > 0);
-
-  //       this.filteredBooks = [...this.books];
-  
-  //       console.log("Testi bor kitoblar:", this.books);
-  //     });
-  //   });
-  // }
   loadBooks() {
     this.bookService.loadBooks().subscribe(booksResponse => {
       this.quizQuestionService.loadAllQuizQuestions().subscribe(quizQuestions => {
@@ -80,20 +77,56 @@ export class PrimaryPageComponent implements OnInit{
         });
 
         this.books = this.books.filter(book => book.questions.length > 0);
-        this.filteredBooks = [...this.books]; // Boshlang‘ich holatda barcha kitoblar chiqadi
+        this.filteredBooks = [...this.books]; 
+        this.updatePaginatedBooks();
+        this.updatePaginatedArticles();
       });
     });
+  }
+
+  loadAllArticles(){
+    this.articleService.loadArticles().subscribe(articles=>{
+      this.articles = articles.data;
+      this.updatePaginatedArticles();
+    })
   }
   
   updateFilteredBooks(query: string) {
     if (!query?.trim()) {
       this.filteredBooks = [...this.books];
     } else {
+      const lowerQuery = query.toLowerCase();
       this.filteredBooks = this.books.filter(book =>
-        book.title.toLowerCase().includes(query.toLowerCase())
+        (book.title?.toLowerCase().includes(lowerQuery)) ||
+        (book.author?.toLowerCase().includes(lowerQuery))
       );
     }
-    this.cdRef.detectChanges(); // <--- UI ni yangilash
+    this.currentArticlePage = 1;
+    this.currentBookPage = 1;
+    this.updatePaginatedBooks();
+  }
+  
+  
+  changeBookPage(page: number) {
+    this.currentBookPage = page;
+    this.updatePaginatedBooks();
+  }
+
+  changeArticlePage(page: number) {
+    this.currentArticlePage = page;
+    this.updatePaginatedArticles();
+  }
+  
+  updatePaginatedBooks() {
+    const startIndex = (this.currentBookPage - 1) * this.itemsPerPageBooks;
+    const endIndex = startIndex + this.itemsPerPageBooks;
+    this.paginatedBooks = this.filteredBooks.slice(startIndex, endIndex);
+  }
+
+  updatePaginatedArticles() {
+    const startIndex = (this.currentArticlePage - 1) * this.itemsPerPageArticles;
+    const endIndex = startIndex + this.itemsPerPageArticles;
+    this.paginatedArticles = this.articles.slice(startIndex, endIndex);
   }
   
 

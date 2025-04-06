@@ -53,6 +53,8 @@ export class ArticleDialogComponent implements OnInit{
       categoryId: [this.article?.category?.id, Validators.required],
       userId: [userId],
       image: [''],
+      title: ['', Validators.required],
+      link: ['']
   
     })
 

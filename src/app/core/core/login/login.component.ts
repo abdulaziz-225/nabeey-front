@@ -53,7 +53,6 @@ export class LoginComponent implements OnInit{
   }
 
   login(){
-    debugger
     if(this.loginForm.valid){
       this.loginForm.controls
      const formValue = this.loginForm.value

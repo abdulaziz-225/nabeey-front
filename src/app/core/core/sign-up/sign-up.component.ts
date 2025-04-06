@@ -36,6 +36,10 @@ export class SignUpComponent implements OnInit{
     });
   }
 
+  orgaqaQaytish(){
+    this.signUpClose.emit(false)
+  }
+
   signUp(){
     if(this.signUpForm.valid){
       const formValue = this.signUpForm.value

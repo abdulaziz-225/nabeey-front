@@ -20,6 +20,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { SafeUrlPipe } from './pipes/safe-url.pipe';
 import { ConfirmDeleteComponent } from './confirm-delete/confirm-delete.component';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 // import { MatToolbarModule } from '@angular/material/toolbar'
 
@@ -45,6 +46,7 @@ import { ConfirmDeleteComponent } from './confirm-delete/confirm-delete.componen
     MatDialogModule,
     MatTabsModule,
     MatCardModule,
+    MatPaginatorModule
     // MatToolbarModule
   ],
   exports: [
@@ -66,6 +68,7 @@ import { ConfirmDeleteComponent } from './confirm-delete/confirm-delete.componen
     MatSelectModule,
     MatFormFieldModule,
     ConfirmDeleteComponent,
+    MatPaginatorModule,
     [SafeUrlPipe]
 
     // MatToolbarModule

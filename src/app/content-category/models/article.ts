@@ -8,6 +8,8 @@ export interface Article{
     categoryId: string;
     userId: string;
     image: string;
+    title: string;
+    link: string
 }
 
 
@@ -17,6 +19,8 @@ export interface DetailedArticle {
     category: Category;
     image: FileData
     user: User;
+    title: string;
+    link: string
   }
 
   export interface ArticleApiResponse {

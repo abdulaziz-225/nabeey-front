@@ -30,6 +30,8 @@ export class ArticleService {
     formData.append('text', data.text);
     formData.append('categoryId', data.categoryId);
     formData.append('userId', data.userId);
+    formData.append('title', data.title);
+    formData.append('link', data.link);
     if (data.image) {
       formData.append('image', data.image); 
     }
@@ -42,6 +44,8 @@ export class ArticleService {
     formData.append('text', data.text);
     formData.append('categoryId', data.categoryId);
     formData.append('userId', data.userId);
+    formData.append('title', data.title);
+    formData.append('link', data.link);
     if (data.image) {
       formData.append('image', data.image); 
     }

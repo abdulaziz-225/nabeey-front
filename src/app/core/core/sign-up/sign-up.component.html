@@ -1,9 +1,11 @@
 <section> 
-  <div class="login">
+  <div class="login !w-[650px]">
+    <img src="assets/logo.PNG" alt="Logotip" class="h-[250px] w-[40%] mx-auto"/>
     <div class="content">
         <form [formGroup]="signUpForm">
           <h2>Ro'yhatdan o'tish uchun ma'lumotlaringizni kiriting! </h2>
-            <div class="form">
+          
+          <div class="form !w-[90%] !mx-auto">
               <mat-form-field appearance="fill">
                 <mat-label>Ism</mat-label>
                 <input matInput type="text" formControlName="FirstName"/>
@@ -44,6 +46,13 @@
                   </button>
                   <mat-error *ngIf="signUpForm.get('Password')?.hasError('required')"> Parol yarating.  </mat-error>
                 </mat-form-field>
+
+                <div class="flex">
+                  <div class="ml-auto">
+                      <a class="text-[cornflowerblue] cursor-pointer mt-0" (click)="orgaqaQaytish()">Login sahifasiga qaytish</a>
+                  </div>
+              </div>
+              
               
                 <div class="inputBox">
                   <button type="sumbit" class="btn-SignIn" (click)="signUp()"

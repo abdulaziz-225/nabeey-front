@@ -21,6 +21,7 @@ import { PrimaryPageComponent } from './primary-page/primary-page.component';
     CommonModule,
     SharedModule, 
     NgxMaskDirective,
+
   ],
   exports: [
     LoginComponent,
