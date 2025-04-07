@@ -37,7 +37,7 @@
           
 
             <a class="nav-link" routerLink="/questions" *ngIf="userRole !== 'User'">Savollar</a>
-            <a class="nav-link" routerLink="/quiz">Viktorina</a>
+            <a class="nav-link" routerLink="/quiz" *ngIf="userRole !== 'User'">Viktorina</a>
 
               <a class="nav-link profile-link" [matMenuTriggerFor]="profileMenu">
                 <mat-icon>person</mat-icon> Profile 
