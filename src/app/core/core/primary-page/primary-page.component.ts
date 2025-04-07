@@ -8,6 +8,7 @@ import { FormControl } from '@angular/forms';
 import { debounceTime } from 'rxjs';
 import { ArticleService } from 'src/app/content-category/services/article.service';
 import { DetailedArticle } from 'src/app/content-category/models/article';
+import { ContentCategoryService } from 'src/app/content-category/services/content-category.service';
 
 @Component({
   selector: 'app-primary-page',
@@ -26,10 +27,13 @@ export class PrimaryPageComponent implements OnInit{
   currentArticlePage: number = 1;
   itemsPerPageArticles: number = 3;
   paginatedBooks: any[] = [];
+  contentCategories: any[] = [];
   paginatedArticles: DetailedArticle[] = [];
+  selectedCategory: string = '';
+
   
   constructor(private bookService: BookService, private quizQuestionService: QuizQustionService,
-    private dialog: MatDialog, private articleService: ArticleService
+    private dialog: MatDialog, private articleService: ArticleService, private contentCategoriesService: ContentCategoryService
   ){
 
   }
@@ -56,14 +60,23 @@ export class PrimaryPageComponent implements OnInit{
   ngOnInit(): void {
     this.loadBooks();
     this.loadAllArticles()
+    this.loadContentCategories()
     
     this.searchControl.valueChanges.pipe(debounceTime(300)).subscribe(value => {
       console.log("Qidiruv qiymati:", value);
-      this.updateFilteredBooks(value || ''); // Agar value null bo‘lsa, bo‘sh string bo‘lsin
+      this.updateFilteredBooks(value || ''); 
     });
-    
   }
 
+  loadContentCategories(){
+    this.contentCategoriesService.loadContentCategory().subscribe(data=>{
+      this.contentCategories = data
+      console.log(this.contentCategories);
+      
+    })
+  }
+  
+  
   loadBooks() {
     this.bookService.loadBooks().subscribe(booksResponse => {
       this.quizQuestionService.loadAllQuizQuestions().subscribe(quizQuestions => {
@@ -80,6 +93,8 @@ export class PrimaryPageComponent implements OnInit{
         this.filteredBooks = [...this.books]; 
         this.updatePaginatedBooks();
         this.updatePaginatedArticles();
+        console.log(this.paginatedBooks, 'paginated');
+        
       });
     });
   }
@@ -90,10 +105,56 @@ export class PrimaryPageComponent implements OnInit{
       this.updatePaginatedArticles();
     })
   }
+
+  toggleCategory(categoryName: string) {
+    if (this.selectedCategory === categoryName) {
+      this.selectedCategory = ''; // Agar bosilgan bo‘lsa, tozalaymiz
+    } else {
+      this.selectedCategory = categoryName; // Yangi kategoriya tanlaymiz
+    }
+  
+    this.filterBooksByCategory();
+  }
+  
+
+  // ✅ Ushbu category tanlanganmi yo‘qmi tekshiradi
+  // isSelected(categoryName: string): boolean {
+  //   return this.selectedCategories.includes(categoryName);
+  // }
+  isSelected(categoryName: string): boolean {
+    return this.selectedCategory === categoryName;
+  }
+  
+
+  // ✅ Kitoblarni tanlangan kategoriyalar bo‘yicha filtrlash
+  // filterBooksByCategory() {
+  //   if (this.selectedCategories.length === 0) {
+  //     this.filteredBooks = [...this.books];
+  //   } else {
+  //     this.filteredBooks = this.books.filter(book =>
+  //       this.selectedCategories.includes(book.quiz.contentCategory.name)
+  //     );
+  //   }
+
+  //   this.updatePaginatedBooks();
+  // }
+  filterBooksByCategory() {
+    if (!this.selectedCategory) {
+      this.filteredBooks = [...this.books];
+    } else {
+      this.filteredBooks = this.books.filter(book =>
+        book.quiz.contentCategory.name === this.selectedCategory
+      );
+    }
+  
+    this.updatePaginatedBooks();
+  }
+  
   
   updateFilteredBooks(query: string) {
     if (!query?.trim()) {
       this.filteredBooks = [...this.books];
+      
     } else {
       const lowerQuery = query.toLowerCase();
       this.filteredBooks = this.books.filter(book =>
@@ -122,6 +183,7 @@ export class PrimaryPageComponent implements OnInit{
     const endIndex = startIndex + this.itemsPerPageBooks;
     this.paginatedBooks = this.filteredBooks.slice(startIndex, endIndex);
   }
+  
 
   updatePaginatedArticles() {
     const startIndex = (this.currentArticlePage - 1) * this.itemsPerPageArticles;
@@ -156,5 +218,7 @@ export class PrimaryPageComponent implements OnInit{
       element.scrollIntoView({ behavior: 'smooth' });
     }
   }
+  
+
   
 }

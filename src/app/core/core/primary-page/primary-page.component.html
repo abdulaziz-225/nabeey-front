@@ -11,7 +11,7 @@
             </div>
         </div>
         <blockquote class="text-xl md:text-2xl font-semibold italic leading-relaxed text-gray-200 animate__animated animate__fadeInDown animate__delay-1s">
-            “Dunyodagi har qaysi davlat, har qaysi xalq birinchi navbatda o‘zining intellektual salohiyati, 
+            “Dunyodagi har qaysi davlat, har qaysi xalq birinchi navbatda o‘zining inatellektual salohiyati, 
             yuksak ma’naviyati bilan qudratlidir. Bunday yengilmas kuch manbai esa avvalo insoniyat tafakkurining 
             buyuk kashfiyoti — kitob va kutubxonalarda.”
         </blockquote>
@@ -30,21 +30,42 @@
   <div class="w-[80%] p-6 flex flex-col">
     <h2 class="text-2xl font-bold mb-4">Kitoblar va Testlar</h2>
 
-    <!-- Search Input -->
-    <div class="max-w-sm   mx-auto p-4 w-full">
-      <input
-        type="text"
-        [formControl]="searchControl"
-        placeholder="Muallif yoki kitob nomini qidiring..."
-        class="w-full p-2 border rounded-lg shadow-md focus:outline-none focus:ring focus:border-blue-300 transition"
-      />
-    </div>  
+    <!-- search by content category -->
+ <!-- Check if category is selected and display books accordingly -->
+ <div class="flex flex-wrap items-center justify-center gap-10 p-4">
+  <!-- Categories -->
+  <div class="flex flex-wrap items-center gap-x-3">
+    <div *ngFor="let category of contentCategories" class="flex items-center">
+      <button mat-icon-button class="rounded-full p-1"
+              [ngClass]="{
+                'bg-blue-500 text-white hover:bg-blue-600': isSelected(category?.name),
+                'bg-gray-200 text-gray-700 hover:bg-gray-300': !isSelected(category?.name)
+              }"
+              (click)="toggleCategory(category.name)">
+        <mat-icon>
+          {{ isSelected(category.name) ? 'check_circle' : 'radio_button_unchecked' }}
+        </mat-icon>
+      </button>
+      <span class="text-lg ml-2">{{ category.name }}</span>
+    </div>
+  </div>
 
-    <!-- Kitoblar mavjud bo‘lsa -->
-    <!-- Kitoblar mavjud bo‘lsa -->
+  <!-- Search Input -->
+  <div class="min-w-[300px] flex-grow max-w-md">
+    <input
+      type="text"
+      [formControl]="searchControl"
+      placeholder="Muallif yoki kitob nomini qidiring..."
+      class="w-full p-4 border rounded-lg shadow-md focus:outline-none focus:ring focus:border-blue-300 transition"
+    />
+  </div>
+</div>
+
+
 <div *ngIf="paginatedBooks.length > 0">
   <div class="grid grid-cols-3 gap-6 mb-6">
     <div *ngFor="let book of paginatedBooks" class="bg-white shadow-lg rounded-xl p-4 w-[360px] h-[510px]" >
+
       <div class="w-full h-[200px] flex items-center justify-center overflow-hidden rounded-lg mb-3 bg-white">
         <img 
           [src]="book.image.filePath" 
@@ -101,8 +122,6 @@
      ➡️
   </button>
 </div>
-
-
 
 </div>
 
