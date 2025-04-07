@@ -7,7 +7,13 @@
 
     <div class="navlink-container">
         <div class="navbar-right">
-            <a class="nav-link" routerLink="/category">All Contents</a>
+          <a class="nav-link flex items-center gap-2 text-gray-700 hover:text-blue-600 transition" routerLink="/home">
+            <mat-icon>home</mat-icon>
+            Asosiy sahifa
+          </a>
+          
+          
+            <a class="nav-link" routerLink="/category">Barcha kategoriyalar</a>
             <a class="nav-link" routerLink="/categories" *ngIf="userRole !== 'User'">Categories</a>
             <a class="nav-link profile-link" [matMenuTriggerFor]="contentMenu">
              <span class="mr-2">Mavzular</span>
@@ -17,16 +23,16 @@
           <mat-menu #contentMenu="matMenu">
               <button mat-menu-item routerLink="/article">
                   <mat-icon class="!text-blue-300">article</mat-icon>
-                  <span>Maqolalar</span>
+                  <span>Xabarlar</span>
               </button>
               <button mat-menu-item routerLink="/books">
                   <mat-icon class="!text-blue-300">menu_book</mat-icon>
                   <span>Kitoblar</span>
               </button>
-              <button mat-menu-item routerLink="/videos">
+              <!-- <button mat-menu-item routerLink="/videos">
                   <mat-icon class="!text-blue-300">videocam</mat-icon>
                   <span>Videolar</span>
-              </button>
+              </button> -->
           </mat-menu>
           
 

@@ -1,0 +1,19 @@
+.full-screen-modal .mat-dialog-container {
+    background-image: url('/assets/login-lib.PNG');
+    background-size: cover;
+    background-position: center;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .full-screen-modal .mat-dialog-content {
+    background-color: rgba(0, 0, 0, 0.5);  /* Matnni o'qish uchun fon ustiga yarim shaffof qora qatlam */
+    text-align: center;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 80%;
+  }
+  

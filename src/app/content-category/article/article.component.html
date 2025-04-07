@@ -1,6 +1,7 @@
 
   
-<div class="py-5"> 
+<!-- <div class="py-5"> 
+
   <div class="w-[500px]   bg-gray-100 py-6 px-12 rounded-[14px] mt-5">
     <h3 class="!text-[22px]">Maqolalar</h3>
     <div class="flex flex-col w-full gap-[15px] mb-[25px]">
@@ -46,4 +47,47 @@
   
     </div>
   </div>
+</div> -->
+
+<div class="max-w-[325px] flex flex-wrap justify-between gap-3">
+
+  <!-- News Card -->
+  <div class="bg-gray-50 rounded-2xl shadow-md overflow-hidden w-full">
+    
+    <!-- Image block -->
+    <div class="flex justify-center items-center w-full h-60 mt-2 overflow-hidden pt-2">
+      <img *ngIf="articles?.image" [src]="articles?.image?.filePath" alt="Yangilik rasmi" class="w-full h-full object-cover">
+    </div>
+    
+    <!-- Text content -->
+    <div class="p-2">
+      <p class="text-xl font-semibold mb-2 h-[55px]">
+        {{ articles?.title }}
+      </p>
+
+      <div class="text-gray-700 text-sm mb-3">
+        <p class="mb-1 line-clamp-4">
+          {{ articles?.text }}
+        </p>
+
+        <a [href]="articles?.link" class="inline-block text-blue-600 text-sm font-medium hover:underline">
+          Batafsil o'qish →
+        </a>
+      </div>
+    </div>
+
+    <!-- Admin actions -->
+    <div class="p-4 pt-0" *ngIf="userRole === 'Admin'">
+      <div class="w-full flex justify-end items-center gap-3">
+        <button class="bg-blue-500 text-white w-[40px] h-[40px] rounded hover:bg-blue-600" (click)="onEdit()">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button class="bg-red-500 text-white w-[40px] h-[40px] rounded hover:bg-red-600" (click)="onDelete()">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </div>
+
+  </div>
+
 </div>

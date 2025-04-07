@@ -7,6 +7,9 @@ import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { HomeComponent } from './home/home.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { PrimaryPageComponent } from './primary-page/primary-page.component';
+import { FooterComponent } from './footer/footer.component';
+import { LayoutComponent } from './layout/layout.component';
+import { AboutModalComponent } from './footer/aboutModal.component';
 
 
 @NgModule({
@@ -16,6 +19,9 @@ import { PrimaryPageComponent } from './primary-page/primary-page.component';
     HomeComponent,
     NavbarComponent,
     PrimaryPageComponent,
+    FooterComponent,
+    LayoutComponent,
+    AboutModalComponent,
   ],
   imports: [
     CommonModule,
@@ -25,7 +31,8 @@ import { PrimaryPageComponent } from './primary-page/primary-page.component';
   ],
   exports: [
     LoginComponent,
-    HomeComponent
+    HomeComponent,
+    LayoutComponent
   ],
   providers: [
     provideNgxMask(),

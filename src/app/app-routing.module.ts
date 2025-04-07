@@ -22,7 +22,7 @@ const routes: Routes = [
   {path: 'profile', component: ProfileComponent, canActivate: [AuthGuard]},
   {path: 'category', component: CategoryComponent, canActivate: [AuthGuard]},
   {path: 'article', component: ArticleContentComponent, canActivate: [AuthGuard]},
-  {path: 'videos', component: ContentVideoComponent, canActivate: [AuthGuard]},
+  // {path: 'videos', component: ContentVideoComponent, canActivate: [AuthGuard]},
   {path: 'categories', component: CategoryContentComponent, canActivate: [AuthGuard]},
   {path: 'books', component: BookContentComponent, canActivate: [AuthGuard]},
   {path: 'questions', component: QuestionComponent, canActivate: [AuthGuard]},

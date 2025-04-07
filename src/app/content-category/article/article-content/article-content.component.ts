@@ -13,12 +13,22 @@ import { ConfirmDeleteComponent } from 'src/app/shared/shared/confirm-delete/con
 export class ArticleContentComponent implements OnInit{
 
   articles: DetailedArticle [] = [];
-  isOpened = false
+  isOpened = false;
+  userRole: string | null
+
 
 
   constructor(private articleService: ArticleService,
     private dialog: MatDialog
-  ){}
+  ){
+    const userRole = localStorage.getItem('role');
+    let parseUserRole = null;
+    if(userRole != null){
+      parseUserRole = JSON.parse(userRole)
+    }
+   
+    this.userRole = parseUserRole
+  }
 
   ngOnInit(): void {
     this.loadArticles()

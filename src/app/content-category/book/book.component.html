@@ -1,30 +1,28 @@
 <div class="py-5"> 
-<div *ngIf="book" class="p-4 bg-slate-50 rounded-md w-[350px]">
+<div *ngIf="book" class="p-4 bg-slate-50 rounded-md w-[450px]">
 
     <h2 class="text-2xl font-bold mb-2 !mb-0"> <span class="text-xl font-semibold">Kitob nomi:</span> {{ book.title }}</h2>
+    <h2 class="text-2xl font-bold mb-2 !mb-0"> <span class="text-xl font-semibold">Kitob nomi:</span> {{ book.author }}</h2>
      
     <div>
       <p class="text-2xl font-bold mb-2 !mb-0"> <span class="text-xl font-semibold">Kiob yili:</span> {{ book.year }}</p>
       <p class="text-2xl font-bold mb-2 !mb-0"> <span class="text-xl font-semibold">Kiob janri:</span> {{ book.genre }}</p>
     </div>
     
-    <div class="flex items-center mt-2">
-      <p class="text-sm text-gray-700 flex-1"
-         [class.line-clamp-2]="expandedBookId !== book.id">
-        {{ book.description }}
-      </p>
-      <mat-icon class="cursor-pointer text-gray-600 ml-2"
-                (click)="toggleDescription(book.id)">
-        {{ expandedBookId === book.id ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}
-      </mat-icon>
+    <div class="flex items-center mt-2 !h-[90x]">
+      <p class="text-sm text-gray-700 flex-1">
+        <!-- [class.line-clamp-4]="expandedBookId !== book.id" -->
+      {{ book.description }}
+    </p>
+
     </div>
 
     <div class="mt-4 flex gap-10 items-center text-center">
 
       <div class="">
-        <a [href]="book.file.filePath" target="_blank" download  class="text-blue-500 text-[18px] border rounded-md p-2 bg-blue-50 ">
+        <!-- <a [href]="book.file.filePath" target="_blank" download  class="text-blue-500 text-[18px] border rounded-md p-2 bg-blue-50 ">
           Faylni ko'rish
-        </a>
+        </a> -->
         
         <div class="flex !mt-4" *ngIf="userRole === 'Admin'">
 
@@ -40,7 +38,10 @@
    
       </div>
 
-      <img [src]="book.image.filePath" [alt]="book.title" class="w-32 h-32 object-cover rounded-md shadow" />
+      <div class="flex justify-center items-center w-32 h-32">
+        <img [src]="book.image.filePath" [alt]="book.title" class="w-32 h-32 object-cover rounded-md shadow" />
+      </div>
+      
     </div>
 
   </div>

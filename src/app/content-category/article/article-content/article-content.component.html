@@ -1,11 +1,11 @@
 <app-home>
 </app-home>
-<button mat-butto class="bg-gray-500 m-2 text-white py-2 px-4 rounded-[6px]" (click)="openDialog(false)">Maqola Qo'shish</button>
+<button mat-butto class="bg-gray-500 m-2 text-white py-2 px-4 rounded-[6px]" (click)="openDialog(false)" *ngIf="userRole === 'Admin'">Maqola Qo'shish</button>
 
 <div class="container">
-    <div class="flex flex-wrap justify-around">
+    <div class="flex justify-around flex-wrap gap-y-5 !py-7">
 
-        <ng-container *ngFor="let article of articles let i = index">
+        <ng-container *ngFor="let article of articles let i = index" class="!mb-5 pb-5">
             <app-article  [articles]="article" (delete)="confirmArticleDelete(article.id)" (edit)="openDialog(true, i)"></app-article>
         </ng-container>
     </div>

@@ -1,0 +1,60 @@
+<footer class="bg-gray-800 text-white py-8">
+    <div class="container"> 
+
+    
+    <div class="container mx-auto flex flex-col md:flex-row justify-between items-center">
+        <!-- Logo -->
+        <div class="mb-4 md:mb-0 bg-gray-400 rounded-[10px]">
+            <img src="assets/logo.PNG" alt="Logo" class="h-32">
+        </div>
+        
+        <!-- About Us and Project -->
+        <div class="flex flex-col md:flex-row gap-10">
+            <div class="flex flex-col">
+                <button (click)="openAboutModal()" class="font-medium text-lg mb-2 hover:text-blue-400 flex items-center gap-2 text-left">
+                    <i class="fas fa-info-circle text-blue-500"></i> Biz haqimizda
+                  </button>
+              <a href="" class="font-medium text-lg mb-2 hover:text-blue-400 flex items-center gap-2">
+                <i class="fas fa-project-diagram text-purple-500"></i> Loyiha haqida
+              </a>
+              <a href="https://t.me/arsenal_coyg" class="font-medium text-lg mb-2 hover:text-blue-400 flex items-center gap-2">
+                <i class="fas fa-paper-plane text-teal-500"></i> Biz bilan bog'lanish
+              </a>
+            </div>
+            
+        
+            <div class="flex flex-col">
+                <a href="/books" class="font-medium text-lg mb-2 hover:text-blue-400 flex items-center gap-2">
+                  <i class="fas fa-book text-amber-500"></i> Kitoblar
+                </a>
+                <a href="/article" class="font-medium text-lg mb-2 hover:text-blue-400 flex items-center gap-2">
+                  <i class="fas fa-newspaper text-red-500"></i> Yangiliklar
+                </a>
+                <a (click)="scrollToKitobxon()" class="font-medium text-lg mb-2 hover:text-blue-400 flex items-center gap-2">
+                  <i class="fas fa-question-circle text-green-500"></i> Quizlar
+                </a>
+              </div>
+          </div>
+
+
+        <!-- Social Media Icons -->
+        <div class="flex space-x-6">
+            <a href="https://www.instagram.com/choriyev_07" class="text-white hover:text-gray-400">
+                <i class="fab fa-instagram text-3xl"></i>
+            </a>
+            <a href="https://t.me/arsenal_coyg" class="text-white hover:text-gray-400">
+                <i class="fab fa-telegram-plane text-3xl"></i>
+            </a>
+            <a href="https://twitter.com/LChoriyev" class="text-white hover:text-gray-400">
+                <i class="fab fa-twitter text-3xl"></i>
+            </a>
+            <a href="https://www.facebook.com" class="text-white hover:text-gray-400">
+                <i class="fab fa-facebook text-3xl"></i>
+            </a>
+            
+        </div>
+    </div>
+</div>
+</footer>
+
+

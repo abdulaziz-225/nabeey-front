@@ -46,7 +46,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     MatDialogModule,
     MatTabsModule,
     MatCardModule,
-    MatPaginatorModule
+    MatPaginatorModule,
     // MatToolbarModule
   ],
   exports: [

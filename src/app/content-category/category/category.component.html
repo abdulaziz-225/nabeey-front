@@ -8,7 +8,7 @@
     <mat-option value="all">All Contents</mat-option>
     <mat-option value="articles">Articles</mat-option>
     <mat-option value="books">Books</mat-option>
-    <mat-option value="videos">Videos</mat-option>
+    <!-- <mat-option value="videos">Videos</mat-option> -->
   </mat-select>
 </mat-form-field>
 
@@ -39,7 +39,7 @@
           
         </div>
         
-        <div *ngIf="visibleContent === 'books' || visibleContent === 'all'" class="!pb-5">
+        <div *ngIf="visibleContent === 'books' || visibleContent === 'all'" class="!pb-5 ">     
           <h3 *ngIf="category.books.length > 0" class="!text-2xl !font-semibold !text-gray-800 !mb-0 text-center !pt-7
              border-b-2 border-blue-500 !pb-2">Ushbu category'iga oid barcha kitoblar!</h3>
 
@@ -49,13 +49,18 @@
                 <p class="!text-2xl !font-semibold !text-gray-800 text-center">Ushbu category'ga oid kitoblar yo'q!</p>
               </div>
               
-               <div *ngFor="let book of category.books let i = index">
-                 <app-book [book]="book" (edit)="openBookDialog(true, i)" (delete)="confirmDeleteBook(book.id)"></app-book>
-               </div>
+              <div class="flex justify-evenlynpm install font-awesome
+ gap-3 flex-wrap">
+
+                <div *ngFor="let book of category.books let i = index" class="">
+                  <app-book [book]="book" (edit)="openBookDialog(true, i)" (delete)="confirmDeleteBook(book.id)"></app-book>
+                </div>
+              </div>
              </div>
+           
         </div>
 
-        <div *ngIf="visibleContent === 'videos' || visibleContent === 'all'">
+        <!-- <div *ngIf="visibleContent === 'videos' || visibleContent === 'all'">
           <h3 *ngIf="category.videos.length > 0" class="!text-2xl !font-semibold !text-gray-800 !mb-0 text-center 
             !pt-7 border-b-2 border-blue-500 !pb-2">Ushbu category'iga oid barcha videolar</h3>
           <div class="flex justify-around flex-wrap gap-y-5 pb-7">
@@ -66,7 +71,7 @@
             </div>
           </div>
           
-        </div>
+        </div> -->
 
       </div>
     </div>
