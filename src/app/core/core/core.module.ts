@@ -32,7 +32,8 @@ import { AboutModalComponent } from './footer/aboutModal.component';
   exports: [
     LoginComponent,
     HomeComponent,
-    LayoutComponent
+    LayoutComponent,
+    FooterComponent
   ],
   providers: [
     provideNgxMask(),
