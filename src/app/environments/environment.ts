@@ -4,4 +4,3 @@ export const environment = {
     // apiUrl: 'https://localhost:7267/api'
     apiUrl: 'https://api.kitobsevar.olami.uz/api'
   };
-  
