@@ -1,0 +1,52 @@
+<app-home></app-home>
+<div class="p-5">
+    <app-progress-button
+    [currentScore]="totalScore"
+    label="Ballar"
+    ></app-progress-button>
+  </div>
+
+  <div class="p-6 bg-white rounded-lg shadow-md w-full max-w-md mx-auto text-center">
+    <h2 class="text-xl font-bold mb-4">🎉 Tabriklaymiz!</h2>
+  
+    <!-- Agar hali 1000 ball to‘plamagan bo‘lsa -->
+    <div *ngIf="totalScore < 1000; else rewardBlock">
+      <p class="text-gray-700 font-medium mb-2">
+        Siz hozirda <strong>{{ totalScore }}</strong> ball to‘plagansiz.
+      </p>
+      <p class="text-orange-500 font-semibold">
+        Rag‘bat olish uchun yana <strong>{{ pointsLeft }}</strong> ball to‘plashingiz kerak.
+      </p>
+    </div>
+  
+    <!-- Aks holda (1000 yoki ko‘proq ball bo‘lsa) -->
+    <ng-template #rewardBlock>
+      <div *ngIf="!isAlreadySent; else sentBlock" class="space-y-4">
+        <p class="mb-2 text-green-700 font-semibold">
+          Siz 1000 ball to‘pladingiz! 🎁 Sovg‘ani olish uchun Telegram username'ingizni yuboring:
+        </p>
+  
+        <input
+          [(ngModel)]="telegramUsername"
+          class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:border-orange-500"
+          placeholder="@username"
+          [disabled]="disableInput"
+        />
+  
+        <button
+          class="w-full bg-orange-500 text-white py-2 rounded font-semibold hover:bg-orange-600 disabled:opacity-50"
+          (click)="sendUsername()"
+          [disabled]="disableInput || !telegramUsername"
+        >
+          Yuborish
+        </button>
+      </div>
+  
+      <ng-template #sentBlock>
+        <p class="text-green-600 font-semibold">Siz allaqachon rag‘bat olgansiz. 🎁</p>
+      </ng-template>
+    </ng-template>
+  </div>
+  
+  
+  
