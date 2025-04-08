@@ -32,6 +32,9 @@ import { ScoreDialogComponent } from './quizzes/start-quiz-dialog/score-dialog/s
     CommonModule,
     CoreModule,
     SharedModule
+  ],
+  exports: [
+    // ProgressButtonComponent
   ]
 })
 export class QuizzesModule { }

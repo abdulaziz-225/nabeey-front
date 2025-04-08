@@ -1,0 +1,64 @@
+<div class="flex items-center gap-6 p-6 bg-white rounded-xl shadow-lg container">
+    <!-- Description text with larger font size and motivational tone -->
+   <!-- Navigation icon with book motif -->
+ 
+        
+        <div class="flex-shrink-0 text-orange-500">
+         <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+         </svg>
+       </div>
+     
+       <!-- Text content with tighter spacing -->
+       <div class="flex-1 min-w-0">
+         <p class="text-xl font-bold text-gray-800 truncate">Kitoblar dunyosidagi safaringiz</p>
+         <p class="text-xs text-gray-500 mt-0.5">Har bir kitob sizni yangi bilimlar dunyosiga olib boradi!</p>
+       </div>
+ 
+
+  <!-- Optional chevron for navigation -->
+  <div class="flex-shrink-0 text-gray-400">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+      <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+    </svg>
+  </div>
+    
+    <!-- Progress bar container with more visual impact -->
+    <div class="relative w-72 h-20 rounded-xl overflow-hidden bg-gradient-to-b from-gray-100 to-gray-200 border border-gray-300">
+      <!-- Glowing progress bar -->
+      <div 
+        class="absolute top-0 left-0 h-full bg-gradient-to-r from-orange-400 to-orange-600 transition-all duration-700 ease-out shadow-[inset_0_2px_4px_rgba(255,255,255,0.3)]"
+        [style.width.%]="progress"
+      ></div>
+      
+      <!-- Decorative elements -->
+      <div class="absolute top-0 right-0 w-2 h-full bg-white opacity-20"></div>
+      
+      <!-- Text content with better hierarchy -->
+      <div class="relative z-10 flex flex-col items-center justify-center h-full px-4">
+        <div class="flex items-center justify-between w-full">
+          <span class="text-xs font-semibold text-gray-700">O'qilgan kitoblar</span>
+          <span class="text-xs font-bold text-gray-800">{{ currentScore }} / {{ maxScore }}</span>
+        </div>
+        
+        <!-- Animated percentage -->
+        <div class="w-full mt-1">
+          <div class="flex items-center">
+            <span class="text-lg font-extrabold text-gray-900 mr-1">{{ progress }}%</span>
+            <span class="text-xs text-gray-600">tugallandi</span>
+          </div>
+          <!-- Mini progress indicator -->
+          <div class="w-full h-1.5 mt-1 bg-gray-300 rounded-full overflow-hidden">
+            <div class="h-full bg-orange-500 rounded-full" [style.width.%]="progress"></div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Celebration icon appears when progress is high -->
+      <div *ngIf="progress > 70" class="absolute -top-3 -right-3 text-yellow-400">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 100-2 1 1 0 000 2zm7-1a1 1 0 11-2 0 1 1 0 012 0zm-.464 5.535a1 1 0 10-1.415-1.414 3 3 0 01-4.242 0 1 1 0 00-1.415 1.414 5 5 0 007.072 0z" clip-rule="evenodd" />
+        </svg>
+      </div>
+    </div>
+  </div>

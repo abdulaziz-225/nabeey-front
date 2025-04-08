@@ -1,5 +1,5 @@
 import { MatDialog } from '@angular/material/dialog';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { BookService } from 'src/app/content-category/services/book.service';
 import { QuizQustionService } from 'src/app/quizzes/services/quiz-qustion.service';
 import { StartQuizDialogComponent } from 'src/app/quizzes/quizzes/start-quiz-dialog/start-quiz-dialog.component';
@@ -30,13 +30,21 @@ export class PrimaryPageComponent implements OnInit{
   contentCategories: any[] = [];
   paginatedArticles: DetailedArticle[] = [];
   selectedCategory: string = '';
+  totalScore: number = 0;
+  intervalId: any;
 
   
   constructor(private bookService: BookService, private quizQuestionService: QuizQustionService,
-    private dialog: MatDialog, private articleService: ArticleService, private contentCategoriesService: ContentCategoryService
+    private dialog: MatDialog, private articleService: ArticleService, private contentCategoriesService: ContentCategoryService,
   ){
 
   }
+
+  // userProgress = {
+  //   totalScore: 0,
+  //   completedBooks: new Set<number>(),
+  // };
+
   get totalBookPages(): number {
     return Math.ceil(this.filteredBooks.length / this.itemsPerPageBooks);
   }
@@ -66,8 +74,10 @@ export class PrimaryPageComponent implements OnInit{
       console.log("Qidiruv qiymati:", value);
       this.updateFilteredBooks(value || ''); 
     });
-  }
 
+
+  }
+  
   loadContentCategories(){
     this.contentCategoriesService.loadContentCategory().subscribe(data=>{
       this.contentCategories = data
@@ -218,6 +228,7 @@ export class PrimaryPageComponent implements OnInit{
       element.scrollIntoView({ behavior: 'smooth' });
     }
   }
+
   
 
   

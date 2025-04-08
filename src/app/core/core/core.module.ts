@@ -10,6 +10,7 @@ import { PrimaryPageComponent } from './primary-page/primary-page.component';
 import { FooterComponent } from './footer/footer.component';
 import { LayoutComponent } from './layout/layout.component';
 import { AboutModalComponent } from './footer/aboutModal.component';
+import { ProgressButtonComponent } from 'src/app/quizzes/quizzes/start-quiz-dialog/progress-button/progress-button.component';
 
 
 @NgModule({
@@ -22,6 +23,7 @@ import { AboutModalComponent } from './footer/aboutModal.component';
     FooterComponent,
     LayoutComponent,
     AboutModalComponent,
+    ProgressButtonComponent
   ],
   imports: [
     CommonModule,
