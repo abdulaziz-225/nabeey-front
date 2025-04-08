@@ -12,6 +12,7 @@ import { CategoryContentComponent } from './content-category/category/category-c
 import { QuestionComponent } from './quizzes/question/question.component';
 import { QuizzesComponent } from './quizzes/quizzes/quizzes.component';
 import { PrimaryPageComponent } from './core/core/primary-page/primary-page.component';
+import { EncourageComponent } from './core/core/encourage/encourage.component';
 
 const routes: Routes = [
   {
@@ -28,7 +29,7 @@ const routes: Routes = [
   {path: 'questions', component: QuestionComponent, canActivate: [AuthGuard]},
   {path: 'quiz', component: QuizzesComponent, canActivate: [AuthGuard]},
   {path: 'home', component: PrimaryPageComponent, canActivate: [AuthGuard]},
-  
+  {path: 'encourage', component: EncourageComponent, canActivate: [AuthGuard]},
 
 ];
 
