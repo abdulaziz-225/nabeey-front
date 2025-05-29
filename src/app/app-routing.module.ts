@@ -6,7 +6,6 @@ import { ProfileComponent } from './profile/profile/profile.component';
 import { CategoryComponent } from './content-category/category/category.component';
 // import { ArticleComponent } from './content-category/article/article.component';
 import { ArticleContentComponent } from './content-category/article/article-content/article-content.component';
-import { ContentVideoComponent } from './content-category/category/content-video/content-video.component';
 import { BookContentComponent } from './content-category/book/book-content/book-content.component';
 import { CategoryContentComponent } from './content-category/category/category-content/category-content.component';
 import { QuestionComponent } from './quizzes/question/question.component';
@@ -30,8 +29,6 @@ const routes: Routes = [
   {path: 'quiz', component: QuizzesComponent, canActivate: [AuthGuard]},
   {path: 'home', component: PrimaryPageComponent, canActivate: [AuthGuard]},
   {path: 'encourage', component: EncourageComponent, canActivate: [AuthGuard]},
-  
-
 ];
 
 @NgModule({
