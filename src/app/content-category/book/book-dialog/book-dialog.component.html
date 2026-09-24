@@ -83,24 +83,27 @@
     </div>
     
     <div class="!mt-0 mb-6 image-upload">
-      <a [href]="filePreview" target="_blank"  class="text-blue-500 text-[18px] flex justify-center
-      border rounded-md p-2 bg-blue-50 w-[130px] h-[100px] mb-[10px] text-center items-center mx-auto" *ngIf="filePreview">
+      <a [href]="filePreview" target="_blank" class="text-blue-500 text-[18px] flex justify-center
+      border rounded-md p-2 bg-blue-50 w-[130px] h-[100px] mb-[10px] text-center items-center mx-auto"
+         *ngIf="filePreview && !selectedFileName">
         Faylni ko'rish
       </a>
-      <label class="custom-file-upload  !flex !justify-center">{{book?.id? "Fayl Almashtirish" : "Fayl Qo'yish"}}
+      <label class="custom-file-upload !flex !justify-center">{{selectedFileName || book?.id ? "Fayl Almashtirish" : "Fayl Qo'yish"}}
         <input type="file" (change)="onFilesSelected($event, 'file')" accept=".pdf,.doc,.docx,.txt"/>
       </label>
-
+      <p class="!m-0 mt-2 text-sm text-emerald-600 text-center" *ngIf="selectedFileName">
+        ✓ {{ selectedFileName }}
+      </p>
     </div>
   </div>
   
   
     <div class=" gap-[10px] flex justify-end mb-3">
-      <button mat-raised-button class="!bg-gray-300" (click)="onClose()">
+      <button class="btn-secondary" (click)="onClose()">
         Bekor Qilish
       </button>
-      <button mat-raised-button color="primary" [disabled]="bookForm.invalid" (click)="createBook()">
-        Qo'shish
+      <button class="btn-primary" [disabled]="bookForm.invalid" (click)="createBook()">
+        {{ isEdit ? 'Yangilash' : "Qo'shish" }}
       </button>
     </div>
   </form>

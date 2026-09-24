@@ -46,7 +46,9 @@ export class QuestionsService {
     createQuestions(data: Question){
       let formData = new FormData;
       formData.append('text', data.text);
-      formData.append('image', data.image)
+      if (data.image) {
+        formData.append('image', data.image);
+      }
 
     return  this.http.post(`${this.apiUrl}/questions/create`, formData)
     }
@@ -55,7 +57,9 @@ export class QuestionsService {
       let formData = new FormData;
       formData.append('id', data.id);
       formData.append('text', data.text);
-      formData.append('image', data.image)
+      if (data.image) {
+        formData.append('image', data.image);
+      }
 
     return  this.http.put(`${this.apiUrl}/questions/update`, formData)
     }

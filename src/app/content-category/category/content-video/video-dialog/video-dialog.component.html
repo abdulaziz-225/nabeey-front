@@ -48,10 +48,10 @@
     </div>
 
     <div class=" gap-[10px] flex justify-end mb-3">
-        <button mat-raised-button class="!bg-gray-300" (click)="onClose()">
+        <button class="btn-secondary" (click)="onClose()">
           Bekor Qilish
         </button>
-        <button mat-raised-button color="primary" [disabled]="videoForm.invalid" (click)="createVideo()">
-          Qo'shish
+        <button class="btn-primary" [disabled]="videoForm.invalid" (click)="createVideo()">
+          {{ isEdit ? 'Yangilash' : "Qo'shish" }}
         </button>
       </div>

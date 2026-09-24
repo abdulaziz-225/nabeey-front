@@ -31,7 +31,7 @@ export class QuestionDialogComponent implements OnInit{
 
   formBuilder(){
     this.questionForm = this.fb.group({
-      id: [this.question.id],
+      id: [this.question?.id],
       text: ['', Validators.required]
     })
   }

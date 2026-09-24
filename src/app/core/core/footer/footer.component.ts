@@ -9,6 +9,8 @@ import { AboutModalComponent } from './aboutModal.component';
 })
 export class FooterComponent {
 
+  currentYear: number = new Date().getFullYear();
+
   scrollToKitobxon() {
     const element = document.getElementById('kitobxon');
     if (element) {

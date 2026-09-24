@@ -29,7 +29,7 @@ import { MatDialogRef } from '@angular/material/dialog';
   </div>
 </mat-dialog-content>
 <mat-dialog-actions class="justify-end">
-  <button mat-raised-button color="primary" (click)="close()">
+  <button class="btn-primary" (click)="close()">
     <i class="fas fa-times mr-2"></i>Yopish
   </button>
 </mat-dialog-actions>

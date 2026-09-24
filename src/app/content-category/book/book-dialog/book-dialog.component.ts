@@ -23,6 +23,7 @@ export class BookDialogComponent implements OnInit{
 
   imagePreview: string | ArrayBuffer | null = null
   filePreview: string | ArrayBuffer | null = null
+  selectedFileName: string | null = null
 
   constructor(private bookService: BookService,
     private fb: FormBuilder, public dialogRef: DialogRef<BookDialogComponent>,
@@ -46,11 +47,11 @@ export class BookDialogComponent implements OnInit{
       this.bookForm.patchValue(this.book)
     }
 
-    if( this.book?.id && this.book.image.filePath){
+    if( this.book?.id && this.book.image?.filePath){
       this.imagePreview = this.book.image.filePath
     }
 
-    if( this.book?.id && this.book.file.filePath){
+    if( this.book?.id && this.book.file?.filePath){
       this.filePreview = this.book.file.filePath
     }
 
@@ -125,17 +126,17 @@ onFilesSelected(event: Event, type: 'image' | 'file') {
         const selectedFile = fileInput.files[0];
 
         if (type === 'image') {
-            this.selectedImageFile = selectedFile; 
+            this.selectedImageFile = selectedFile;
             const reader = new FileReader();
             reader.onload = () => {
                 this.imagePreview = reader.result as string;
-                this.filePreview = reader.result as string;
                 this.bookForm.patchValue({ image: this.selectedImageFile });
             };
             reader.readAsDataURL(this.selectedImageFile);
         } else if (type === 'file') {
             this.selectedOtherFile = selectedFile;
-            
+            this.selectedFileName = selectedFile.name;
+            this.bookForm.patchValue({ file: this.selectedOtherFile });
         }
     }
 }

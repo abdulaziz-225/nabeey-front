@@ -5,7 +5,7 @@ export interface Category{
     id: number;
     name: string;
     description: string;
-    image: FileData;
+    image: FileData | null;
     books: any[]; 
     audios: any[]; 
     videos: any[]; 

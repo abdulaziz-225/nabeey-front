@@ -55,3 +55,109 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .custom-file-upload input {
   display: none;
 }
+
+/* ===== Unified button design system (used across the whole app) ===== */
+.btn-primary,
+.btn-secondary,
+.btn-danger,
+.btn-success {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: none !important;
+  border-radius: 9999px !important;
+  font-weight: 600 !important;
+  font-size: 0.9rem;
+  padding: 10px 22px !important;
+  line-height: 1.2;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-primary {
+  color: #fff !important;
+  background: linear-gradient(90deg, #2563eb 0%, #312e81 100%) !important;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.28) !important;
+}
+.btn-primary:hover:not(:disabled) {
+  background: linear-gradient(90deg, #3b82f6 0%, #3730a3 100%) !important;
+  box-shadow: 0 6px 18px rgba(37, 99, 235, 0.35) !important;
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  color: #334155 !important;
+  background: #f1f5f9 !important;
+}
+.btn-secondary:hover:not(:disabled) {
+  background: #e2e8f0 !important;
+}
+
+.btn-danger {
+  color: #fff !important;
+  background: linear-gradient(90deg, #dc2626 0%, #991b1b 100%) !important;
+  box-shadow: 0 4px 14px rgba(220, 38, 38, 0.25) !important;
+}
+.btn-danger:hover:not(:disabled) {
+  background: linear-gradient(90deg, #ef4444 0%, #b91c1c 100%) !important;
+  transform: translateY(-1px);
+}
+
+.btn-success {
+  color: #fff !important;
+  background: linear-gradient(90deg, #059669 0%, #065f46 100%) !important;
+  box-shadow: 0 4px 14px rgba(5, 150, 105, 0.25) !important;
+}
+.btn-success:hover:not(:disabled) {
+  background: linear-gradient(90deg, #10b981 0%, #047857 100%) !important;
+  transform: translateY(-1px);
+}
+
+.btn-primary:disabled,
+.btn-secondary:disabled,
+.btn-danger:disabled,
+.btn-success:disabled,
+.btn-primary.opacity-30,
+.btn-primary.btn-disabled {
+  opacity: 0.45 !important;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none !important;
+}
+
+.btn-icon {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 36px !important;
+  height: 36px !important;
+  border-radius: 9999px !important;
+  border: none !important;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.btn-icon-primary {
+  background: #eff6ff !important;
+  color: #2563eb !important;
+}
+.btn-icon-primary:hover {
+  background: #2563eb !important;
+  color: #fff !important;
+}
+.btn-icon-danger {
+  background: #fef2f2 !important;
+  color: #dc2626 !important;
+}
+.btn-icon-danger:hover {
+  background: #dc2626 !important;
+  color: #fff !important;
+}
+.btn-icon-success {
+  background: #ecfdf5 !important;
+  color: #059669 !important;
+}
+.btn-icon-success:hover {
+  background: #059669 !important;
+  color: #fff !important;
+}

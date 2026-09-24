@@ -13,7 +13,8 @@ import { QuizzesComponent } from './quizzes/quizzes/quizzes.component';
 import { PrimaryPageComponent } from './core/core/primary-page/primary-page.component';
 import { EncourageComponent } from './core/core/encourage/encourage.component';
 
-const routes: Routes = [
+const routes: Routes = 
+[
   {
     path: '', component: LoginComponent, pathMatch: 'full'
   },
@@ -30,6 +31,24 @@ const routes: Routes = [
   {path: 'home', component: PrimaryPageComponent, canActivate: [AuthGuard]},
   {path: 'encourage', component: EncourageComponent, canActivate: [AuthGuard]},
 ];
+// [
+//   {
+//     path: '', component: LoginComponent, pathMatch: 'full'
+//   },
+//   { path: 'login', component: LoginComponent  },
+//   // {path: 'home', component: HomeComponent, canActivate: [AuthGuard]},
+//   {path: 'profile', component: ProfileComponent},
+//   {path: 'category', component: CategoryComponent},
+//   {path: 'article', component: ArticleContentComponent},
+//   // {path: 'videos', component: ContentVideoComponent, canActivate: [AuthGuard]},
+//   {path: 'categories', component: CategoryContentComponent},
+//   {path: 'books', component: BookContentComponent},
+//   {path: 'questions', component: QuestionComponent},
+//   {path: 'quiz', component: QuizzesComponent},
+//   {path: 'home', component: PrimaryPageComponent},
+//   {path: 'encourage', component: EncourageComponent},
+// ];
+
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

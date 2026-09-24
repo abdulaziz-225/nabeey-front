@@ -1,10 +1,25 @@
 .navbar{
     display: flex;
     align-items: center;
-    background-color: #585656   ; 
-    transition: 1s;
-    padding: 5px 15px;
-    color: #fff;  
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 84px;
+    z-index: 1000;
+    background: linear-gradient(90deg, rgba(13, 24, 48, 0.97) 0%, rgba(22, 38, 68, 0.97) 55%, rgba(30, 50, 90, 0.95) 100%);
+    box-shadow: 0 2px 14px rgba(0, 0, 0, 0.28), 0 1px 0 rgba(255, 255, 255, 0.04) inset;
+    border-bottom: 1px solid rgba(96, 140, 220, 0.18);
+    backdrop-filter: blur(6px);
+    transition: background-color 0.4s ease, box-shadow 0.4s ease;
+    padding: 4px 18px;
+    color: #fff;
+    box-sizing: border-box;
+}
+
+.navbar-spacer{
+    height: 84px;
 }
 
 .navbar-brand{
@@ -13,54 +28,79 @@
 }
 
 .navbar a{
-    color: #fff;
+    color: rgba(255, 255, 255, 0.85);
     text-decoration: none;
     font-size: 1.2em;
   }
 
   .navbar a:hover {
-    background-color: rgb(204, 204, 204, 0.3);//rgba(176, 169, 179, 0.3);
-    opacity: 0.9;
+    background-color: rgba(96, 150, 255, 0.16);
     color: #fff;
-  }
-  
-  .navbar:hover{
-    opacity: 0.9;
-    transition: 1s;
   }
 
   .navbar-left {
     font-weight: bold;
     font-size: 1.2em;
+    margin-left: 22px;
+    cursor: pointer;
   }
-  
+
+  .logo-img {
+    display: block;
+    padding: 3px 10px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.88);
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.25);
+  }
+
   .navbar-right {
     display: flex;
+    align-items: center;
     gap: 5px;
   }
 
   .navlink-container{
     flex-grow: 1;
-    display: flex;   
+    display: flex;
     align-items: center;
-    column-gap: 20px;
+    column-gap: 10px;
     justify-content: flex-end;
   }
 
   .navlink-container a {
-    color: #fff;
+    color: rgba(255, 255, 255, 0.82);
     text-decoration: none;
-    padding: 10px 20px;
+    padding: 9px 18px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
   }
-  
+
+  .navlink-container a:hover,
+  .navlink-container a:focus-visible {
+    background-color: rgba(96, 150, 255, 0.14);
+    color: #fff;
+    box-shadow: 0 0 0 1px rgba(96, 150, 255, 0.25) inset;
+  }
+
+  .navlink-container a.active,
+  .navlink-container a[aria-current="page"] {
+    background-color: rgba(96, 150, 255, 0.2);
+    color: #fff;
+  }
+
     mat-icon{
       padding-right: 5px;
+      color: rgba(255, 255, 255, 0.7);
     }
-  
+
+    .navlink-container a:hover mat-icon {
+      color: rgba(255, 210, 100, 0.95);
+    }
+
     .profile-link{
       margin-right: 7px;
     }

@@ -79,10 +79,10 @@
     <!-- Admin actions -->
     <div class="p-4 pt-0" *ngIf="userRole === 'Admin'">
       <div class="w-full flex justify-end items-center gap-3">
-        <button class="bg-blue-500 text-white w-[40px] h-[40px] rounded hover:bg-blue-600" (click)="onEdit()">
+        <button class="btn-icon btn-icon-primary" (click)="onEdit()">
           <mat-icon>edit</mat-icon>
         </button>
-        <button class="bg-red-500 text-white w-[40px] h-[40px] rounded hover:bg-red-600" (click)="onDelete()">
+        <button class="btn-icon btn-icon-danger" (click)="onDelete()">
           <mat-icon>delete</mat-icon>
         </button>
       </div>

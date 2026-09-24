@@ -17,11 +17,6 @@ import { switchMap } from 'rxjs';
 export class QuestionComponent implements OnInit{
 
   questions: any;
-  hidden: boolean = false;
-  selectedIndex: number = 0;
-
-
-  colors = ['border-green-500', 'border-blue-500', 'border-black'];
 
   constructor(private questionService: QuestionsService,
     private dialog: MatDialog,
@@ -52,15 +47,8 @@ export class QuestionComponent implements OnInit{
       });
     });
   }
-  
-   getBorderColor(index: number): string {
-        return this.colors[index % this.colors.length];
-    }
 
-  openDialog(isEdit: boolean, question?:string){
-    if(!question){
-      question = this.questions[this.selectedIndex]
-    }
+  openDialog(isEdit: boolean, question?: any){
     const dialogRef = this.dialog.open(QuestionDialogComponent,{
       data:{
         question: question,

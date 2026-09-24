@@ -1,38 +1,53 @@
 <app-home></app-home>
 
-<button class="!bg-gray-500 m-2 !text-white py-2 px-4 rounded-[6px]" mat-raised-button (click)="openDialog(false)">Kategoriya Qo'shish</button> 
+<div class="min-h-screen bg-slate-50 py-10 px-6">
+  <div class="max-w-6xl mx-auto">
 
-<p class="font-medium italic text-center text-2xl">Barcha content category'lar!</p>
-  
-<div class="container pt-5">  
-<div class="flex justify-between">
-  <div class="max-w-sm rounded overflow-hidden border flex w-[402px] h-[192px]" *ngFor="let item of contentCategories">
-
-    <img class="w-[192px] p-2 pr-[14px] object-cover" [src]="item.image.filePath" alt="{{ item.name }}">
-    
-    <div class="px-1 py-4 w-1/2 flex flex-col justify-between">
-        
+    <div class="flex flex-wrap items-center justify-between gap-4 mb-8">
       <div>
-        <div class="font-bold text-xl mb-2">{{ item.name }}</div>
-
-        <p class="text-gray-700 text-base !mb-0 !h-[52px] overflow-hidden">
-          {{ item.description }}
-        </p>
+        <h1 class="text-3xl font-bold text-slate-800 flex items-center gap-3 !m-0">
+          <span class="w-11 h-11 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-800 text-white flex items-center justify-center shadow-md">
+            <mat-icon>grid_view</mat-icon>
+          </span>
+          Barcha kategoriyalar
+        </h1>
+        <p class="text-slate-500 mt-1 !mb-0">Kontent kategoriyalarini shu yerdan boshqaring</p>
       </div>
-  
-      <div class="flex justify-end items-center gap-x-2">
-        
-        <button mat-raised-button color="primary" (click)="openDialog(true, item)">
-          Tahrirlash
-        </button>
 
-        <button mat-raised-button color="warn" (click)="confirmDelete(item.id)">
-          O'chirish
-        </button>
+      <button class="btn-primary" (click)="openDialog(false)">
+        <mat-icon>add</mat-icon>
+        Kategoriya qo'shish
+      </button>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-300 border-l-4 border-blue-600 overflow-hidden flex flex-col"
+           *ngFor="let item of contentCategories">
+
+        <div class="w-full h-40 bg-slate-100 overflow-hidden">
+          <img class="w-full h-full object-cover" [src]="item.image?.filePath || 'assets/Default_pfp.svg.png'" alt="{{ item.name }}">
+        </div>
+
+        <div class="p-5 flex flex-col flex-1">
+          <div class="flex items-start justify-between gap-2">
+            <h3 class="font-semibold text-lg text-slate-800 !m-0">{{ item.name }}</h3>
+
+            <div class="flex items-center gap-2 flex-shrink-0">
+              <button class="btn-icon btn-icon-primary" (click)="openDialog(true, item)">
+                <mat-icon class="!text-[18px]">edit</mat-icon>
+              </button>
+              <button class="btn-icon btn-icon-danger" (click)="confirmDelete(item.id)">
+                <mat-icon class="!text-[18px]">delete</mat-icon>
+              </button>
+            </div>
+          </div>
+
+          <p class="text-slate-500 text-sm mt-2 !mb-0 line-clamp-3">
+            {{ item.description }}
+          </p>
+        </div>
       </div>
     </div>
+
   </div>
 </div>
-</div>
-  
-

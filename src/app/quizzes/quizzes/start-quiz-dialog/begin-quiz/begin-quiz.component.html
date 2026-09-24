@@ -47,7 +47,7 @@
         </div>
   
         <div class="mt-6 flex justify-end gap-4">
-          <button mat-button color="primary" class="text-xl px-6 py-3" [disabled]="!selectedAnswer" (click)="nextQuestion()">
+          <button class="btn-primary !text-lg !px-6 !py-3" [disabled]="!selectedAnswer" (click)="nextQuestion()">
             Keyingi
           </button>
 
@@ -74,13 +74,11 @@
 
   <!-- Tugmalar -->
   <div class="mt-6 flex gap-4">
-    <button (click)="restartQuiz()" 
-      class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition-all duration-300">
+    <button (click)="restartQuiz()" class="btn-primary !py-3 !px-6 !text-base">
       🔄 Qayta ishlash
     </button>
 
-    <button (click)="goToHome()" 
-      class="bg-gray-600 hover:bg-gray-700 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition-all duration-300">
+    <button (click)="goToHome()" class="btn-secondary !py-3 !px-6 !text-base !bg-white/15 !text-white hover:!bg-white/25">
       🔙 Asosiy sahifaga qaytish
     </button>
   </div>

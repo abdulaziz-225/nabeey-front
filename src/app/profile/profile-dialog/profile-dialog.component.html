@@ -59,11 +59,11 @@
   </div>
     
       <div class=" gap-[10px] flex justify-end mb-3">
-        <button mat-raised-button class="!bg-gray-300" (click)="onCancel()">
+        <button class="btn-secondary" (click)="onCancel()">
           Bekor Qilish
         </button>
-        <button mat-raised-button color="primary" [disabled]="profileForm.invalid" (click)="onSave()">
-          Qo'shish
+        <button class="btn-primary" [disabled]="profileForm.invalid" (click)="onSave()">
+          Saqlash
         </button>
       </div>
     </form>

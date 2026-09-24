@@ -13,11 +13,11 @@
       <div class="profile-info" *ngIf="profiles">
 
 
-        <p class="text-sm-[20px]"> Ismi: <span> {{ profiles.firstName }} </span>
-          <a class="cursor-pointer ml-20 py-2 px-4 bg-gray-300 rounded text-xl fs-5" (click)="openDialog()">
+        <p class="text-sm-[20px] flex items-center gap-4"> Ismi: <span> {{ profiles.firstName }} </span>
+          <button class="btn-primary !py-2 !px-4 !text-sm" (click)="openDialog()">
             Edit Profile
-          </a>
-        </p>  
+          </button>
+        </p>
 
       <p>Email: {{ profiles.email }}</p>
       <p>Phone: {{ profiles.phone }}</p>

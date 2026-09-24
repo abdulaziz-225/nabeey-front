@@ -24,7 +24,9 @@ export class ContentCategoryService {
     let categoryData = new FormData();
     categoryData.append('name', data.name);
     categoryData.append('description', data.description);
-    categoryData.append('image', data.image);
+    if (data.image) {
+      categoryData.append('image', data.image);
+    }
     return this.http.post(`${this.apiUrl}/content-categories/create`, categoryData)
   }
 
@@ -33,7 +35,9 @@ export class ContentCategoryService {
     categoryData.append('id', data.id);
     categoryData.append('name', data.name);
     categoryData.append('description', data.description);
-    categoryData.append('image', data.image);
+    if (data.image) {
+      categoryData.append('image', data.image);
+    }
    return  this.http.put(`${this.apiUrl}/content-categories/update`, categoryData)
   }
 

@@ -17,16 +17,15 @@ style="height: calc(100vh - 79px); background-image: url('assets/login-lib.PNG')
                 <img src="assets/Shavkat_Mirziyoyev.jpg" alt="Shavkat Mirziyoyev" class="w-full h-full object-cover">
             </div>
         </div>
-        <blockquote class="text-xl md:text-2xl font-semibold italic leading-relaxed text-gray-200 animate__animated animate__fadeInDown animate__delay-1s">
-            “Dunyodagi har qaysi davlat, har qaysi xalq birinchi navbatda o‘zining inatellektual salohiyati, 
-            yuksak ma’naviyati bilan qudratlidir. Bunday yengilmas kuch manbai esa avvalo insoniyat tafakkurining 
+        <blockquote class="text-xl md:text-2xl font-semibold italic leading-relaxed text-slate-100 drop-shadow-md animate__animated animate__fadeInDown animate__delay-1s">
+            “Dunyodagi har qaysi davlat, har qaysi xalq birinchi navbatda o‘zining inatellektual salohiyati,
+            yuksak ma’naviyati bilan qudratlidir. Bunday yengilmas kuch manbai esa avvalo insoniyat tafakkurining
             buyuk kashfiyoti — kitob va kutubxonalarda.”
         </blockquote>
-        <p class="mt-4 text-3xl font-bold text-yellow-400 animate__animated animate__fadeInUp animate__delay-1s">
+        <p class="mt-4 text-xl md:text-2xl font-semibold uppercase tracking-widest text-amber-300 animate__animated animate__fadeInUp animate__delay-1s">
             — Shavkat Mirziyoyev
         </p>
-        <button class="mt-6 px-8 py-3 bg-gradient-to-r from-green-500 to-green-700 hover:from-green-600 hover:to-green-800 text-white rounded-full text-lg font-semibold shadow-2xl 
-                      transition-all duration-300 ease-in-out animate__animated animate__bounceIn animate__delay-2s transform hover:scale-105"
+        <button class="btn-primary mt-6 !px-8 !py-3 !text-lg animate__animated animate__bounceIn animate__delay-2s transform hover:scale-105"
                 (click)="scrollToKitobxon()">
             Kitobxonlik darajasini aniqlash
         </button>
@@ -45,35 +44,34 @@ style="height: calc(100vh - 79px); background-image: url('assets/login-lib.PNG')
   
   
   <div class="w-[80%] p-6 flex flex-col">
-    <h2 class="text-2xl font-bold mb-4">Kitoblar va Testlar</h2>
+    <h2 class="text-2xl font-bold mb-4 text-slate-800 border-l-4 border-blue-600 pl-3">Kitoblar va Testlar</h2>
 
     <!-- search by content category -->
  <!-- Check if category is selected and display books accordingly -->
  <div class="flex flex-wrap items-center justify-center gap-10 p-4">
   <!-- Categories -->
-  <div class="flex flex-wrap items-center gap-x-3">
-    <div *ngFor="let category of contentCategories" class="flex items-center">
-      <button mat-icon-button class="rounded-full p-1"
-              [ngClass]="{
-                'bg-blue-500 text-white hover:bg-blue-600': isSelected(category?.name),
-                'bg-gray-200 text-gray-700 hover:bg-gray-300': !isSelected(category?.name)
-              }"
-              (click)="toggleCategory(category.name)">
-        <mat-icon>
-          {{ isSelected(category.name) ? 'check_circle' : 'radio_button_unchecked' }}
-        </mat-icon>
-      </button>
-      <span class="text-lg ml-2">{{ category.name }}</span>
-    </div>
+  <div class="flex flex-wrap items-center gap-2.5">
+    <button *ngFor="let category of contentCategories"
+            class="inline-flex items-center gap-1.5 pl-2.5 pr-4 py-2 rounded-full border text-sm font-medium transition-all duration-200"
+            [ngClass]="isSelected(category?.name)
+              ? '!bg-gradient-to-r !from-blue-600 !to-indigo-800 !border-transparent !text-white shadow-md shadow-blue-600/25'
+              : 'bg-white border-slate-200 text-slate-600 hover:border-blue-300 hover:text-blue-600 hover:bg-blue-50'"
+            (click)="toggleCategory(category.name)">
+      <mat-icon class="!text-[19px] !w-[19px] !h-[19px]">
+        {{ isSelected(category.name) ? 'check_circle' : 'radio_button_unchecked' }}
+      </mat-icon>
+      {{ category.name }}
+    </button>
   </div>
 
   <!-- Search Input -->
-  <div class="min-w-[300px] flex-grow max-w-md">
+  <div class="min-w-[300px] flex-grow max-w-md relative">
+    <mat-icon class="!absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 !text-[20px] pointer-events-none">search</mat-icon>
     <input
       type="text"
       [formControl]="searchControl"
       placeholder="Muallif yoki kitob nomini qidiring..."
-      class="w-full p-4 border rounded-lg shadow-md focus:outline-none focus:ring focus:border-blue-300 transition"
+      class="w-full pl-12 pr-5 py-3.5 rounded-full border border-slate-200 bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 transition"
     />
   </div>
 </div>
@@ -85,7 +83,7 @@ style="height: calc(100vh - 79px); background-image: url('assets/login-lib.PNG')
 
       <div class="w-full h-[200px] flex items-center justify-center overflow-hidden rounded-lg mb-3 bg-white">
         <img 
-          [src]="book.image.filePath" 
+          [src]="book.image?.filePath || 'assets/Default_pfp.svg.png'"
           alt="Kitob rasmi" 
           class="!w-full h-full object-contain"
         />
@@ -107,7 +105,7 @@ style="height: calc(100vh - 79px); background-image: url('assets/login-lib.PNG')
         </mat-icon> -->
       </div>
 
-      <button class="mt-2 bg-blue-500 text-white px-4 py-2 rounded-lg w-full hover:bg-blue-600"
+      <button class="btn-primary mt-2 w-full !rounded-lg"
               (click)="startTest(book)">
         Testni boshlash
       </button>
@@ -116,10 +114,10 @@ style="height: calc(100vh - 79px); background-image: url('assets/login-lib.PNG')
 
  <!-- Pagination (moved above book grid) -->
  <div class="flex justify-center items-center flex-wrap gap-2 mt-2 mb-6 animate__animated animate__fadeInDown">
-  <button class="px-4 py-2 rounded-full bg-gray-300 hover:bg-gray-400 text-black font-semibold shadow transition disabled:opacity-50 disabled:cursor-not-allowed"
+  <button class="btn-icon btn-icon-primary disabled:opacity-40 disabled:cursor-not-allowed"
           [disabled]="currentBookPage === 1"
           (click)="changeBookPage(currentBookPage - 1)">
-    ⬅️
+    <mat-icon class="!text-[20px]">chevron_left</mat-icon>
   </button>
 
   <ng-container *ngFor="let page of totalBookPagesArray">
@@ -133,10 +131,10 @@ style="height: calc(100vh - 79px); background-image: url('assets/login-lib.PNG')
     </button>
   </ng-container>
 
-  <button class="px-4 py-2 rounded-full bg-gray-300 hover:bg-gray-400 text-black font-semibold shadow transition disabled:opacity-50 disabled:cursor-not-allowed"
+  <button class="btn-icon btn-icon-primary disabled:opacity-40 disabled:cursor-not-allowed"
           [disabled]="currentBookPage === totalBookPages"
           (click)="changeBookPage(currentBookPage + 1)">
-     ➡️
+    <mat-icon class="!text-[20px]">chevron_right</mat-icon>
   </button>
 </div>
 
@@ -160,8 +158,8 @@ style="height: calc(100vh - 79px); background-image: url('assets/login-lib.PNG')
           Afsuski, siz izlagan kitobni topa olmadik. Iltimos, boshqa so‘zni kiriting yoki barcha kitoblarni ko‘rib chiqing.
         </p>
         
-        <button 
-          class="bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white font-semibold px-6 py-2 rounded-full shadow-md transition duration-300 ease-in-out"
+        <button
+          class="btn-primary"
           (click)="searchControl.setValue('')"
         >
           Qidiruvni tozalash
@@ -173,34 +171,34 @@ style="height: calc(100vh - 79px); background-image: url('assets/login-lib.PNG')
   </div>
   
   <div class="w-[25%] bg-white p-6 border-l">
-    <h2 class="text-2xl font-bold mb-4">Yangiliklar</h2>
-    
+    <h2 class="text-2xl font-bold mb-4 text-slate-800 border-l-4 border-blue-600 pl-3">Yangiliklar</h2>
+
     <!-- News Card -->
     <div class="bg-gray-50 rounded-2xl shadow-md overflow-hidden mb-4" *ngFor="let article of paginatedArticles">
-      <div class="flex justify-center items-center w-[300px] h-[200px] mt-2 overflow-hidden">
+      <div class="flex justify-center items-center w-[300px] h-[200px] mt-2 mb-[10px] overflow-hidden">
         <img *ngIf="article.image" [src]="article.image.filePath" alt="Yangilik rasmi" class="w-full h-full object-cover">
       </div>
-      
+
       <div class="p-1 w-full">
-        <p class="text-xl font-semibold mb-2 h-[55px] !mb-2"> {{article.title}} </p>
-        <div class="text-gray-700 text-sm mb-3">
+        <p class="text-xl font-semibold mb-2 h-[55px] !mb-2 text-slate-800"> {{article.title}} </p>
+        <div class="text-gray-600 text-sm mb-3">
           <p [class.line-clamp-4]="expandedBookId !== article.id" class="mb-1">
             {{ article.text }}
           </p>
-        
+
           <a *ngIf="expandedBookId !== article.id" [href]="article.link" class="inline-block text-blue-600 text-sm font-medium hover:underline">
             Batafsil o'qish →
           </a>
         </div>
-        
+
       </div>
     </div>
     <!-- Pagination for Articles -->
   <div class="flex justify-center items-center flex-wrap gap-2 mt-2 mb-6 animate__animated animate__fadeInDown">
-    <button class="px-4 py-2 rounded-full bg-gray-300 hover:bg-gray-400 text-black font-semibold shadow transition disabled:opacity-50 disabled:cursor-not-allowed"
+    <button class="btn-icon btn-icon-primary disabled:opacity-40 disabled:cursor-not-allowed"
             [disabled]="currentArticlePage === 1"
             (click)="changeArticlePage(currentArticlePage - 1)">
-      ⬅️
+      <mat-icon class="!text-[20px]">chevron_left</mat-icon>
     </button>
 
     <ng-container *ngFor="let page of totalArticlePagesArray">
@@ -214,10 +212,10 @@ style="height: calc(100vh - 79px); background-image: url('assets/login-lib.PNG')
       </button>
     </ng-container>
 
-    <button class="px-4 py-2 rounded-full bg-gray-300 hover:bg-gray-400 text-black font-semibold shadow transition disabled:opacity-50 disabled:cursor-not-allowed"
+    <button class="btn-icon btn-icon-primary disabled:opacity-40 disabled:cursor-not-allowed"
             [disabled]="currentArticlePage === totalArticlePages"
             (click)="changeArticlePage(currentArticlePage + 1)">
-       ➡️
+      <mat-icon class="!text-[20px]">chevron_right</mat-icon>
     </button>
   </div>
   </div>

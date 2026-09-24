@@ -26,11 +26,11 @@
         
         <div class="flex !mt-4" *ngIf="userRole === 'Admin'">
 
-          <button mat-raised-button color="primary" class="!mr-2" (click)="onEdit()">
+          <button class="btn-primary !mr-2" (click)="onEdit()">
             Tahrirlash
           </button>
-  
-          <button mat-raised-button color="warn" (click)="onDelete()">
+
+          <button class="btn-danger" (click)="onDelete()">
             O'chirish
           </button>
         </div>
@@ -39,7 +39,7 @@
       </div>
 
       <div class="flex justify-center items-center w-32 h-32">
-        <img [src]="book.image.filePath" [alt]="book.title" class="w-32 h-32 object-cover rounded-md shadow" />
+        <img [src]="book.image?.filePath || 'assets/Default_pfp.svg.png'" [alt]="book.title" class="w-32 h-32 object-cover rounded-md shadow" />
       </div>
       
     </div>

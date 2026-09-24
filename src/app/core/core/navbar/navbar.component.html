@@ -1,11 +1,11 @@
 <router-outlet></router-outlet>
 
 <nav class="navbar">
-    <div class="navbar-left">
-      <img src="assets/logo.PNG" alt="logotip" class="h-[70px]">
+    <div class="navbar-left" routerLink="/home">
+      <img src="assets/logo.PNG" alt="logotip" class="logo-img h-[70px] ">
     </div>
 
-    <div class="navlink-container">
+    <div class="navlink-container px-4">
         <div class="navbar-right">
           <a class="nav-link flex items-center gap-2 text-gray-700 hover:text-blue-600 transition" routerLink="/home">
             <mat-icon>home</mat-icon>
@@ -18,7 +18,7 @@
             <a class="nav-link" routerLink="/categories" *ngIf="userRole !== 'User'">Bo'limlar</a>
             <a class="nav-link profile-link" [matMenuTriggerFor]="contentMenu">
              <span class="mr-2">Mavzular</span>
-              <mat-icon class="!text-yellow-400">folder</mat-icon>
+              <mat-icon class="!text-yellow-400">library_books</mat-icon>
           </a>
           
           <mat-menu #contentMenu="matMenu">
@@ -59,3 +59,4 @@
         </div>
     </div>
 </nav>
+<div class="navbar-spacer"></div>

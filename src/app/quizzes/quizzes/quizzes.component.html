@@ -7,8 +7,8 @@
   </div>
 </nav>
   
-<button class="!bg-gray-500 m-4 !text-white py-2 px-4 rounded-[6px]" mat-raised-button
- [ngClass]="{'opacity-30' : currentQuizId || checkStatusQuiz}" [disabled]="currentQuizId || checkStatusQuiz" (click)="openDialog(false)">Viktorina Yaratish</button> 
+<button class="btn-primary m-4"
+ [ngClass]="{'opacity-30' : currentQuizId || checkStatusQuiz}" [disabled]="currentQuizId || checkStatusQuiz" (click)="openDialog(false)">Viktorina Yaratish</button>
 
 
   <div class="container mx-auto mt-8">  
@@ -23,9 +23,11 @@
         </div>
           <div class="gap-3 flex">
 
-            <button class="bg-blue-500 text-white w-[50px] h-[40px] rounded" (click)="openDialog(true, i)"
-  >       <mat-icon>edit</mat-icon></button>
-            <button class="bg-red-500 text-white w-[50px] h-[40px] rounded" (click)="confirmDelete(quiz.id)"
-  >       <mat-icon>delete</mat-icon></button>
+            <button class="btn-icon btn-icon-primary" (click)="openDialog(true, i)">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button class="btn-icon btn-icon-danger" (click)="confirmDelete(quiz.id)">
+              <mat-icon>delete</mat-icon>
+            </button>
         </div>
         </div>

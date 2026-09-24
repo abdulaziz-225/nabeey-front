@@ -51,11 +51,11 @@
     </div>
   
     <div class=" gap-[10px] flex justify-end mb-3">
-      <button mat-raised-button class="!bg-gray-300" (click)="onClose()">
+      <button class="btn-secondary" (click)="onClose()">
         Bekor Qilish
       </button>
-      <button mat-raised-button color="primary" [disabled]="articleForm.invalid" (click)="createArticle()">
-        Qo'shish
+      <button class="btn-primary" [disabled]="articleForm.invalid" (click)="createArticle()">
+        {{ isEdit ? 'Yangilash' : "Qo'shish" }}
       </button>
     </div>
   </form>
