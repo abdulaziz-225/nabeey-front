@@ -142,26 +142,25 @@ style="height: calc(100vh - 79px); background-image: url('assets/login-lib.PNG')
 
     <!-- Kitoblar topilmasa -->
     <div *ngIf="filteredBooks.length === 0" class="flex-grow flex flex-col items-center justify-center p-6">
-      <div class="bg-white p-6 rounded-3xl shadow-xl max-w-md w-full text-center">
-        
-        <img
-          src="https://media.giphy.com/media/UoeaPqYrimha6rdTFV/giphy.gif"
-          alt="No results"
-          class="w-52 h-52 object-contain mx-auto mb-4 rounded-2"
-        />
-        
-        <h2 class="text-2xl font-extrabold text-gray-800 mb-2">
-          Hech narsa topilmadi 😕
+      <div class="bg-white p-10 rounded-3xl shadow-xl border border-slate-100 max-w-md w-full text-center">
+
+        <div class="w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+          <mat-icon class="!text-[46px] !w-[46px] !h-[46px] !text-blue-400">search_off</mat-icon>
+        </div>
+
+        <h2 class="text-2xl font-bold text-slate-800 !m-0">
+          Hech narsa topilmadi
         </h2>
-        
-        <p class="text-gray-600 mb-4">
+
+        <p class="text-slate-500 mt-3 mb-7">
           Afsuski, siz izlagan kitobni topa olmadik. Iltimos, boshqa so‘zni kiriting yoki barcha kitoblarni ko‘rib chiqing.
         </p>
-        
+
         <button
           class="btn-primary"
           (click)="searchControl.setValue('')"
         >
+          <mat-icon>refresh</mat-icon>
           Qidiruvni tozalash
         </button>
       </div>
