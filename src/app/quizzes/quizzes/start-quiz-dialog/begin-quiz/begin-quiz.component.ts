@@ -1,5 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { QuestionAnswerService } from 'src/app/quizzes/services/question-answer.service';
+import { QuizzesService } from 'src/app/quizzes/services/quizzes.service';
 
 @Component({
   selector: 'app-begin-quiz',
@@ -11,54 +13,34 @@ export class BeginQuizComponent implements OnInit{
   currentQuestionIndex: number = -1;
   countdown: number = 3;
   score: number = 0;
-  selectedAnswer: string | null = null; 
+  selectedAnswer: string | null = null;
   showLetsGoMessage: boolean = false;
   correctAnswers = 0;
   incorrectAnswers = 0;
-  timeLeft: number = 30; 
+  timeLeft: number = 30;
   timer: any;
-  isQuizFinished: boolean = false; 
+  isQuizFinished: boolean = false;
   quizResult: { bg: string, message: string, gif: string } = { bg: '', message: '', gif: '' };
+
+  userId: number | null = null;
+  quizId: number | null = null;
+  totalScore: number | null = null;
 
   constructor(
     public dialogRef: MatDialogRef<BeginQuizComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any, 
-    public dialog: MatDialog
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    public dialog: MatDialog,
+    private questionAnswerService: QuestionAnswerService,
+    private quizzesService: QuizzesService
   ) {
-    console.log(data.book, 'fu');
-    
+    const id = localStorage.getItem('userId');
+    this.userId = id ? JSON.parse(id) : null;
+    this.quizId = this.data.book?.quiz?.id ?? null;
+
     this.startCountdown();
   }
 
-  ngOnInit(): void {
-    this.loadProgress()
-  }
-
-  userProgress = {
-    totalScore: 0,
-    completedBooks: new Set<string>()
-  };
-
-  loadProgress() {
-    // const userId = localStorage.getItem('userId');
-    const savedProgress = localStorage.getItem(`userProgress`);
-  
-    this.userProgress = savedProgress
-      ? JSON.parse(savedProgress)
-      : { totalScore: 0, completedBooks: [] };
-  
-    this.userProgress.completedBooks = new Set(this.userProgress.completedBooks);
-  }
-
-  saveProgress() {
-    const userId = localStorage.getItem('userId');
-    const progressToSave = {
-      totalScore: this.userProgress.totalScore,
-      completedBooks: Array.from(this.userProgress.completedBooks)
-    };
-    localStorage.setItem(`userProgress`, JSON.stringify(progressToSave));
-  }
-  
+  ngOnInit(): void {}
 
   startCountdown() {
     const interval = setInterval(() => {
@@ -97,22 +79,31 @@ export class BeginQuizComponent implements OnInit{
     this.selectedAnswer = answer;
   }
 
-  checkAnswer(isTrue: boolean, answerText: string): void {
+  checkAnswer(answer: any): void {
     if (!this.selectedAnswer) {
-      this.selectedAnswer = answerText;
+      this.selectedAnswer = answer.text;
       clearInterval(this.timer);
-      if (isTrue) {
+      if (answer.isTrue) {
         this.correctAnswers++;
       } else {
         this.incorrectAnswers++;
       }
+
+      if (this.userId && this.quizId) {
+        this.questionAnswerService.sumbitAnswer({
+          answerId: answer.id,
+          questionId: this.currentQuestion.id,
+          userId: this.userId,
+          quizId: this.quizId
+        }).subscribe({ error: () => {} });
+      }
     }
-  
+
     setTimeout(() => {
       if(this.selectedAnswer){
          this.nextQuestion();
       }
-    }, 1300); 
+    }, 1300);
   }
 
   nextQuestion() {
@@ -126,118 +117,71 @@ export class BeginQuizComponent implements OnInit{
       this.finishQuizz();
     }
   }
-  // finishQuizz() {
-  //   this.isQuizFinished = true;
-  //   this.currentQuestionIndex = -1;
 
-  //   let percentage = (this.correctAnswers / this.data.book.questions.length) * 100;
-  //   this.finishQuiz(percentage);
-  // }
-
-  // finishQuizz() {
-  //   this.isQuizFinished = true;
-  //   this.currentQuestionIndex = -1;
-  
-  //   const percentage = (this.correctAnswers / this.data.book.questions.length) * 100;
-  //   const bookId = this.data.book.id;
-  
-  //   if (!this.userProgress.completedBooks.has(bookId)) {
-  //     let score = 0;
-  
-  //     if (percentage >= 80) {
-  //       score = 10;
-  //     } else if (percentage >= 50) {
-  //       score = 6;
-  //     } else {
-  //       score = 3;
-  //     }
-  
-  //     this.userProgress.totalScore += score;
-  //     this.userProgress.completedBooks.add(bookId);
-  //     this.saveProgress();
-  //   }
-  //   this.finishQuiz(percentage);
-  // }
-
-
-  // finishQuiz(percentage: number) {
-  //   if (percentage >= 80) {
-  //     this.quizResult = { 
-  //       bg: 'bg-green-500', 
-  //       message: `Qoyilmaqom! ${percentage.toFixed(1)}% natijaga erishdingiz! \nKitob o‘qishda davom eting!`, 
-  //       gif: 'https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExajM2Y29uOXdwYXE5eGxuMWFhdmttMzFxY240NWwwdDg5c2I5bjRtMyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/duNowzaVje6Di3hnOu/giphy.gif' 
-  //     };
-  //   } else if (percentage >= 50) {
-  //     this.quizResult = { 
-  //       bg: 'bg-yellow-500', 
-  //       message: `Yaxshi natija! ${percentage.toFixed(1)}% ga erishdingiz, lekin hali yaxshiroq bo‘lishi mumkin!`, 
-  //       gif: 'https://media.giphy.com/media/l3q2K5jinAlChoCLS/giphy.gif' 
-  //     };
-  //   } else {
-  //     this.quizResult = { 
-  //       bg: 'bg-red-500', 
-  //       message: `Siz ${percentage.toFixed(1)}% natijaga erishdingiz. Yanada ko‘proq kitob o‘qishingiz kerak!`, 
-  //       gif: 'https://media.giphy.com/media/3o7btPCcdNniyf0ArS/giphy.gif' 
-  //     };
-  //   }
-  // }
   finishQuizz() {
     this.isQuizFinished = true;
     this.currentQuestionIndex = -1;
-  
+
     const percentage = (this.correctAnswers / this.data.book.questions.length) * 100;
     const bookId = this.data.book.id;
-  
-    let alreadyCompleted = this.userProgress.completedBooks.has(bookId);
-    let score = 0;
-  
+
+    const completedBooks: number[] = JSON.parse(localStorage.getItem('completedBookIds') || '[]');
+    const alreadyCompleted = completedBooks.includes(bookId);
+    const score = alreadyCompleted ? 0 : this.correctAnswers;
+
     if (!alreadyCompleted) {
-      if (percentage >= 80) {
-        score = 10;
-      } else if (percentage >= 50) {
-        score = 6;
-      } else {
-        score = 3;
-      }
-  
-      this.userProgress.totalScore += score;
-      this.userProgress.completedBooks.add(bookId);
-      this.saveProgress();
+      completedBooks.push(bookId);
+      localStorage.setItem('completedBookIds', JSON.stringify(completedBooks));
     }
-  
+
+    if (this.userId && this.quizId) {
+      this.quizzesService.getQuizResult(this.quizId, String(this.userId)).subscribe({
+        next: () => this.refreshTotalScore(),
+        error: () => this.refreshTotalScore()
+      });
+    }
+
     this.finishQuiz(percentage, alreadyCompleted, score);
   }
-  
+
+  private refreshTotalScore(): void {
+    if (!this.userId) return;
+    this.quizzesService.getLeaderboard().subscribe({
+      next: (list) => {
+        const mine = list.find((item: any) => item.user?.id === this.userId);
+        this.totalScore = mine ? mine.ball : 0;
+      },
+      error: () => {}
+    });
+  }
+
   finishQuiz(percentage: number, alreadyCompleted: boolean, score: number) {
-    const totalScore = this.userProgress.totalScore;
-  
     if (alreadyCompleted) {
       this.quizResult = {
         bg: 'bg-gray-400',
-        message: `Siz bu kitobni ilgari ishlagansiz, shuning uchun ball qo‘shilmadi. \nUmumiy ballingiz: ${totalScore}`,
+        message: `Siz bu kitobni ilgari ishlagansiz, shuning uchun ball qo‘shilmadi.`,
         gif: 'https://media.giphy.com/media/3o6Zt481isNVuQI1l6/giphy.gif'
       };
     } else if (percentage >= 80) {
       this.quizResult = {
         bg: 'bg-green-500',
-        message: `Qoyilmaqom! Siz bu kitobdan ${score} ball oldingiz! (${percentage.toFixed(1)}%) \nUmumiy ballingiz: ${totalScore}. Kitob o‘qishda davom eting!`,
+        message: `Qoyilmaqom! Siz bu kitobdan ${score} ball oldingiz! (${percentage.toFixed(1)}%) \nKitob o‘qishda davom eting!`,
         gif: 'https://media.giphy.com/media/xT0GqeSlGSRQut4JSo/giphy.gif'
       };
     } else if (percentage >= 50) {
       this.quizResult = {
         bg: 'bg-yellow-500',
-        message: `Yaxshi natija! Bu kitobdan ${score} ball oldingiz. (${percentage.toFixed(1)}%) \nUmumiy ballingiz: ${totalScore}. Hali ham kuchliroq bo‘lishingiz mumkin!`,
+        message: `Yaxshi natija! Bu kitobdan ${score} ball oldingiz. (${percentage.toFixed(1)}%) \nHali ham kuchliroq bo‘lishingiz mumkin!`,
         gif: 'https://media.giphy.com/media/l0K4nGhy7aD6Z4zvO/giphy.gif'
       };
     } else {
       this.quizResult = {
         bg: 'bg-red-500',
-        message: `Bu kitobdan ${score} ball oldingiz. (${percentage.toFixed(1)}%) \nUmumiy ballingiz: ${totalScore}. Ko‘proq kitob o‘qib, yana urinib ko‘ring!`,
+        message: `Bu kitobdan ${score} ball oldingiz. (${percentage.toFixed(1)}%) \nKo‘proq kitob o‘qib, yana urinib ko‘ring!`,
         gif: 'https://media.giphy.com/media/3o7btPCcdNniyf0ArS/giphy.gif'
       };
     }
   }
-  
 
   restartQuiz() {
     this.isQuizFinished = false;
@@ -252,5 +196,4 @@ export class BeginQuizComponent implements OnInit{
     this.dialogRef.close();
   }
 
-  
 }

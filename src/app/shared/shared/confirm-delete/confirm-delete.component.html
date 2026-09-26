@@ -1,11 +1,15 @@
-<div class="wrapper"> 
+<div class="wrapper">
 
-    <h1 mat-dialog-title class="!m-0">Tasdiqlang!!!</h1>
+    <div class="confirm-icon" [ngClass]="data.iconVariant === 'primary' ? 'confirm-icon-primary' : 'confirm-icon-danger'">
+      <mat-icon>{{ data.icon || (data.iconVariant === 'primary' ? 'help_outline' : 'delete_outline') }}</mat-icon>
+    </div>
+
+    <h1 mat-dialog-title class="!m-0">{{ data.title || 'Tasdiqlang!!!' }}</h1>
     <div mat-dialog-content class="mat-dialog-content">
       <p>{{data.message}}</p>
     </div>
     <div class="flex justify-evenly gap-x-2 px-3">
       <button class="btn-secondary" (click)="onCancel()">Bekor Qilish</button>
-      <button class="btn-danger" (click)="onConfirm()">O'chirish</button>
+      <button [class]="data.confirmClass || 'btn-danger'" (click)="onConfirm()">{{ data.confirmText || "O'chirish" }}</button>
     </div>
   </div>

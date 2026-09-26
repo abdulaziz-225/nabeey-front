@@ -1,0 +1,93 @@
+<div class="chat-header">
+  <div class="chat-header-info">
+    <mat-icon>smart_toy</mat-icon>
+    <div>
+      <p class="chat-title">AI yordamchi</p>
+      <p class="chat-status status-open" *ngIf="remaining !== null && !isLimitReached">
+        Bugun qoldi: {{ remaining }} ta savol
+      </p>
+      <p class="chat-status status-closed" *ngIf="isLimitReached">
+        Bugungi limit tugadi
+      </p>
+    </div>
+  </div>
+  <div class="chat-header-actions">
+    <button class="ai-icon-btn" (click)="toggleHistory()" title="Suhbatlar tarixi">
+      <mat-icon>history</mat-icon>
+    </button>
+    <button class="ai-icon-btn" (click)="startNewChat()" title="Yangi suhbat" *ngIf="messages.length > 0">
+      <mat-icon>add_comment</mat-icon>
+    </button>
+    <button class="ai-icon-btn" (click)="toggleMaximize.emit()" [title]="isMaximized ? 'Kichraytirish' : 'Kattalashtirish'">
+      <mat-icon>{{ isMaximized ? 'close_fullscreen' : 'open_in_full' }}</mat-icon>
+    </button>
+    <button class="ai-expert-switch-btn" (click)="goToExpert()" title="Ekspertga o'tish">
+      <mat-icon>support_agent</mat-icon>
+      <span>Ekspert</span>
+    </button>
+  </div>
+</div>
+
+<div class="history-panel" *ngIf="showHistory">
+  <div class="history-panel-header">
+    <span>Suhbatlar tarixi</span>
+    <button class="ai-icon-btn" (click)="showHistory = false" title="Yopish">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div class="history-empty" *ngIf="history.length === 0">
+    <mat-icon>forum</mat-icon>
+    <p>Hozircha saqlangan suhbat yo'q.</p>
+  </div>
+  <button class="history-item" *ngFor="let session of history" (click)="openSession(session)">
+    <span class="history-item-date">{{ session.startedAt | date:'dd.MM.yyyy HH:mm' }}</span>
+    <span class="history-item-preview">{{ sessionPreview(session) }}</span>
+  </button>
+</div>
+
+<div class="chat-body" #chatBody>
+  <div *ngIf="messages.length === 0" class="chat-empty">
+    <mat-icon>smart_toy</mat-icon>
+    <p>Kitoblar, mualliflar yoki kutubxona haqida savol bering.</p>
+  </div>
+
+  <div *ngFor="let message of messages"
+       class="chat-message"
+       [ngClass]="message.role === 'user' ? 'chat-message-user' : 'chat-message-admin'">
+    <div class="chat-bubble">
+      <p class="chat-bubble-text ai-text">{{ message.content }}</p>
+    </div>
+  </div>
+
+  <div *ngIf="isSending" class="chat-message chat-message-admin">
+    <div class="chat-bubble">
+      <p class="chat-bubble-text ai-typing">Yozmoqda...</p>
+    </div>
+  </div>
+</div>
+
+<p class="ai-error" *ngIf="errorMessage">{{ errorMessage }}</p>
+<p class="ai-cooldown" *ngIf="cooldownSeconds > 0 && !isLimitReached">
+  Keyingi savolni {{ cooldownSeconds }} soniyadan so'ng yuborishingiz mumkin
+</p>
+
+<div class="chat-footer">
+  <textarea
+    #questionInput
+    [(ngModel)]="questionText"
+    (keydown.enter)="onEnterKey($event)"
+    (input)="autoResize(questionInput)"
+    rows="1"
+    [disabled]="isLimitReached || cooldownSeconds > 0"
+    placeholder="Savolingizni yozing..."
+    class="chat-input"
+  ></textarea>
+  <button class="chat-send-btn" (click)="send()" [disabled]="!questionText.trim() || isSending || isLimitReached || cooldownSeconds > 0">
+    <span *ngIf="cooldownSeconds > 0" class="cooldown-count">{{ cooldownSeconds }}</span>
+    <mat-icon *ngIf="cooldownSeconds === 0">send</mat-icon>
+  </button>
+</div>
+
+<button class="chat-end-btn ai-expert-btn" *ngIf="isLimitReached" (click)="goToExpert()">
+  Ekspertga o'tish
+</button>

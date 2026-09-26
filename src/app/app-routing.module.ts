@@ -12,6 +12,7 @@ import { QuestionComponent } from './quizzes/question/question.component';
 import { QuizzesComponent } from './quizzes/quizzes/quizzes.component';
 import { PrimaryPageComponent } from './core/core/primary-page/primary-page.component';
 import { EncourageComponent } from './core/core/encourage/encourage.component';
+import { ChatAdminComponent } from './core/core/chatbot/chat-admin/chat-admin.component';
 
 const routes: Routes = 
 [
@@ -30,6 +31,7 @@ const routes: Routes =
   {path: 'quiz', component: QuizzesComponent, canActivate: [AuthGuard]},
   {path: 'home', component: PrimaryPageComponent, canActivate: [AuthGuard]},
   {path: 'encourage', component: EncourageComponent, canActivate: [AuthGuard]},
+  {path: 'support', component: ChatAdminComponent, canActivate: [AuthGuard]},
 ];
 // [
 //   {

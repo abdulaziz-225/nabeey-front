@@ -1,0 +1,83 @@
+<ng-container *ngIf="isVisible">
+
+  <button class="chat-fab" (click)="toggleChat()" [class.chat-fab-active]="isOpen">
+    <mat-icon>{{ isOpen ? 'close' : 'support_agent' }}</mat-icon>
+  </button>
+
+  <div class="chat-panel" [class.chat-panel-maximized]="isMaximized" *ngIf="isOpen">
+
+    <ng-container *ngIf="activeView === 'expert'">
+      <div class="chat-header">
+        <div class="chat-header-info">
+          <mat-icon>support_agent</mat-icon>
+          <div>
+            <p class="chat-title">Ekspert bilan suhbat</p>
+            <p class="chat-status" [ngClass]="isConversationOpen ? 'status-open' : 'status-closed'">
+              {{ isConversationOpen ? 'Faol' : 'Yakunlangan' }}
+            </p>
+          </div>
+        </div>
+        <div class="chat-header-actions">
+          <button class="chat-close-btn" (click)="toggleMaximize()" [title]="isMaximized ? 'Kichraytirish' : 'Kattalashtirish'">
+            <mat-icon>{{ isMaximized ? 'close_fullscreen' : 'open_in_full' }}</mat-icon>
+          </button>
+          <button class="chat-close-btn" (click)="toggleChat()" title="Yopish">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <div class="chat-body">
+        <div *ngIf="!conversation || conversation.messages.length === 0" class="chat-empty">
+          <mat-icon>chat_bubble_outline</mat-icon>
+          <p>Savolingizni yozing, admin-ekspert sizga javob beradi.</p>
+        </div>
+
+        <div *ngFor="let message of conversation?.messages"
+             class="chat-message"
+             [ngClass]="message.isFromAdmin ? 'chat-message-admin' : 'chat-message-user'">
+          <div class="chat-bubble">
+            <p class="chat-bubble-text">{{ message.text }}</p>
+            <span class="chat-meta">
+              <span class="chat-time">{{ message.createdAt | date:'HH:mm' }}</span>
+              <mat-icon *ngIf="!message.isFromAdmin" class="chat-tick" [class.chat-tick-read]="message.isRead">
+                {{ message.isRead ? 'done_all' : 'done' }}
+              </mat-icon>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <p class="chat-closed-hint" *ngIf="!isConversationOpen && conversation">
+        Suhbat yakunlangan. Yangi xabar yozsangiz, yangi suhbat boshlanadi.
+      </p>
+
+      <div class="chat-footer">
+        <textarea
+          #messageInput
+          [(ngModel)]="messageText"
+          (keydown.enter)="onEnterKey($event)"
+          (input)="autoResize(messageInput)"
+          rows="1"
+          placeholder="Xabar yozing..."
+          class="chat-input"
+        ></textarea>
+        <button class="chat-send-btn" (click)="send()" [disabled]="!messageText.trim()">
+          <mat-icon>send</mat-icon>
+        </button>
+      </div>
+
+      <button class="chat-end-btn" *ngIf="isConversationOpen && conversation" (click)="closeConversation()">
+        Suhbatni yakunlash
+      </button>
+    </ng-container>
+
+    <app-ai-chat
+      *ngIf="activeView === 'ai'"
+      [isMaximized]="isMaximized"
+      (toggleMaximize)="toggleMaximize()"
+      (switchToExpert)="openExpertView()">
+    </app-ai-chat>
+  </div>
+
+</ng-container>

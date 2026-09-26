@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { QuizzesService } from 'src/app/quizzes/services/quizzes.service';
 
 @Component({
   selector: 'app-progress-button',
@@ -6,48 +7,48 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./progress-button.component.scss']
 })
 export class ProgressButtonComponent implements OnInit {
-  @Input() currentScore: number = 6; // Default value changed to match your image
+  @Input() currentScore: number = 0;
   @Input() maxScore: number = 1000;
   @Input() label: string = 'Ballar';
 
   progress: number = 0;
 
-  ngOnInit() {
-    // Retrieve data from localStorage if available
-    const userProgress = localStorage.getItem('userProgress');
-    
-    if (userProgress) {
-      try {
-        const parsedProgress = JSON.parse(userProgress);
-        this.currentScore = parsedProgress.totalScore || this.currentScore;
-      } catch (e) {
-        console.error('Error parsing user progress', e);
-      }
-    }
+  constructor(private quizzesService: QuizzesService) {}
 
-    // Calculate the percentage of progress with better handling
+  ngOnInit() {
     this.calculateProgress();
+    this.loadScoreFromBackend();
+  }
+
+  private loadScoreFromBackend(): void {
+    const rawUserId = localStorage.getItem('userId');
+    const userId = rawUserId ? JSON.parse(rawUserId) : null;
+    if (!userId) return;
+
+    this.quizzesService.getLeaderboard().subscribe({
+      next: (list: any[]) => {
+        const mine = (list || []).find(item => item.user?.id === userId);
+        this.currentScore = mine ? mine.ball : 0;
+        this.calculateProgress();
+      },
+      error: () => {}
+    });
   }
 
   private calculateProgress(): void {
-    // Ensure we don't divide by zero
     if (this.maxScore <= 0) {
       this.progress = 0;
       return;
     }
 
-    // Calculate percentage with at least 2 decimal places
     const rawPercentage = (this.currentScore / this.maxScore) * 100;
-    
-    // Show at least 1% if there's any progress (for visibility)
+
     if (rawPercentage > 0 && rawPercentage < 1) {
       this.progress = 1;
     } else {
-      // Round to nearest integer
       this.progress = Math.round(rawPercentage);
     }
 
-    // Ensure we don't exceed 100%
     this.progress = Math.min(this.progress, 100);
   }
 }

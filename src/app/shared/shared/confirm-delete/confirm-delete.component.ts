@@ -10,8 +10,8 @@ export class ConfirmDeleteComponent {
 
 
   constructor(public dialogRef: MatDialogRef<ConfirmDeleteComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { id: number; message: string }
-    
+    @Inject(MAT_DIALOG_DATA) public data: { id?: number; message: string; title?: string; confirmText?: string; confirmClass?: string; icon?: string; iconVariant?: 'primary' | 'danger' }
+
   ){}
 
   onConfirm(): void {

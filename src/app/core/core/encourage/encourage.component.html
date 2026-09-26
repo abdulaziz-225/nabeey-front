@@ -1,52 +1,99 @@
 <app-home></app-home>
-<div class="p-5">
-    <app-progress-button
-    [currentScore]="totalScore"
-    label="Ballar"
-    ></app-progress-button>
-  </div>
 
-  <div class="p-6 bg-white rounded-lg shadow-md w-full max-w-md mx-auto text-center">
-    <h2 class="text-xl font-bold mb-4">🎉 Tabriklaymiz!</h2>
-  
-    <!-- Agar hali 1000 ball to‘plamagan bo‘lsa -->
-    <div *ngIf="totalScore < 1000; else rewardBlock">
-      <p class="text-gray-700 font-medium mb-2">
-        Siz hozirda <strong>{{ totalScore }}</strong> ball to‘plagansiz.
-      </p>
-      <p class="text-orange-500 font-semibold">
-        Rag‘bat olish uchun yana <strong>{{ pointsLeft }}</strong> ball to‘plashingiz kerak.
-      </p>
+<div class="min-h-screen bg-slate-50 py-10 px-6">
+  <div class="max-w-3xl mx-auto space-y-6">
+
+    <div class="p-5">
+      <app-progress-button
+      [currentScore]="totalScore"
+      label="Ballar"
+      ></app-progress-button>
     </div>
-  
-    <!-- Aks holda (1000 yoki ko‘proq ball bo‘lsa) -->
-    <ng-template #rewardBlock>
-      <div *ngIf="!isAlreadySent; else sentBlock" class="space-y-4">
-        <p class="mb-2 text-green-700 font-semibold">
-          Siz 1000 ball to‘pladingiz! 🎁 Sovg‘ani olish uchun Telegram username'ingizni yuboring:
+
+    <div class="p-6 bg-white rounded-2xl shadow-sm border border-slate-100 text-center">
+      <h2 class="text-xl font-bold !m-0">🎉 Tabriklaymiz!</h2>
+
+      <!-- Agar hali 1000 ball to‘plamagan bo‘lsa -->
+      <div *ngIf="totalScore < 1000; else rewardBlock" class="mt-4">
+        <p class="text-gray-700 font-medium mb-2">
+          Siz hozirda <strong>{{ totalScore }}</strong> ball to‘plagansiz.
         </p>
-  
-        <input
-          [(ngModel)]="telegramUsername"
-          class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:border-orange-500"
-          placeholder="@username"
-          [disabled]="disableInput"
-        />
-  
-        <button
-          class="btn-primary w-full"
-          (click)="sendUsername()"
-          [disabled]="disableInput || !telegramUsername"
-        >
-          Yuborish
-        </button>
+        <p class="text-orange-500 font-semibold">
+          Rag‘bat olish uchun yana <strong>{{ pointsLeft }}</strong> ball to‘plashingiz kerak.
+        </p>
       </div>
-  
-      <ng-template #sentBlock>
-        <p class="text-green-600 font-semibold">Siz allaqachon rag‘bat olgansiz. 🎁</p>
+
+      <!-- Aks holda (1000 yoki ko‘proq ball bo‘lsa) -->
+      <ng-template #rewardBlock>
+        <div *ngIf="!isAlreadySent; else sentBlock" class="space-y-4 mt-4">
+          <p class="mb-2 text-green-700 font-semibold">
+            Siz 1000 ball to‘pladingiz! 🎁 Sovg‘ani olish uchun Telegram username'ingizni yuboring:
+          </p>
+
+          <input
+            [(ngModel)]="telegramUsername"
+            class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:border-orange-500"
+            placeholder="@username"
+            [disabled]="disableInput"
+          />
+
+          <button
+            class="btn-primary w-full"
+            (click)="sendUsername()"
+            [disabled]="disableInput || !telegramUsername"
+          >
+            Yuborish
+          </button>
+        </div>
+
+        <ng-template #sentBlock>
+          <p class="text-green-600 font-semibold mt-4">Siz allaqachon rag‘bat olgansiz. 🎁</p>
+        </ng-template>
       </ng-template>
-    </ng-template>
+    </div>
+
+    <!-- Reyting jadvali -->
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+      <div class="px-6 py-4 border-b border-slate-100">
+        <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2 !m-0">
+          <mat-icon class="!text-amber-400">emoji_events</mat-icon>
+          Reyting jadvali
+        </h3>
+        <p class="text-slate-500 text-sm mt-1 !mb-0">Kimda nechta ball borligini shu yerdan kuzatib boring</p>
+      </div>
+
+      <div *ngIf="loadingLeaderboard" class="p-6 text-center text-slate-400 text-sm">
+        Yuklanmoqda...
+      </div>
+
+      <div *ngIf="!loadingLeaderboard && leaderboard.length === 0" class="p-6 text-center text-slate-400 text-sm">
+        Hozircha hech kim ball to‘plamagan
+      </div>
+
+      <div *ngFor="let entry of leaderboard"
+           class="flex items-center gap-3 px-6 py-3 border-b border-slate-50 last:border-0 transition"
+           [ngClass]="entry.user?.id === currentUserId ? 'bg-blue-50' : ''">
+
+        <span class="w-8 h-8 flex-shrink-0 rounded-full flex items-center justify-center text-sm font-bold"
+              [ngClass]="entry.rating === 1 ? 'bg-amber-400 text-white' :
+                         entry.rating === 2 ? 'bg-slate-300 text-white' :
+                         entry.rating === 3 ? 'bg-amber-700 text-white' :
+                         'bg-slate-100 text-slate-500'">
+          {{ entry.rating }}
+        </span>
+
+        <span class="w-9 h-9 flex-shrink-0 rounded-full bg-blue-100 text-blue-700 font-semibold flex items-center justify-center">
+          {{ entry.user?.firstName ? entry.user?.firstName?.charAt(0) : '?' }}
+        </span>
+
+        <p class="!m-0 flex-1 text-sm font-medium text-slate-800 truncate">
+          {{ entry.user?.firstName }} {{ entry.user?.lastName }}
+          <span *ngIf="entry.user?.id === currentUserId" class="text-blue-600 text-xs font-semibold">(Siz)</span>
+        </p>
+
+        <span class="text-sm font-bold text-blue-600 flex-shrink-0">{{ entry.ball }} ball</span>
+      </div>
+    </div>
+
   </div>
-  
-  
-  
+</div>

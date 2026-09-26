@@ -12,6 +12,10 @@ import { LayoutComponent } from './layout/layout.component';
 import { AboutModalComponent } from './footer/aboutModal.component';
 import { ProgressButtonComponent } from 'src/app/quizzes/quizzes/start-quiz-dialog/progress-button/progress-button.component';
 import { EncourageComponent } from './encourage/encourage.component';
+import { ChatbotWidgetComponent } from './chatbot/chatbot-widget/chatbot-widget.component';
+import { ChatAdminComponent } from './chatbot/chat-admin/chat-admin.component';
+import { ChatChoiceDialogComponent } from './chatbot/chat-choice-dialog/chat-choice-dialog.component';
+import { AiChatComponent } from './chatbot/ai-chat/ai-chat.component';
 
 
 @NgModule({
@@ -25,11 +29,15 @@ import { EncourageComponent } from './encourage/encourage.component';
     LayoutComponent,
     AboutModalComponent,
     ProgressButtonComponent,
-    EncourageComponent
+    EncourageComponent,
+    ChatbotWidgetComponent,
+    ChatAdminComponent,
+    ChatChoiceDialogComponent,
+    AiChatComponent
   ],
   imports: [
     CommonModule,
-    SharedModule, 
+    SharedModule,
     NgxMaskDirective,
 
   ],
@@ -37,7 +45,9 @@ import { EncourageComponent } from './encourage/encourage.component';
     LoginComponent,
     HomeComponent,
     LayoutComponent,
-    FooterComponent
+    FooterComponent,
+    ChatbotWidgetComponent,
+    ChatAdminComponent
   ],
   providers: [
     provideNgxMask(),

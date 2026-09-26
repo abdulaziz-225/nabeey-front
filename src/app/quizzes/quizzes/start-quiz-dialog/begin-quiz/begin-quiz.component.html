@@ -33,7 +33,7 @@
 
           <ul class="mt-4 space-y-4 w-[70%] mx-auto">
             <li *ngFor="let answer of currentQuestion.answers"
-                (click)="checkAnswer(answer.isTrue, answer.text)"
+                (click)="checkAnswer(answer)"
                 class="border p-4 rounded-lg cursor-pointer text-xl transition-all duration-300"
                 [ngClass]="{
                   'bg-emerald-100 border text-green-600': selectedAnswer === answer.text && answer.isTrue,
@@ -68,9 +68,9 @@
       style="white-space: pre-line;">
     {{ quizResult.message }}
   </h2>
-  <!-- <div class="mt-4 font-bold text-xl">
-    Umumiy ball: {{ userProgress.totalScore }}
-  </div> -->
+  <div class="mt-4 font-bold text-xl" *ngIf="totalScore !== null">
+    Umumiy ballingiz: {{ totalScore }}
+  </div>
 
   <!-- Tugmalar -->
   <div class="mt-6 flex gap-4">

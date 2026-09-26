@@ -8,6 +8,6 @@ export interface Answer {
   export interface AnswerData{
     answerId: number,
     questionId: number,
-    userId: string | undefined,
-    quizId: number | null
+    userId: number,
+    quizId: number
   }

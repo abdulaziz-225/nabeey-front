@@ -104,3 +104,27 @@
     .profile-link{
       margin-right: 7px;
     }
+
+    .chat-badge {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      min-width: 17px;
+      height: 17px;
+      padding: 0 4px;
+      border-radius: 9999px;
+      background: #ef4444;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      line-height: 17px;
+      text-align: center;
+      box-shadow: 0 0 0 2px rgba(13, 24, 48, 0.97);
+      animation: chat-badge-pulse 1.6s infinite;
+    }
+
+    @keyframes chat-badge-pulse {
+      0% { box-shadow: 0 0 0 2px rgba(13, 24, 48, 0.97), 0 0 0 0 rgba(239, 68, 68, 0.6); }
+      70% { box-shadow: 0 0 0 2px rgba(13, 24, 48, 0.97), 0 0 0 6px rgba(239, 68, 68, 0); }
+      100% { box-shadow: 0 0 0 2px rgba(13, 24, 48, 0.97), 0 0 0 0 rgba(239, 68, 68, 0); }
+    }

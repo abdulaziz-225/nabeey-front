@@ -15,16 +15,16 @@ export class HttpInterceptorService implements HttpInterceptor {
         tap(
           (event: HttpEvent<any>) => {
             if (event instanceof HttpResponse) {
-              this.snackBar.open(`Success: ${req.method} request completed with status ${event.status}`, 'Close', {
+              this.snackBar.open(this.getSuccessMessage(req), 'Yopish', {
                 duration: 3000,
                 panelClass: ['success-snackbar']
               });
             }
           },
           (error: HttpErrorResponse) => {
-            // Display error message
-            this.snackBar.open(`Error: ${error.error.message}`, 'Close', {
-              duration: 3000,
+            const message = error.error?.message || error.error?.Message || "Nimadir xato ketdi, qaytadan urinib ko'ring";
+            this.snackBar.open(message, 'Yopish', {
+              duration: 3500,
               panelClass: ['error-snackbar']
             });
           }
@@ -33,6 +33,28 @@ export class HttpInterceptorService implements HttpInterceptor {
     } else {
       // Pass through GET and other requests without interception
       return next.handle(req);
+    }
+  }
+
+  private getSuccessMessage(req: HttpRequest<any>): string {
+    const url = req.url.toLowerCase();
+
+    if (url.includes('/auth/login')) {
+      return 'Muvaffaqiyatli kirildi';
+    }
+    if (url.includes('/user/create')) {
+      return "Muvaffaqiyatli ro'yxatdan o'tildi";
+    }
+
+    switch (req.method) {
+      case 'POST':
+        return "Muvaffaqiyatli qo'shildi";
+      case 'PUT':
+        return "Muvaffaqiyatli o'zgartirildi";
+      case 'DELETE':
+        return "Muvaffaqiyatli o'chirildi";
+      default:
+        return 'Muvaffaqiyatli bajarildi';
     }
   }
 }

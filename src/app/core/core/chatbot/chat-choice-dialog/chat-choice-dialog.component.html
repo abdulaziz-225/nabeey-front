@@ -1,0 +1,32 @@
+<div class="choice-wrapper">
+  <div class="choice-icon">
+    <mat-icon>question_answer</mat-icon>
+  </div>
+
+  <h1 mat-dialog-title class="!m-0">Yordam kerakmi?</h1>
+  <p class="choice-subtitle">Qaysi biri orqali javob olishni xohlaysiz?</p>
+
+  <div class="choice-options">
+    <button class="choice-option" (click)="choose('ai')">
+      <span class="choice-option-icon choice-option-icon-primary">
+        <mat-icon>smart_toy</mat-icon>
+      </span>
+      <span class="choice-option-text">
+        <span class="choice-option-title">AI dan so'rash</span>
+        <span class="choice-option-desc">Kitoblar bo'yicha darhol javob oling</span>
+      </span>
+      <mat-icon class="choice-option-arrow">chevron_right</mat-icon>
+    </button>
+
+    <button class="choice-option" (click)="choose('expert')">
+      <span class="choice-option-icon choice-option-icon-dark">
+        <mat-icon>support_agent</mat-icon>
+      </span>
+      <span class="choice-option-text">
+        <span class="choice-option-title">Ekspertdan so'rash</span>
+        <span class="choice-option-desc">Admin-ekspert bilan real suhbat</span>
+      </span>
+      <mat-icon class="choice-option-arrow">chevron_right</mat-icon>
+    </button>
+  </div>
+</div>

@@ -26,6 +26,12 @@ export class QuizzesService {
     )
   }
 
+  getLeaderboard(): Observable<any[]> {
+    return this.http.get<any>(`${this.apiUrl}/quiz-result/leaderboard`).pipe(
+      map(response => response.data)
+    );
+  }
+
   createQuiz(data: Quiz){
     return this.http.post(`${this.apiUrl}/quizzes/create`, data)
   }
