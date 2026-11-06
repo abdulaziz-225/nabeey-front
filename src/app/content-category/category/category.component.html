@@ -52,7 +52,7 @@
               <div class="flex justify-evenlynpm install font-awesome
  gap-3 flex-wrap">
 
-                <div *ngFor="let book of category.books let i = index" class="">
+                <div *ngFor="let book of category.books let i = index" class="w-[300px]">
                   <app-book [book]="book" (edit)="openBookDialog(true, i)" (delete)="confirmDeleteBook(book.id)"></app-book>
                 </div>
               </div>

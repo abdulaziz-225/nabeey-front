@@ -1,0 +1,31 @@
+<div class="legend">
+  <span class="legend-item" *ngFor="let s of series"><span class="swatch line" [style.background]="s.color"></span>{{ s.name }}</span>
+</div>
+
+<div class="chart-wrap" (mouseleave)="hovered = null">
+  <svg #svg [attr.viewBox]="'0 0 ' + width + ' ' + height" preserveAspectRatio="none" class="chart-svg" [style.height.px]="height"
+       role="img" aria-label="Kunlik faollik" (mousemove)="onMove($event)">
+    <line *ngFor="let t of ticks" class="grid" [attr.x1]="pad.left" [attr.x2]="width - pad.right" [attr.y1]="t.y" [attr.y2]="t.y"></line>
+    <line class="baseline" [attr.x1]="pad.left" [attr.x2]="width - pad.right" [attr.y1]="plotBottom" [attr.y2]="plotBottom"></line>
+    <line *ngIf="hovered !== null" class="crosshair" [attr.x1]="x(hovered)" [attr.x2]="x(hovered)" [attr.y1]="pad.top" [attr.y2]="plotBottom"></line>
+    <path *ngFor="let p of paths" [attr.d]="p.d" [attr.stroke]="p.color" class="line" vector-effect="non-scaling-stroke"></path>
+  </svg>
+
+  <!-- Nuqtalar SVG tashqarisida: preserveAspectRatio="none" doirani cho'zib yubormasligi uchun -->
+  <ng-container *ngIf="hovered !== null">
+    <span *ngFor="let s of series" class="dot"
+          [style.left]="tooltipLeft(hovered)" [style.top.px]="y(s.values[hovered])" [style.background]="s.color"></span>
+  </ng-container>
+
+  <div class="y-labels" [style.height.px]="height">
+    <span *ngFor="let t of ticks" [style.top.px]="t.y">{{ t.value }}</span>
+  </div>
+  <div class="x-labels">
+    <span *ngFor="let l of xLabels" [style.left.%]="(l.x / width) * 100">{{ l.text }}</span>
+  </div>
+
+  <div class="chart-tooltip" *ngIf="hovered !== null" [style.left]="tooltipLeft(hovered)">
+    <div class="tt-title">{{ labels[hovered] }}</div>
+    <div class="tt-row" *ngFor="let s of series"><span class="swatch" [style.background]="s.color"></span>{{ s.name }}<b>{{ s.values[hovered] }}</b></div>
+  </div>
+</div>

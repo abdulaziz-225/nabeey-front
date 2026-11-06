@@ -1,5 +1,6 @@
 export const environment = {
     production: false,
-    apiUrl: 'http://localhost:5000/api'
+    // ng serve proxy (src/proxy.conf.json) orqali backend'ga yo'naltiriladi
+    apiUrl: '/api'
     // apiUrl: 'https://api.kitobsevar.olami.uz:8080/api'
   };

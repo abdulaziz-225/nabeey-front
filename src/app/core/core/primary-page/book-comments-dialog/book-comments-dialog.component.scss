@@ -1,0 +1,534 @@
+:host {
+  display: block;
+}
+
+// Oyna balandligi qat'iy: faqat izohlar ro'yxati aylanadi, sarlavha va yozish maydoni joyida turadi
+.bc-dialog {
+  display: flex;
+  flex-direction: column;
+  height: min(82vh, 720px);
+  background: #fff;
+  color: #0f172a;
+}
+
+/* ===== Sarlavha ===== */
+.bc-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px 14px 18px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.bc-cover {
+  width: 40px;
+  height: 54px;
+  flex-shrink: 0;
+  object-fit: cover;
+  border-radius: 6px;
+  background: #f1f5f9;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.15);
+}
+
+.bc-header-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.bc-title {
+  margin: 0 !important;
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bc-author {
+  margin: 0 !important;
+  font-size: 0.82rem;
+  color: #64748b;
+}
+
+.bc-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 9999px;
+  background: transparent;
+  color: #475569;
+  cursor: pointer;
+
+  &:hover {
+    background: #f1f5f9;
+  }
+}
+
+/* ===== Reyting (bitta qator) ===== */
+.bc-rating {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  padding: 10px 18px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.bc-rating-summary {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.bc-rating-avg {
+  font-size: 1.1rem;
+  font-weight: 800;
+}
+
+.bc-rating-count {
+  font-size: 0.8rem;
+  color: #94a3b8;
+}
+
+.bc-rating-mine {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #b45309;
+}
+
+/* ===== Izohlar ro'yxati ===== */
+.bc-list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 6px 18px 12px;
+}
+
+.bc-thread {
+  padding: 6px 0;
+}
+
+.bc-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 8px 0;
+  border-radius: 12px;
+}
+
+.bc-avatar {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  border-radius: 9999px;
+  object-fit: cover;
+  background: #e2e8f0;
+}
+
+.bc-avatar-sm {
+  width: 28px;
+  height: 28px;
+}
+
+.bc-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.bc-text {
+  margin: 0 !important;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  color: #1e293b;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.bc-name {
+  margin-right: 4px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.bc-stars {
+  margin-right: 4px;
+  vertical-align: -1px;
+}
+
+.bc-mention {
+  margin-right: 2px;
+  font-weight: 600;
+  color: #2563eb;
+}
+
+.bc-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 2px 14px;
+  margin-top: 4px;
+  font-size: 0.75rem;
+  color: #94a3b8;
+}
+
+.bc-meta-strong {
+  font-weight: 600;
+  color: #64748b;
+}
+
+.bc-meta-btn {
+  padding: 0;
+  border: none;
+  background: transparent;
+  font: inherit;
+  font-weight: 600;
+  color: #64748b;
+  cursor: pointer;
+
+  &:hover {
+    color: #0f172a;
+  }
+}
+
+.bc-meta-delete:hover {
+  color: #dc2626;
+}
+
+.bc-like {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  margin-top: 2px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: #94a3b8;
+  cursor: pointer;
+
+  mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+  }
+
+  &:hover {
+    color: #64748b;
+  }
+
+  &.liked {
+    color: #e11d48;
+  }
+}
+
+// Layk bosilganda yurakcha bir marta "pop" qiladi
+.like-pop {
+  animation: like-pop 0.35s ease-out;
+}
+
+@keyframes like-pop {
+  0%   { transform: scale(1); }
+  45%  { transform: scale(1.35); }
+  100% { transform: scale(1); }
+}
+
+/* Javoblar: chiziqsiz, faqat surilgan */
+.bc-toggle-replies {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 2px 48px;
+  padding: 4px 0;
+  border: none;
+  background: transparent;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #64748b;
+  cursor: pointer;
+
+  &:hover {
+    color: #0f172a;
+  }
+}
+
+.bc-toggle-line {
+  width: 24px;
+  height: 1px;
+  background: #cbd5e1;
+}
+
+.bc-replies {
+  margin-left: 48px;
+}
+
+.bc-item-reply {
+  gap: 10px;
+  padding: 6px 0;
+}
+
+/* Yangi izoh: sirpanib kiradi va qisqa sariq fonda turadi */
+.bc-new {
+  animation: bc-slide-in 0.25s ease-out, bc-new-bg 1.25s ease-out;
+}
+
+@keyframes bc-slide-in {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes bc-new-bg {
+  0%, 80% { background-color: #fef9c3; }
+  100%    { background-color: transparent; }
+}
+
+/* Bo'sh holat va skeleton */
+.bc-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 180px;
+  text-align: center;
+  color: #94a3b8;
+
+  mat-icon {
+    font-size: 40px;
+    width: 40px;
+    height: 40px;
+    margin-bottom: 8px;
+  }
+}
+
+.bc-empty-title {
+  margin: 0 !important;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.bc-empty-text {
+  margin: 2px 0 0 !important;
+  font-size: 0.85rem;
+}
+
+.bc-skeleton {
+  display: flex;
+  gap: 12px;
+  padding: 10px 0;
+}
+
+.bc-skel-avatar {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  border-radius: 9999px;
+}
+
+.bc-skel-lines {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 4px;
+}
+
+.bc-skel-line {
+  height: 10px;
+  border-radius: 6px;
+}
+
+.bc-skel-avatar,
+.bc-skel-line {
+  background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+  background-size: 200% 100%;
+  animation: bc-shimmer 1.2s infinite;
+}
+
+@keyframes bc-shimmer {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}
+
+/* ===== Pastdagi yozish maydoni ===== */
+.bc-input-bar {
+  flex-shrink: 0;
+  padding: 10px 14px 12px;
+  border-top: 1px solid #f1f5f9;
+  background: #fff;
+}
+
+.bc-replying {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: -10px -14px 10px;
+  padding: 8px 14px 8px 18px;
+  background: #f8fafc;
+  font-size: 0.8rem;
+  color: #64748b;
+
+  b {
+    color: #0f172a;
+  }
+
+  button {
+    display: flex;
+    padding: 2px;
+    border: none;
+    border-radius: 9999px;
+    background: transparent;
+    color: #64748b;
+    cursor: pointer;
+
+    mat-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+    }
+
+    &:hover {
+      background: #e2e8f0;
+    }
+  }
+}
+
+.bc-input-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.bc-input {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  padding: 7px 8px 7px 14px;
+  border: 1px solid #e2e8f0;
+  border-radius: 22px;
+  background: #fff;
+  transition: border-color 0.2s, box-shadow 0.2s;
+
+  &:focus-within {
+    border-color: #93c5fd;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+  }
+
+  &.bc-input-error,
+  &.bc-input-error:focus-within {
+    border-color: #dc2626;
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+  }
+
+  textarea {
+    flex: 1;
+    min-width: 0;
+    max-height: 96px;
+    padding: 3px 0;
+    border: none;
+    outline: none;
+    resize: none;
+    background: transparent;
+    font: inherit;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    overflow-y: auto;
+    overflow-wrap: anywhere;
+  }
+}
+
+.bc-post {
+  flex-shrink: 0;
+  padding: 3px 8px;
+  border: none;
+  background: transparent;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #2563eb;
+  cursor: pointer;
+
+  &:disabled {
+    color: #bfdbfe;
+    cursor: default;
+  }
+
+  &:not(:disabled):hover {
+    color: #1d4ed8;
+  }
+}
+
+.bc-limit {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 6px;
+  font-size: 0.75rem;
+}
+
+.bc-counter {
+  color: #d97706;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+
+  &.bc-counter-error {
+    color: #dc2626;
+  }
+}
+
+.bc-limit-msg {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  margin-right: auto;
+  color: #dc2626;
+  font-weight: 500;
+
+  mat-icon {
+    font-size: 15px;
+    width: 15px;
+    height: 15px;
+  }
+}
+
+.bc-login-hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  color: #64748b;
+
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+  }
+}
+
+@media (max-width: 560px) {
+  .bc-replies,
+  .bc-toggle-replies {
+    margin-left: 36px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .like-pop,
+  .bc-new {
+    animation: none;
+  }
+}

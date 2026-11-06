@@ -13,6 +13,10 @@ export class BookService {
 
   constructor(private http: HttpClient) { }
 
+  trackView(bookId: number): Observable<any> {
+    return this.http.post(`${this.apiUrl}/book-views/track/${bookId}`, null);
+  }
+
   loadBooks(): Observable<any>{
     return this.http.get(`${this.apiUrl}/books/get-all`)
   }

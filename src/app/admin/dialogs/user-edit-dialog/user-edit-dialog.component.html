@@ -1,0 +1,72 @@
+<form class="dlg" [formGroup]="form" (ngSubmit)="save()" autocomplete="off">
+  <div class="dlg-head">
+    <div class="dlg-icon blue"><mat-icon>edit</mat-icon></div>
+    <div>
+      <h2>Foydalanuvchini tahrirlash</h2>
+      <p class="muted">ID {{ u.id }} · {{ roleLabel }} · {{ u.createdAt | date: 'dd.MM.yyyy' }} da ro'yxatdan o'tgan</p>
+    </div>
+  </div>
+
+  <div class="facts">
+    <div><b>{{ u.totalBall }}</b><span>Ball</span></div>
+    <div><b>{{ u.rating || '—' }}</b><span>O'rin</span></div>
+    <div><b>{{ u.quizCount }}</b><span>Test</span></div>
+    <div><b>{{ u.certificateCount }}</b><span>Sertifikat</span></div>
+  </div>
+
+  <div class="grid">
+    <label class="field">
+      <span>Ism</span>
+      <input class="input" formControlName="firstName" />
+      <small class="error" *ngIf="form.controls.firstName.touched && form.controls.firstName.invalid">Ism kiriting</small>
+    </label>
+    <label class="field">
+      <span>Familiya</span>
+      <input class="input" formControlName="lastName" />
+      <small class="error" *ngIf="form.controls.lastName.touched && form.controls.lastName.invalid">Familiya kiriting</small>
+    </label>
+    <label class="field">
+      <span>Telefon (login)</span>
+      <input class="input" formControlName="phone" />
+      <small class="error" *ngIf="form.controls.phone.touched && form.controls.phone.invalid">Telefon kiriting</small>
+    </label>
+    <label class="field">
+      <span>Email</span>
+      <input class="input" type="email" formControlName="email" />
+      <small class="error" *ngIf="form.controls.email.touched && form.controls.email.invalid">Email noto'g'ri</small>
+    </label>
+  </div>
+
+  <div class="pw-section" formGroupName="passwords">
+    <div class="pw-title">
+      <mat-icon>lock_reset</mat-icon>
+      <span>Yangi parol <span class="muted">(ixtiyoriy)</span></span>
+      <button type="button" class="link-btn" (click)="generatePassword()"><mat-icon>casino</mat-icon> Tasodifiy</button>
+    </div>
+    <p class="muted small">Joriy parol shifrlangan holda saqlanadi, uni hech kim ko'ra olmaydi. O'zgartirmoqchi bo'lmasangiz, bo'sh qoldiring.</p>
+    <div class="grid">
+      <label class="field">
+        <span>Yangi parol</span>
+        <div class="pw">
+          <input class="input" [type]="hide ? 'password' : 'text'" formControlName="password" autocomplete="new-password" />
+          <button type="button" class="pw-toggle" (click)="hide = !hide"><mat-icon>{{ hide ? 'visibility' : 'visibility_off' }}</mat-icon></button>
+        </div>
+      </label>
+      <label class="field">
+        <span>Parolni tasdiqlang</span>
+        <input class="input" [type]="hide ? 'password' : 'text'" formControlName="confirm" autocomplete="new-password" />
+      </label>
+    </div>
+    <small class="error" *ngIf="passwords.errors?.['tooShort'] && passwords.controls['password'].dirty">Kamida {{ minPassword }} ta belgi bo'lishi kerak</small>
+    <small class="error" *ngIf="passwords.errors?.['mismatch'] && passwords.controls['confirm'].dirty">Parollar mos kelmadi</small>
+  </div>
+
+  <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+  <div class="dlg-actions">
+    <button type="button" class="btn-secondary" mat-dialog-close>Bekor qilish</button>
+    <button type="submit" class="btn-primary" [disabled]="saving || form.pristine">
+      {{ saving ? 'Saqlanmoqda...' : 'Saqlash' }}
+    </button>
+  </div>
+</form>

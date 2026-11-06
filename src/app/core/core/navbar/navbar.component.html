@@ -1,4 +1,3 @@
-<router-outlet></router-outlet>
 
 <nav class="navbar">
     <div class="navbar-left" routerLink="/home">
@@ -16,29 +15,22 @@
             <a class="nav-link" routerLink="/category">Barcha kategoriyalar</a>
             <a class="nav-link" routerLink="/encourage">Rag'banlashtirish</a>
             <a class="nav-link" routerLink="/categories" *ngIf="userRole !== 'User'">Bo'limlar</a>
-            <a class="nav-link profile-link" [matMenuTriggerFor]="contentMenu">
-             <span class="mr-2">Mavzular</span>
-              <mat-icon class="!text-yellow-400">library_books</mat-icon>
-          </a>
-          
-          <mat-menu #contentMenu="matMenu">
-              <button mat-menu-item routerLink="/article">
-                  <mat-icon class="!text-blue-300">article</mat-icon>
-                  <span>Xabarlar</span>
-              </button>
-              <button mat-menu-item routerLink="/books">
-                  <mat-icon class="!text-blue-300">menu_book</mat-icon>
-                  <span>Kitoblar</span>
-              </button>
-              <!-- <button mat-menu-item routerLink="/videos">
-                  <mat-icon class="!text-blue-300">videocam</mat-icon>
-                  <span>Videolar</span>
-              </button> -->
-          </mat-menu>
+            <a class="nav-link flex items-center gap-2" routerLink="/books">
+              <mat-icon class="!text-blue-400">menu_book</mat-icon>
+              Kitoblar
+            </a>
+            <a class="nav-link flex items-center gap-2" routerLink="/article">
+              <mat-icon class="!text-blue-400">article</mat-icon>
+              Xabarlar
+            </a>
           
 
             <a class="nav-link" routerLink="/questions" *ngIf="userRole !== 'User'">Savollar</a>
             <a class="nav-link" routerLink="/quiz" *ngIf="userRole !== 'User'">Viktorina</a>
+            <a class="nav-link admin-link" routerLink="/admin" *ngIf="userRole === 'SuperAdmin'">
+              <mat-icon>admin_panel_settings</mat-icon>
+              Admin panel
+            </a>
             <a class="nav-link relative" routerLink="/support" *ngIf="userRole !== 'User'">
               Suhbatlar
               <span class="chat-badge" *ngIf="unreadChatCount > 0">{{ unreadChatCount > 9 ? '9+' : unreadChatCount }}</span>

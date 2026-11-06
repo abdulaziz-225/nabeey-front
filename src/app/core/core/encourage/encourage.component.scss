@@ -1,0 +1,16 @@
+// Jadval ochilganda foydalanuvchining o'z qatori bir marta yonib, odatiy och ko'k rangga qaytadi
+.my-row {
+  animation: my-row-highlight 1.5s ease-out 0.2s both;
+}
+
+@keyframes my-row-highlight {
+  0%   { background-color: #eff6ff; }
+  20%  { background-color: #bfdbfe; }
+  100% { background-color: #eff6ff; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .my-row {
+    animation: none;
+  }
+}

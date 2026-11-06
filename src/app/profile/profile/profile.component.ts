@@ -7,6 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ProfileDialogComponent } from '../profile-dialog/profile-dialog.component';
 import { ArticleService } from 'src/app/content-category/services/article.service';
 import { ArticleDialogComponent } from 'src/app/content-category/article/article-dialog/article-dialog.component';
+import { ProfileActivity, ProfileActivityService } from './profile-activity.service';
 
 
 @Component({
@@ -16,14 +17,21 @@ import { ArticleDialogComponent } from 'src/app/content-category/article/article
 })
 export class ProfileComponent implements OnInit {
 
-  profiles!: USerr;
-  articles:any
+  profiles?: USerr;
+  articles: any[] = [];
+  activity?: ProfileActivity;
+  activityLoading = true;
+  activityError = false;
+  activeHistoryTab: 'quizzes' | 'ai' | 'expert' | 'articles' = 'quizzes';
+  expandedAiSessionId: string | null = null;
+  expandedExpertConversationId: number | null = null;
   selectedIndex: number = 0;
 
 
 
   constructor(private userService: UserService,
     private articleService: ArticleService,
+    private profileActivityService: ProfileActivityService,
     private location: Location,
     private dialog: MatDialog
   ){}
@@ -31,7 +39,43 @@ export class ProfileComponent implements OnInit {
   ngOnInit(): void {
     this.getUserById();
     this.getArticleByUser();
+    this.loadActivity();
     
+  }
+
+  loadActivity(): void {
+    this.activityLoading = true;
+    this.activityError = false;
+    this.profileActivityService.getActivity().subscribe({
+      next: activity => {
+        this.activity = activity;
+        this.activityLoading = false;
+      },
+      error: () => {
+        this.activityError = true;
+        this.activityLoading = false;
+      }
+    });
+  }
+
+  setHistoryTab(tab: 'quizzes' | 'ai' | 'expert' | 'articles'): void {
+    this.activeHistoryTab = tab;
+  }
+
+  toggleAiSession(sessionId: string): void {
+    this.expandedAiSessionId = this.expandedAiSessionId === sessionId ? null : sessionId;
+  }
+
+  toggleExpertConversation(conversationId: number): void {
+    this.expandedExpertConversationId = this.expandedExpertConversationId === conversationId ? null : conversationId;
+  }
+
+  firstUserMessage(messages: { isFromAdmin: boolean; text: string }[]): string {
+    return messages.find(message => !message.isFromAdmin)?.text || 'Suhbat';
+  }
+
+  firstAiQuestion(turns: { question: string }[]): string {
+    return turns[0]?.question || 'AI suhbati';
   }
 
   goBack(){
@@ -46,13 +90,13 @@ export class ProfileComponent implements OnInit {
     }
 
     this.userService.getUserById(parseUserId).subscribe((response) => {
-      this.profiles = response;
-      console.log(this.profiles);
+      const profile = response as USerr;
+      this.profiles = profile;
       
-      if (response.asset && response.asset.filePath) {
-          this.profiles.asset = response.asset; 
+      if (profile.asset && profile.asset.filePath) {
+        profile.asset = profile.asset;
       } else {
-          this.profiles.asset = { 
+        profile.asset = {
               filePath: 'assets/Default_pfp.svg.png', 
               // fileName: 'Default_pfp.svg.png'
           };

@@ -10,7 +10,9 @@ export class HttpInterceptorService implements HttpInterceptor {
   constructor(private snackBar: MatSnackBar) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (['POST', 'PUT', 'DELETE'].includes(req.method)) {
+    // Admin panel o'z xabarlarini o'zi ko'rsatadi; kitob ko'rishni yozish esa jim ishlaydi
+    const silent = req.url.includes('/book-views/track') || req.url.includes('/api/admin/');
+    if (['POST', 'PUT', 'DELETE'].includes(req.method) && !silent) {
       return next.handle(req).pipe(
         tap(
           (event: HttpEvent<any>) => {

@@ -1,0 +1,28 @@
+// 4.7 soniyalik sikl: 3s yoniq (fon opacity 1) → o'chadi, 1.7s xira (fon opacity 0.5) → yonadi
+:host {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+// Qora qatlam 0.5 bo'lsa, fon rasmi yarim yorug'likda ko'rinadi
+.lights-out {
+  position: absolute;
+  inset: 0;
+  background: #000;
+  opacity: 0;
+  animation: lights-out 4.7s infinite;
+}
+
+// 0–3s yoniq · 3–3.1s o'chadi · 3.1–4.6s xira · 4.6–4.7s yonadi
+@keyframes lights-out {
+  0%, 63.83%       { opacity: 0; }
+  65.96%, 97.87%   { opacity: 0.5; }
+  100%             { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lights-out {
+    animation: none;
+  }
+}

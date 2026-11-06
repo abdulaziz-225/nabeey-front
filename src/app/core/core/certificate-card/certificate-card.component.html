@@ -1,0 +1,33 @@
+<div class="cert" [ngStyle]="colorVars" [style.width.px]="width" [style.height.px]="height">
+  <div class="frame"></div>
+  <div class="frame2"></div>
+  <div class="corner c1"></div><div class="corner c2"></div><div class="corner c3"></div><div class="corner c4"></div>
+  <div class="num">№ {{ code }}</div>
+
+  <div class="inner">
+    <img class="logo" src="assets/logo.PNG" alt="Kitobsevar" />
+    <div class="brand-name">KITOBSEVAR</div>
+    <h1>SERTIFIKAT</h1>
+    <div class="sub">{{ template.subtitle }}</div>
+    <div class="given">Ushbu sertifikat faxr bilan topshiriladi</div>
+    <div class="name">{{ fullName }}</div>
+    <div class="why">{{ body }}</div>
+    <div class="quote" *ngIf="template.quote">«{{ template.quote }}»</div>
+  </div>
+
+  <div class="medal" *ngIf="!isTopReader"><b>{{ threshold }}</b><span>BALL</span></div>
+  <div class="medal top" *ngIf="isTopReader"><b>★</b><span>TOP</span></div>
+
+  <div class="foot">
+    <div><div class="sig">{{ issuedAt | date: 'dd.MM.yyyy' }}</div><div class="line"></div>Berilgan sana</div>
+    <div><div class="sig">{{ template.signerName }}</div><div class="line"></div>{{ template.signerTitle }}</div>
+  </div>
+
+  <div class="qr">
+    <div class="box">
+      <img *ngIf="qrDataUrl; else qrPlaceholder" [src]="qrDataUrl" alt="Tekshirish QR kodi" />
+      <ng-template #qrPlaceholder><div class="qr-placeholder"><span>QR</span></div></ng-template>
+    </div>
+    <div class="qr-label">Haqiqiyligini tekshiring</div>
+  </div>
+</div>

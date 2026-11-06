@@ -10,6 +10,7 @@ import { ProfileModule } from './profile/profile.module';
 import { ContentCategoryModule } from './content-category/content-category.module';
 import { QuizzesModule } from './quizzes/quizzes.module';
 import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
+import { AdminModule } from './admin/admin.module';
 
 
 
@@ -28,6 +29,7 @@ import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
     ProfileModule,
     QuizzesModule,
     ContentCategoryModule,
+    AdminModule,
 ],
   providers: [
     // { provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: { disableClose: true, hasBackdrop: false } }

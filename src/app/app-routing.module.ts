@@ -13,6 +13,14 @@ import { QuizzesComponent } from './quizzes/quizzes/quizzes.component';
 import { PrimaryPageComponent } from './core/core/primary-page/primary-page.component';
 import { EncourageComponent } from './core/core/encourage/encourage.component';
 import { ChatAdminComponent } from './core/core/chatbot/chat-admin/chat-admin.component';
+import { SuperAdminGuard } from './admin/guards/super-admin.guard';
+import { AdminLayoutComponent } from './admin/admin-layout/admin-layout.component';
+import { DashboardComponent } from './admin/dashboard/dashboard.component';
+import { UsersComponent } from './admin/users/users.component';
+import { BookAnalyticsComponent } from './admin/book-analytics/book-analytics.component';
+import { ActivityComponent } from './admin/activity/activity.component';
+import { CertificateTemplatesComponent } from './admin/certificate-templates/certificate-templates.component';
+import { CertificateViewComponent } from './core/core/certificate-view/certificate-view.component';
 
 const routes: Routes = 
 [
@@ -32,6 +40,18 @@ const routes: Routes =
   {path: 'home', component: PrimaryPageComponent, canActivate: [AuthGuard]},
   {path: 'encourage', component: EncourageComponent, canActivate: [AuthGuard]},
   {path: 'support', component: ChatAdminComponent, canActivate: [AuthGuard]},
+  // QR kod shu sahifaga olib boradi: hamma uchun ochiq
+  {path: 'certificate/:code', component: CertificateViewComponent},
+  {
+    path: 'admin', component: AdminLayoutComponent, canActivate: [SuperAdminGuard],
+    children: [
+      {path: '', component: DashboardComponent},
+      {path: 'users', component: UsersComponent},
+      {path: 'books', component: BookAnalyticsComponent},
+      {path: 'activity', component: ActivityComponent},
+      {path: 'certificate-templates', component: CertificateTemplatesComponent},
+    ]
+  },
 ];
 // [
 //   {

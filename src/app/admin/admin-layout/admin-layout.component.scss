@@ -1,0 +1,132 @@
+:host {
+  display: block;
+  background: #f8fafc;
+  min-height: 100vh;
+}
+
+.admin-shell {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  gap: 24px;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 24px 24px 48px;
+}
+
+.sidebar {
+  position: sticky;
+  top: 96px;
+  align-self: start;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 16px 10px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 10px 16px;
+  border-bottom: 1px solid #f1f5f9;
+  margin-bottom: 8px;
+
+  mat-icon {
+    color: #fff;
+    background: linear-gradient(135deg, #2563eb, #312e81);
+    border-radius: 10px;
+    padding: 8px;
+    width: 40px;
+    height: 40px;
+    font-size: 24px;
+    box-sizing: border-box;
+  }
+
+  .brand-title {
+    font-weight: 700;
+    color: #0f172a;
+  }
+
+  .brand-sub {
+    font-size: 0.75rem;
+    color: #64748b;
+  }
+}
+
+.group-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #94a3b8;
+  padding: 14px 12px 6px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border-radius: 10px;
+  color: #334155;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+
+  mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+    color: #64748b;
+  }
+
+  .ext {
+    margin-left: auto;
+    font-size: 18px;
+    color: #cbd5e1;
+  }
+
+  &:hover {
+    background: #f1f5f9;
+  }
+
+  &.active {
+    background: #eff6ff;
+    color: #1d4ed8;
+
+    mat-icon {
+      color: #2563eb;
+    }
+  }
+}
+
+.content {
+  min-width: 0;
+}
+
+.menu-toggle {
+  display: none !important;
+}
+
+@media (max-width: 900px) {
+  .admin-shell {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 16px 16px 40px;
+  }
+
+  .menu-toggle {
+    display: inline-flex !important;
+    justify-self: start;
+  }
+
+  .sidebar {
+    display: none;
+    position: static;
+
+    &.open {
+      display: block;
+    }
+  }
+}

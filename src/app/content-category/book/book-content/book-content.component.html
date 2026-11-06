@@ -1,17 +1,88 @@
 <app-home></app-home>
 
-<button class="btn-primary m-2" (click)="openDialog(false)" *ngIf="userRole === 'Admin'">Kitob Qo'shish</button>
+<div class="books-page">
 
-<div class="container">
+  <!-- Sarlavha -->
+  <header class="books-hero">
+    <div>
+      <h1>Kitoblar</h1>
+      <p>Kitobni tanlang, test ishlang, baho va izoh qoldiring. Qaysi kitobga talab ko'pligini shu yerda kuzating.</p>
+    </div>
+    <button class="btn-primary" (click)="openDialog(false)" *ngIf="userRole === 'Admin' || userRole === 'SuperAdmin'">
+      <mat-icon>add</mat-icon>
+      Kitob qo'shish
+    </button>
+  </header>
 
-    <p class="p-0 font-medium italic text-center text-2xl" [ngClass]="{'!mt-7': userRole === 'User'}">O'zizga kerakli bo'lgan kitoblarni yuklab olishingiz yoki <br> boshqalarga manfaatli bo'ladigan kitoblarni yuklashingiz mumkin.</p>
-    <div class="container flex justify-around flex-wrap gap-y-5 !py-7">
-    
-        <ng-container *ngFor="let book of books let i = index">
-            <app-book [book]="book" (edit)="openDialog(true, i)" (delete)="confirmDeleteBook(book.id)">
-                
-            </app-book>
-            
-        </ng-container>
+  <!-- Talab yuqori kitoblar -->
+  <section class="demand-strip" *ngIf="topDemand.length">
+    <div class="demand-head">
+      <mat-icon>trending_up</mat-icon>
+      <span>Talab yuqori · {{ periodLabel }}</span>
+    </div>
+    <div class="demand-list">
+      <div class="demand-item" *ngFor="let book of topDemand; let i = index">
+        <span class="demand-rank" [ngClass]="'rank-' + (i + 1)">{{ i + 1 }}</span>
+        <div class="min-w-0">
+          <p class="demand-title">{{ book.title }}</p>
+          <p class="demand-meta">{{ stats[book.id].views }} marta o'qilgan</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Boshqaruv paneli -->
+  <section class="toolbar">
+    <div class="sort-group" role="tablist" #sortGroup>
+      <!-- Tanlangan tugma ostidagi oq fon: tugmalar orasida sirpanib o'tadi -->
+      <span class="sort-indicator" [class.ready]="indicator.ready"
+            [style.left.px]="indicator.left" [style.top.px]="indicator.top"
+            [style.width.px]="indicator.width" [style.height.px]="indicator.height"></span>
+      <button *ngFor="let option of sortOptions" role="tab" #sortButton
+              [attr.aria-selected]="sort === option.value"
+              [class.active]="sort === option.value" (click)="setSort(option.value)">
+        <mat-icon>{{ option.icon }}</mat-icon>
+        {{ option.label }}
+      </button>
+    </div>
+
+    <div class="toolbar-right">
+      <div class="period-group" title="Ko'rishlar davri">
+        <button *ngFor="let option of periodOptions"
+                [class.active]="period === option.value" (click)="setPeriod(option.value)">
+          {{ option.label }}
+        </button>
+      </div>
+
+      <div class="search-box">
+        <mat-icon>search</mat-icon>
+        <input type="text" [formControl]="searchControl" placeholder="Kitob yoki muallif..." />
+      </div>
+    </div>
+  </section>
+
+  <!-- Kitoblar -->
+  <div class="books-grid" *ngIf="!loading && visibleBooks.length">
+    <app-book *ngFor="let book of visibleBooks; trackBy: trackById"
+              [book]="book"
+              [stat]="stats[book.id] || null"
+              [demandRank]="demandRank(book)"
+              [periodLabel]="periodLabel"
+              (changed)="loadStats()"
+              (edit)="openDialog(true, book)"
+              (delete)="confirmDeleteBook(book.id)">
+    </app-book>
+  </div>
+
+  <div class="books-grid" *ngIf="loading">
+    <div class="skeleton-card" *ngFor="let s of [1, 2, 3, 4, 5, 6]"></div>
+  </div>
+
+  <div class="empty-state" *ngIf="!loading && !visibleBooks.length">
+    <mat-icon>search_off</mat-icon>
+    <h3>Kitob topilmadi</h3>
+    <p>Boshqa so'z bilan qidirib ko'ring.</p>
+    <button class="btn-secondary" *ngIf="searchControl.value" (click)="searchControl.setValue('')">Qidiruvni tozalash</button>
+  </div>
 </div>
-</div>
+

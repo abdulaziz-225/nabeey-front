@@ -10,7 +10,6 @@ import { ArticleContentComponent } from './article/article-content/article-conte
 import { VideoPlayerComponent } from './category/video-player/video-player.component';
 import { ContentVideoComponent } from './category/content-video/content-video.component';
 import { VideoDialogComponent } from './category/content-video/video-dialog/video-dialog.component';
-import { BookComponent } from './book/book.component';
 import { BookContentComponent } from './book/book-content/book-content.component';
 import { BookDialogComponent } from './book/book-dialog/book-dialog.component';
 import { CategoryContentComponent } from './category/category-content/category-content.component';
@@ -27,7 +26,6 @@ import { CategoryContentComponent } from './category/category-content/category-c
     VideoPlayerComponent,
     ContentVideoComponent,
     VideoDialogComponent,
-    BookComponent,
     BookContentComponent,
     BookDialogComponent,
     CategoryContentComponent,

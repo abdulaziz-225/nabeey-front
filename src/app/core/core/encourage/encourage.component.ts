@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { QuizzesService } from 'src/app/quizzes/services/quizzes.service';
+import { RewardCertificate, RewardService, RewardType } from '../services/reward.service';
 
 interface LeaderboardEntry {
   rating: number;
@@ -14,53 +15,75 @@ interface LeaderboardEntry {
 })
 export class EncourageComponent implements OnInit {
   totalScore: number = 0;
-  telegramUsername: string = '';
-  disableInput: boolean = false;
-  isAlreadySent: boolean = false;
-  pointsLeft: number = 1000;
+  threshold: number = 100;
+  certificates: RewardCertificate[] = [];
+  loadingStatus: boolean = true;
 
   leaderboard: LeaderboardEntry[] = [];
   currentUserId: number | null = null;
   loadingLeaderboard: boolean = true;
+  leaderboardPeriod: 'day' | 'week' | 'month' | 'all' = 'all';
+  readonly leaderboardPeriods: { value: 'day' | 'week' | 'month' | 'all'; label: string }[] = [
+    { value: 'day', label: 'Kunlik' },
+    { value: 'week', label: 'Haftalik' },
+    { value: 'month', label: 'Oylik' },
+    { value: 'all', label: 'Umumiy' }
+  ];
 
-  constructor(private quizzesService: QuizzesService) {}
+  constructor(private quizzesService: QuizzesService, private rewardService: RewardService) {}
 
   ngOnInit() {
     const id = localStorage.getItem('userId');
-    this.currentUserId = id ? JSON.parse(id) : null;
+    this.currentUserId = id ? Number(JSON.parse(id)) : null;
 
-    const alreadySent = localStorage.getItem('rewardClaimed');
-    this.isAlreadySent = alreadySent === 'true';
+    this.loadStatus();
+    this.loadLeaderboard();
+  }
 
+  get pointsLeft(): number {
+    return Math.max(0, this.threshold - this.totalScore);
+  }
+
+  get hasBallCertificate(): boolean {
+    return this.certificates.some(c => c.type === RewardType.Ball100);
+  }
+
+  certificateTitle(c: RewardCertificate): string {
+    return this.rewardService.title(c.type, c.threshold);
+  }
+
+  // Ball va sertifikatlar backend'dan: 100 ballga yetgan bo'lsa sertifikat shu so'rovda beriladi
+  loadStatus(): void {
+    this.loadingStatus = true;
+    this.rewardService.getMyStatus().subscribe({
+      next: status => {
+        this.totalScore = status.totalBall;
+        this.threshold = status.threshold;
+        this.certificates = status.certificates;
+        this.loadingStatus = false;
+      },
+      error: () => {
+        this.loadingStatus = false;
+      }
+    });
+  }
+
+  setLeaderboardPeriod(period: 'day' | 'week' | 'month' | 'all'): void {
+    if (this.leaderboardPeriod === period) return;
+    this.leaderboardPeriod = period;
     this.loadLeaderboard();
   }
 
   loadLeaderboard(): void {
     this.loadingLeaderboard = true;
-    this.quizzesService.getLeaderboard().subscribe({
+    this.quizzesService.getLeaderboard(this.leaderboardPeriod).subscribe({
       next: (list: LeaderboardEntry[]) => {
         this.leaderboard = list || [];
-
-        const mine = this.leaderboard.find(item => item.user?.id === this.currentUserId);
-        this.totalScore = mine ? mine.ball : 0;
-        this.pointsLeft = Math.max(0, 1000 - this.totalScore);
-        this.disableInput = this.isAlreadySent || this.totalScore < 1000;
-
         this.loadingLeaderboard = false;
       },
       error: () => {
         this.loadingLeaderboard = false;
       }
     });
-  }
-
-  sendUsername() {
-    if (this.telegramUsername.startsWith('@') && this.telegramUsername.length > 3) {
-      localStorage.setItem('rewardClaimed', 'true');
-      this.disableInput = true;
-      this.isAlreadySent = true;
-    } else {
-      alert("Iltimos, to'g'ri Telegram username kiriting, masalan: @kitobsevar");
-    }
   }
 }

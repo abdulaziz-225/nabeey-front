@@ -1,0 +1,30 @@
+
+// Progress yangi ballgacha 0.8s da to'ladi
+.bar-animate {
+  transition: width 0.8s ease-out;
+}
+
+// "+3" belgisi tepaga suzib chiqib yo'qoladi
+.gained {
+  position: absolute;
+  right: 12px;
+  top: -6px;
+  z-index: 20;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #ea580c;
+  pointer-events: none;
+  animation: gained-float 1.6s ease-out forwards;
+}
+
+@keyframes gained-float {
+  0%   { opacity: 0; transform: translateY(8px); }
+  20%  { opacity: 1; transform: translateY(0); }
+  70%  { opacity: 1; transform: translateY(-14px); }
+  100% { opacity: 0; transform: translateY(-24px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bar-animate { transition: none; }
+  .gained { animation: none; }
+}

@@ -7,13 +7,24 @@
   <p class="choice-subtitle">Qaysi biri orqali javob olishni xohlaysiz?</p>
 
   <div class="choice-options">
-    <button class="choice-option" (click)="choose('ai')">
+    <button class="choice-option" (click)="choose('ai')" *ngIf="availability.generalEnabled">
       <span class="choice-option-icon choice-option-icon-primary">
         <mat-icon>smart_toy</mat-icon>
       </span>
       <span class="choice-option-text">
         <span class="choice-option-title">AI dan so'rash</span>
         <span class="choice-option-desc">Kitoblar bo'yicha darhol javob oling</span>
+      </span>
+      <mat-icon class="choice-option-arrow">chevron_right</mat-icon>
+    </button>
+
+    <button class="choice-option" (click)="choose('library')" *ngIf="availability.libraryEnabled">
+      <span class="choice-option-icon choice-option-icon-library">
+        <mat-icon>local_library</mat-icon>
+      </span>
+      <span class="choice-option-text">
+        <span class="choice-option-title">Kutubxona AI</span>
+        <span class="choice-option-desc">Kitobsevar kontentidagi manbalarga tayangan javoblar</span>
       </span>
       <mat-icon class="choice-option-arrow">chevron_right</mat-icon>
     </button>

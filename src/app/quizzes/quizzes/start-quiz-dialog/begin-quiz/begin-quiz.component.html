@@ -1,6 +1,6 @@
 <div class="w-full h-full flex justify-center items-center bg-gray-200">
     <!-- X tugmachasi tepada -->
-    <p class="absolute top-2 right-40 text-xl cursor-pointer text-gray-500 flex items-center gap-2"  *ngIf="!isQuizFinished" (click)=" goToHome()">
+    <p class="absolute top-2 right-40 text-xl cursor-pointer text-gray-500 flex items-center gap-2"  *ngIf="!isQuizFinished" (click)="confirmExit()">
         <span class="text-2xl">&#10006;</span> Testni Yakunlash
       </p>
       
@@ -13,17 +13,21 @@
         <h2 class="!text-5xl !font-bold animate__animated  animate__zoomIn animate__delay-0.5s animate__faster">Qani ketdik!</h2>
       </ng-container>
 
-    <div class="bg-white p-6 rounded-lg shadow-lg w-[70%]" *ngIf="!isQuizFinished && !showLetsGoMessage && countdown === 0">
+    <div *ngIf="!isQuizFinished && !showLetsGoMessage && countdown === 0 && !currentQuestion" class="text-center text-gray-500 text-xl">
+      Yuklanmoqda...
+    </div>
+
+    <div class="bg-white p-6 rounded-lg shadow-lg w-[70%]" *ngIf="!isQuizFinished && !showLetsGoMessage && countdown === 0 && currentQuestion">
   
       <ng-container>
-        <h2 class="text-4xl font-bold text-center">{{ data.book.title }} Testi</h2>
-        <p class="text-gray-600 text-xl text-center">Savol {{ currentQuestionIndex + 1 }} / {{ data.book.questions.length }}</p>
+        <h2 class="text-4xl font-bold text-center">{{ bookTitle }} Testi</h2>
+        <p class="text-gray-600 text-xl text-center">Savol {{ currentQuestionIndex + 1 }} / {{ questions.length }}</p>
         
          <!-- Timer -->
     <div class="relative w-full bg-gray-300 h-3 mt-2 rounded-full">
         <div 
           class="absolute h-3 bg-blue-500 rounded-full transition-all"
-          [style.width]="(timeLeft / 30) * 100 + '%'">
+          [style.width]="(timeLeft / questionSeconds) * 100 + '%'">
         </div>
       </div>
       <p class="text-right text-sm text-gray-500 mt-1">{{ timeLeft }} sek</p>
@@ -34,11 +38,14 @@
           <ul class="mt-4 space-y-4 w-[70%] mx-auto">
             <li *ngFor="let answer of currentQuestion.answers"
                 (click)="checkAnswer(answer)"
-                class="border p-4 rounded-lg cursor-pointer text-xl transition-all duration-300"
+                class="border p-4 rounded-lg text-xl transition-all duration-300"
                 [ngClass]="{
-                  'bg-emerald-100 border text-green-600': selectedAnswer === answer.text && answer.isTrue,
-                  'bg-red-100 text-red-700': selectedAnswer === answer.text && !answer.isTrue,
-                  'bg-sky-50 border-sky-300': selectedAnswer !== answer.text
+                  'cursor-pointer': selectedAnswerId === null,
+                  'cursor-default': selectedAnswerId !== null,
+                  'bg-emerald-100 border text-green-600 answer-pop': selectedAnswerId === answer.id && selectedIsCorrect === true,
+                  'bg-red-100 text-red-700 answer-shake': selectedAnswerId === answer.id && selectedIsCorrect === false,
+                  'bg-blue-100 border-blue-400 animate-pulse': selectedAnswerId === answer.id && selectedIsCorrect === null,
+                  'bg-sky-50 border-sky-300': selectedAnswerId !== answer.id
                 }">
               {{ answer.text }}
             </li>
@@ -47,7 +54,7 @@
         </div>
   
         <div class="mt-6 flex justify-end gap-4">
-          <button class="btn-primary !text-lg !px-6 !py-3" [disabled]="!selectedAnswer" (click)="nextQuestion()">
+          <button class="btn-primary !text-lg !px-6 !py-3" [disabled]="selectedIsCorrect === null" (click)="nextQuestion()">
             Keyingi
           </button>
 
@@ -56,33 +63,142 @@
     </div>
   </div>
 
-  <div *ngIf="isQuizFinished" class="h-screen w-screen flex flex-col justify-center items-center text-white result-screen"
-  [ngClass]="quizResult.bg">
-  
-  <!-- GIF -->
-  <img [src]="quizResult.gif" alt="Natija holati" class="w-[320px] h-[220px] md:w-[350px] md:h-[250px] mb-4 animate__animated animate__bounceIn">
+  <!-- Natija ekrani -->
+  <div *ngIf="isQuizFinished && result" class="result-screen" [ngClass]="'tier-' + tier">
 
-  <!-- Natija xabari -->
-  <h2 class="text-5xl md:text-6xl font-extrabold text-center animate__animated animate__rubberBand 
-             leading-snug md:leading-normal tracking-wide max-w-2xl"
-      style="white-space: pre-line;">
-    {{ quizResult.message }}
-  </h2>
-  <div class="mt-4 font-bold text-xl" *ngIf="totalScore !== null">
-    Umumiy ballingiz: {{ totalScore }}
+    <!-- Konfetti (a'lo natija) -->
+    <div class="confetti" *ngIf="tier === 'excellent' && !showReview" aria-hidden="true">
+      <span *ngFor="let c of [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18]"></span>
+    </div>
+
+    <!-- Asosiy natija kartasi -->
+    <div class="result-card animate__animated animate__zoomIn" *ngIf="!showReview">
+      <div class="result-badge">
+        <mat-icon>{{ resultIcon }}</mat-icon>
+      </div>
+
+      <h2 class="result-title">{{ resultTitle }}</h2>
+      <p class="result-book">«{{ bookTitle }}» testi</p>
+
+      <div class="score-ring">
+        <svg viewBox="0 0 120 120">
+          <circle class="ring-track" cx="60" cy="60" r="54" />
+          <circle class="ring-value" cx="60" cy="60" r="54"
+                  [attr.stroke-dasharray]="ringCircumference"
+                  [attr.stroke-dashoffset]="ringOffset" />
+        </svg>
+        <div class="ring-label">
+          <span class="ring-percent">{{ shown.percent }}%</span>
+          <span class="ring-sub">{{ shown.correct }} / {{ result.questionCount }}</span>
+        </div>
+      </div>
+
+      <p class="result-message">{{ resultMessage }}</p>
+
+      <div class="result-stats">
+        <div class="stat stat-correct">
+          <mat-icon>check_circle</mat-icon>
+          <span class="stat-value">{{ shown.correct }}</span>
+          <span class="stat-label">To'g'ri</span>
+        </div>
+        <div class="stat stat-wrong">
+          <mat-icon>cancel</mat-icon>
+          <span class="stat-value">{{ shown.wrong }}</span>
+          <span class="stat-label">Xato</span>
+        </div>
+        <div class="stat stat-score">
+          <mat-icon>stars</mat-icon>
+          <span class="stat-value">{{ result.isScoreEligible ? '+' + shown.correct : '—' }}</span>
+          <span class="stat-label">{{ result.isScoreEligible ? 'Ball' : 'Mashq' }}</span>
+        </div>
+        <div class="stat stat-total" *ngIf="totalScore !== null">
+          <mat-icon>military_tech</mat-icon>
+          <span class="stat-value">{{ totalScore }}</span>
+          <span class="stat-label">Umumiy ball</span>
+        </div>
+      </div>
+
+      <div class="result-actions">
+        <button class="btn-primary !py-3 !px-6" (click)="showReview = true; reviewFilter = wrongCount ? 'wrong' : 'all'">
+          <mat-icon>fact_check</mat-icon>
+          <ng-container *ngIf="wrongCount; else allAnswersLabel">Xatolarni ko'rish ({{ wrongCount }})</ng-container>
+          <ng-template #allAnswersLabel>Javoblarni ko'rish</ng-template>
+        </button>
+        <button class="btn-secondary !py-3 !px-6" (click)="restartQuiz()">
+          <mat-icon>replay</mat-icon>
+          Qayta ishlash
+        </button>
+        <button class="btn-secondary !py-3 !px-6" (click)="goToHome()">
+          <mat-icon>home</mat-icon>
+          Asosiy sahifa
+        </button>
+      </div>
+    </div>
+
+    <!-- Xatolar tahlili (taymersiz) -->
+    <div class="review-panel animate__animated animate__fadeInUp animate__faster" *ngIf="showReview">
+      <header class="review-header">
+        <button class="review-back" (click)="showReview = false" aria-label="Natijaga qaytish">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+        <div class="min-w-0">
+          <h3>Javoblar tahlili</h3>
+          <p>{{ bookTitle }} · {{ result.correctAnswers }}/{{ result.questionCount }} to'g'ri</p>
+        </div>
+        <div class="review-tabs">
+          <button [class.active]="reviewFilter === 'all'" (click)="reviewFilter = 'all'">
+            Hammasi <span>{{ result.review.length }}</span>
+          </button>
+          <button [class.active]="reviewFilter === 'wrong'" (click)="reviewFilter = 'wrong'">
+            Xatolar <span>{{ wrongCount }}</span>
+          </button>
+        </div>
+      </header>
+
+      <div class="review-list">
+        <div class="review-empty" *ngIf="reviewItems.length === 0">
+          <mat-icon>celebration</mat-icon>
+          <p>Birorta ham xato yo'q — barakalla!</p>
+        </div>
+
+        <article class="review-item" *ngFor="let item of reviewItems; let i = index"
+                 [ngClass]="item.isCorrect ? 'is-correct' : 'is-wrong'">
+          <div class="review-item-head">
+            <span class="review-num">{{ result.review.indexOf(item) + 1 }}</span>
+            <p class="review-question">{{ item.questionText }}</p>
+            <span class="review-status" *ngIf="item.isCorrect"><mat-icon>check</mat-icon>To'g'ri</span>
+            <span class="review-status" *ngIf="!item.isCorrect && !item.isSkipped"><mat-icon>close</mat-icon>Xato</span>
+            <span class="review-status" *ngIf="item.isSkipped"><mat-icon>timer_off</mat-icon>Vaqt tugadi</span>
+          </div>
+
+          <div class="review-answers">
+            <div class="answer-row answer-mine" *ngIf="!item.isCorrect && !item.isSkipped">
+              <mat-icon>close</mat-icon>
+              <span class="answer-label">Sizning javobingiz:</span>
+              <span class="answer-text">{{ item.selectedAnswerText }}</span>
+            </div>
+            <div class="answer-row answer-mine" *ngIf="item.isSkipped">
+              <mat-icon>timer_off</mat-icon>
+              <span class="answer-label">Javob berilmadi</span>
+            </div>
+            <div class="answer-row answer-correct">
+              <mat-icon>check</mat-icon>
+              <span class="answer-label">To'g'ri javob:</span>
+              <span class="answer-text">{{ item.correctAnswerText }}</span>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <footer class="review-footer">
+        <button class="btn-secondary" (click)="showReview = false">
+          <mat-icon>arrow_back</mat-icon>
+          Natijaga qaytish
+        </button>
+        <button class="btn-primary" (click)="restartQuiz()">
+          <mat-icon>replay</mat-icon>
+          Qayta ishlash
+        </button>
+      </footer>
+    </div>
   </div>
-
-  <!-- Tugmalar -->
-  <div class="mt-6 flex gap-4">
-    <button (click)="restartQuiz()" class="btn-primary !py-3 !px-6 !text-base">
-      🔄 Qayta ishlash
-    </button>
-
-    <button (click)="goToHome()" class="btn-secondary !py-3 !px-6 !text-base !bg-white/15 !text-white hover:!bg-white/25">
-      🔙 Asosiy sahifaga qaytish
-    </button>
-  </div>
-</div>
-
-
-  

@@ -1,49 +1,76 @@
-<div class="py-5"> 
-<div *ngIf="book" class="p-4 bg-slate-50 rounded-md w-[450px]">
+<article *ngIf="book" class="book-card">
 
-    <h2 class="text-2xl font-bold mb-2 !mb-0"> <span class="text-xl font-semibold">Kitob nomi:</span> {{ book.title }}</h2>
-    <h2 class="text-2xl font-bold mb-2 !mb-0"> <span class="text-xl font-semibold">Kitob nomi:</span> {{ book.author }}</h2>
-     
-    <div>
-      <p class="text-2xl font-bold mb-2 !mb-0"> <span class="text-xl font-semibold">Kiob yili:</span> {{ book.year }}</p>
-      <p class="text-2xl font-bold mb-2 !mb-0"> <span class="text-xl font-semibold">Kiob janri:</span> {{ book.genre }}</p>
-    </div>
-    
-    <div class="flex items-center mt-2 !h-[90x]">
-      <p class="text-sm text-gray-700 flex-1">
-        <!-- [class.line-clamp-4]="expandedBookId !== book.id" -->
-      {{ book.description }}
+  <!-- Muqova -->
+  <div class="book-cover">
+    <img *ngIf="book.image?.filePath; else coverPlaceholder" [src]="book.image?.filePath" [alt]="book.title" />
+    <ng-template #coverPlaceholder>
+      <div class="cover-placeholder">
+        <span>{{ initial }}</span>
+        <mat-icon>menu_book</mat-icon>
+      </div>
+    </ng-template>
+
+    <span class="badge-hot" *ngIf="demandRank && demandRank <= 3">
+      <mat-icon [class.fire-beat]="demandRank === 1">local_fire_department</mat-icon>
+      Ommabop #{{ demandRank }}
+    </span>
+    <span class="badge-genre" *ngIf="book.genre">{{ book.genre }}</span>
+  </div>
+
+  <!-- Ma'lumot -->
+  <div class="book-body">
+    <h3 class="book-title" [title]="book.title">{{ book.title }}</h3>
+    <p class="book-author">
+      {{ book.author }}<ng-container *ngIf="book.year"> · {{ book.year }}</ng-container>
     </p>
 
+    <button type="button" class="book-rating" *ngIf="stat" (click)="openComments()" title="Baho qo'yish va izohlar">
+      <app-star-rating [value]="stat.ratingAverage" [size]="18"></app-star-rating>
+      <ng-container *ngIf="stat.ratingCount; else noRating">
+        <span class="rating-value">{{ stat.ratingAverage | number:'1.1-1' }}</span>
+        <span class="rating-count">({{ stat.ratingCount }} baho)</span>
+      </ng-container>
+      <ng-template #noRating>
+        <span class="rating-cta">Birinchi bo'lib baholang</span>
+      </ng-template>
+    </button>
+
+    <p class="book-desc">{{ book.description }}</p>
+
+    <div class="book-stats" *ngIf="stat">
+      <span title="Testni boshlaganlar soni">
+        <mat-icon>visibility</mat-icon>
+        {{ stat.views }} <small>{{ periodLabel }}</small>
+      </span>
+      <span title="Izohlar">
+        <mat-icon>chat_bubble_outline</mat-icon>
+        {{ stat.comments }}
+      </span>
+      <span *ngIf="stat.quizId" title="Test savollari">
+        <mat-icon>quiz</mat-icon>
+        {{ stat.questionCount }} savol
+      </span>
     </div>
-
-    <div class="mt-4 flex gap-10 items-center text-center">
-
-      <div class="">
-        <!-- <a [href]="book.file.filePath" target="_blank" download  class="text-blue-500 text-[18px] border rounded-md p-2 bg-blue-50 ">
-          Faylni ko'rish
-        </a> -->
-        
-        <div class="flex !mt-4" *ngIf="userRole === 'Admin'">
-
-          <button class="btn-primary !mr-2" (click)="onEdit()">
-            Tahrirlash
-          </button>
-
-          <button class="btn-danger" (click)="onDelete()">
-            O'chirish
-          </button>
-        </div>
-
-   
-      </div>
-
-      <div class="flex justify-center items-center w-32 h-32">
-        <img [src]="book.image?.filePath || 'assets/Default_pfp.svg.png'" [alt]="book.title" class="w-32 h-32 object-cover rounded-md shadow" />
-      </div>
-      
-    </div>
-
   </div>
+
+  <!-- Amallar -->
+  <div class="book-actions">
+    <button *ngIf="stat?.quizId" class="btn-primary flex-1 !rounded-xl" (click)="startTest()">
+      <mat-icon class="!text-[20px] !w-[20px] !h-[20px]">quiz</mat-icon>
+      Testni boshlash
+    </button>
+    <button class="btn-secondary !rounded-xl" [class.flex-1]="!stat?.quizId" (click)="openComments()">
+      <mat-icon class="!text-[20px] !w-[20px] !h-[20px]">rate_review</mat-icon>
+      Izoh va baho
+    </button>
   </div>
-  
+
+  <div class="admin-actions" *ngIf="isAdmin">
+    <button class="btn-icon btn-icon-primary" (click)="onEdit()" title="Tahrirlash">
+      <mat-icon>edit</mat-icon>
+    </button>
+    <button class="btn-icon btn-icon-danger" (click)="onDelete()" title="O'chirish">
+      <mat-icon>delete</mat-icon>
+    </button>
+  </div>
+</article>

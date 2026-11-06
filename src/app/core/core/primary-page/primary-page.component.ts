@@ -2,13 +2,15 @@ import { MatDialog } from '@angular/material/dialog';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { BookService } from 'src/app/content-category/services/book.service';
 import { QuizQustionService } from 'src/app/quizzes/services/quiz-qustion.service';
-import { StartQuizDialogComponent } from 'src/app/quizzes/quizzes/start-quiz-dialog/start-quiz-dialog.component';
-import { BeginQuizComponent } from 'src/app/quizzes/quizzes/start-quiz-dialog/begin-quiz/begin-quiz.component';
 import { FormControl } from '@angular/forms';
 import { debounceTime } from 'rxjs';
 import { ArticleService } from 'src/app/content-category/services/article.service';
 import { DetailedArticle } from 'src/app/content-category/models/article';
 import { ContentCategoryService } from 'src/app/content-category/services/content-category.service';
+import { BookRatingService } from 'src/app/content-category/services/book-rating.service';
+import { BookStat } from 'src/app/content-category/models/book-comment';
+import { QuizAttemptService } from 'src/app/quizzes/services/quiz-attempt.service';
+import { QuizLauncherService } from 'src/app/quizzes/services/quiz-launcher.service';
 
 @Component({
   selector: 'app-primary-page',
@@ -32,10 +34,14 @@ export class PrimaryPageComponent implements OnInit{
   selectedCategory: string = '';
   totalScore: number = 0;
   intervalId: any;
+  stats: Record<number, BookStat> = {};
 
   
   constructor(private bookService: BookService, private quizQuestionService: QuizQustionService,
     private dialog: MatDialog, private articleService: ArticleService, private contentCategoriesService: ContentCategoryService,
+    private bookRatingService: BookRatingService,
+    private quizAttemptService: QuizAttemptService,
+    private quizLauncher: QuizLauncherService,
   ){
 
   }
@@ -69,6 +75,7 @@ export class PrimaryPageComponent implements OnInit{
     this.loadBooks();
     this.loadAllArticles()
     this.loadContentCategories()
+    this.loadStats();
     
     this.searchControl.valueChanges.pipe(debounceTime(300)).subscribe(value => {
       console.log("Qidiruv qiymati:", value);
@@ -103,9 +110,16 @@ export class PrimaryPageComponent implements OnInit{
         this.filteredBooks = [...this.books]; 
         this.updatePaginatedBooks();
         this.updatePaginatedArticles();
-        console.log(this.paginatedBooks, 'paginated');
+        this.resumeQuizIfAny();
         
       });
+    });
+  }
+
+  loadStats() {
+    this.bookRatingService.getStats('all').subscribe({
+      next: list => this.stats = Object.fromEntries(list.map(st => [st.bookId, st])),
+      error: () => {}
     });
   }
 
@@ -202,23 +216,16 @@ export class PrimaryPageComponent implements OnInit{
   }
   
 
-  startTest(book: any) {
-    const dialogRef = this.dialog.open(StartQuizDialogComponent, {
-      width: '600px',
-      data: { book }
-    });
-  
-    dialogRef.afterClosed().subscribe(result => {
-      if (result === 'start') {
-        this.dialog.open(BeginQuizComponent, {
-          width: '100vw',
-          height: '100vh',
-          hasBackdrop: false,
-          disableClose: true, 
-          position: { top: '0', left: '0' }, 
-          data: { book }
-        });
-      }
+  // Test paytida sahifa yangilangan bo'lsa, serverdagi tugallanmagan urinishni davom ettiramiz
+  private resumeQuizIfAny() {
+    if (!localStorage.getItem('accessToken')) return;
+
+    this.quizAttemptService.getActive().subscribe({
+      next: attempt => {
+        if (!attempt) return;
+        this.quizLauncher.resume(attempt, this.books.find(b => b.id === attempt.bookId)).subscribe();
+      },
+      error: () => {}
     });
   }
 

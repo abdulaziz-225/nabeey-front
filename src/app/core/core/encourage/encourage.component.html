@@ -11,45 +11,45 @@
     </div>
 
     <div class="p-6 bg-white rounded-2xl shadow-sm border border-slate-100 text-center">
-      <h2 class="text-xl font-bold !m-0">🎉 Tabriklaymiz!</h2>
+      <div *ngIf="loadingStatus" class="text-slate-400 text-sm">Yuklanmoqda...</div>
 
-      <!-- Agar hali 1000 ball to‘plamagan bo‘lsa -->
-      <div *ngIf="totalScore < 1000; else rewardBlock" class="mt-4">
-        <p class="text-gray-700 font-medium mb-2">
-          Siz hozirda <strong>{{ totalScore }}</strong> ball to‘plagansiz.
-        </p>
-        <p class="text-orange-500 font-semibold">
-          Rag‘bat olish uchun yana <strong>{{ pointsLeft }}</strong> ball to‘plashingiz kerak.
-        </p>
-      </div>
-
-      <!-- Aks holda (1000 yoki ko‘proq ball bo‘lsa) -->
-      <ng-template #rewardBlock>
-        <div *ngIf="!isAlreadySent; else sentBlock" class="space-y-4 mt-4">
-          <p class="mb-2 text-green-700 font-semibold">
-            Siz 1000 ball to‘pladingiz! 🎁 Sovg‘ani olish uchun Telegram username'ingizni yuboring:
+      <ng-container *ngIf="!loadingStatus">
+        <!-- Hali 100 ball to'planmagan -->
+        <div *ngIf="!hasBallCertificate">
+          <h2 class="text-xl font-bold !m-0">📚 Sertifikat sari!</h2>
+          <p class="text-gray-700 font-medium mt-4 mb-2">
+            Siz hozirda <strong>{{ totalScore }}</strong> ball to'plagansiz.
           </p>
-
-          <input
-            [(ngModel)]="telegramUsername"
-            class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:border-orange-500"
-            placeholder="@username"
-            [disabled]="disableInput"
-          />
-
-          <button
-            class="btn-primary w-full"
-            (click)="sendUsername()"
-            [disabled]="disableInput || !telegramUsername"
-          >
-            Yuborish
-          </button>
+          <p class="text-orange-500 font-semibold !mb-0">
+            Kitobsevar sertifikatini olish uchun yana <strong>{{ pointsLeft }}</strong> ball to'plang.
+            {{ threshold }} ballga yetishingiz bilan sertifikat avtomatik beriladi.
+          </p>
         </div>
 
-        <ng-template #sentBlock>
-          <p class="text-green-600 font-semibold mt-4">Siz allaqachon rag‘bat olgansiz. 🎁</p>
-        </ng-template>
-      </ng-template>
+        <!-- 100 ball sertifikati berilgan -->
+        <div *ngIf="hasBallCertificate">
+          <h2 class="text-xl font-bold !m-0">🎉 Tabriklaymiz!</h2>
+          <p class="text-green-700 font-semibold mt-3 !mb-0">
+            Siz {{ threshold }} ball to'pladingiz va Kitobsevar sertifikatiga ega bo'ldingiz!
+          </p>
+        </div>
+
+        <!-- Foydalanuvchining barcha sertifikatlari -->
+        <div *ngIf="certificates.length" class="mt-5 space-y-3 text-left">
+          <div *ngFor="let c of certificates"
+               class="flex items-center gap-3 p-4 rounded-xl border"
+               [ngClass]="c.type === 1 ? 'border-blue-200 bg-blue-50' : 'border-amber-200 bg-amber-50'">
+            <mat-icon [ngClass]="c.type === 1 ? '!text-blue-700' : '!text-amber-600'">{{ c.type === 1 ? 'military_tech' : 'workspace_premium' }}</mat-icon>
+            <div class="flex-1 min-w-0">
+              <p class="!m-0 font-semibold text-slate-800">{{ certificateTitle(c) }}</p>
+              <p class="!m-0 text-xs text-slate-500">№ {{ c.code }} · {{ c.issuedAt | date: 'dd.MM.yyyy' }}</p>
+            </div>
+            <a class="btn-primary !py-2 !px-4 !text-sm" [routerLink]="['/certificate', c.code]">
+              <mat-icon class="!text-[18px] !w-[18px] !h-[18px]">visibility</mat-icon> Ko'rish
+            </a>
+          </div>
+        </div>
+      </ng-container>
     </div>
 
     <!-- Reyting jadvali -->
@@ -60,6 +60,15 @@
           Reyting jadvali
         </h3>
         <p class="text-slate-500 text-sm mt-1 !mb-0">Kimda nechta ball borligini shu yerdan kuzatib boring</p>
+
+        <div class="inline-flex flex-wrap gap-1 p-1 mt-3 rounded-full bg-slate-100">
+          <button *ngFor="let p of leaderboardPeriods"
+                  class="px-4 py-1.5 rounded-full text-sm font-semibold transition"
+                  [ngClass]="leaderboardPeriod === p.value ? 'bg-white text-blue-700 shadow-sm' : 'text-slate-500 hover:text-blue-600'"
+                  (click)="setLeaderboardPeriod(p.value)">
+            {{ p.label }}
+          </button>
+        </div>
       </div>
 
       <div *ngIf="loadingLeaderboard" class="p-6 text-center text-slate-400 text-sm">
@@ -67,12 +76,12 @@
       </div>
 
       <div *ngIf="!loadingLeaderboard && leaderboard.length === 0" class="p-6 text-center text-slate-400 text-sm">
-        Hozircha hech kim ball to‘plamagan
+        {{ leaderboardPeriod === 'all' ? 'Hozircha hech kim ball to‘plamagan' : 'Bu davrda hali hech kim ball to‘plamagan' }}
       </div>
 
       <div *ngFor="let entry of leaderboard"
            class="flex items-center gap-3 px-6 py-3 border-b border-slate-50 last:border-0 transition"
-           [ngClass]="entry.user?.id === currentUserId ? 'bg-blue-50' : ''">
+           [ngClass]="entry.user?.id === currentUserId ? 'bg-blue-50 my-row' : ''">
 
         <span class="w-8 h-8 flex-shrink-0 rounded-full flex items-center justify-center text-sm font-bold"
               [ngClass]="entry.rating === 1 ? 'bg-amber-400 text-white' :

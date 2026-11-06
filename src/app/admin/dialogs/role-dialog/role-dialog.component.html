@@ -1,0 +1,32 @@
+<div class="dlg">
+  <div class="dlg-head">
+    <div class="dlg-icon blue"><mat-icon>manage_accounts</mat-icon></div>
+    <div>
+      <h2>Rol berish</h2>
+      <p><b>{{ fullName }}</b> · {{ data.user.phone }}</p>
+      <p class="muted">Joriy rol: {{ currentRoleLabel }}</p>
+    </div>
+  </div>
+
+  <div class="role-options">
+    <label *ngFor="let r of roleOptions" class="role-option" [class.checked]="selectedRole === r.value"
+           [class.disabled]="data.isSelf && r.value !== data.user.userRole">
+      <input type="radio" name="role" [value]="r.value" [(ngModel)]="selectedRole"
+             [disabled]="data.isSelf && r.value !== data.user.userRole" />
+      <div>
+        <div class="role-title">{{ r.label }}</div>
+        <div class="muted small">{{ r.description }}</div>
+      </div>
+    </label>
+  </div>
+
+  <p class="hint" *ngIf="data.isSelf">O'zingizning rolingizni pasaytira olmaysiz.</p>
+  <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+  <div class="dlg-actions">
+    <button class="btn-secondary" mat-dialog-close>Bekor qilish</button>
+    <button class="btn-primary" (click)="save()" [disabled]="unchanged || saving">
+      {{ saving ? 'Saqlanmoqda...' : 'Saqlash' }}
+    </button>
+  </div>
+</div>

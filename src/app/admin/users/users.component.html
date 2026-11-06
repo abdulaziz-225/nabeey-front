@@ -1,0 +1,115 @@
+<div class="page-head">
+  <div>
+    <h1>Foydalanuvchilar</h1>
+    <p *ngIf="!showDeleted">Jami {{ totalCount }} ta · rol berish, parolni yangilash va faollikni ko'rish</p>
+    <p *ngIf="showDeleted">O'chirilgan foydalanuvchilar: {{ totalCount }} ta · tiklangan foydalanuvchi tizimga qayta kira oladi</p>
+  </div>
+</div>
+
+<div class="card">
+  <div class="toolbar">
+    <div class="search">
+      <mat-icon>search</mat-icon>
+      <input class="input" [formControl]="searchControl" placeholder="Ism, familiya, telefon yoki email..." />
+    </div>
+
+    <select class="select" [(ngModel)]="roleFilter" (ngModelChange)="onFilterChange()">
+      <option [ngValue]="null">Barcha rollar</option>
+      <option *ngFor="let r of roleOptions" [ngValue]="r.value">{{ r.label }}</option>
+      <option [ngValue]="'deleted'">🗑 O'chirilganlar</option>
+    </select>
+
+    <select class="select" [(ngModel)]="sortBy" (ngModelChange)="onFilterChange()" *ngIf="!showDeleted">
+      <option *ngFor="let o of sortOptions" [value]="o.value">{{ o.label }}</option>
+    </select>
+  </div>
+
+  <div class="table-wrap">
+    <table class="data">
+      <thead>
+        <tr>
+          <th>Foydalanuvchi</th>
+          <th>Telefon</th>
+          <th>Rol</th>
+          <th class="num">Ball</th>
+          <th class="num">Test</th>
+          <th class="num">Kitob</th>
+          <th>Sana</th>
+          <th class="num">Amallar</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let u of users" [class.deleted-row]="u.isDeleted">
+          <td>
+            <div class="user-cell">
+              <img *ngIf="u.imagePath; else initialsTpl" [src]="u.imagePath" alt="" />
+              <ng-template #initialsTpl><span class="avatar">{{ initials(u) }}</span></ng-template>
+              <div>
+                <div class="name">{{ u.firstName }} {{ u.lastName }} <span class="you" *ngIf="u.id === currentUserId">siz</span></div>
+                <div class="muted">{{ u.email }}</div>
+              </div>
+            </div>
+          </td>
+          <td class="nowrap">{{ u.phone }}</td>
+          <td><span class="role-badge" [ngClass]="'role-' + u.userRole">{{ roleName(u.userRole) }}</span></td>
+          <td class="num">
+            <b>{{ u.totalBall }}</b>
+            <div class="muted small" *ngIf="u.rating">{{ u.rating }}-o'rin</div>
+          </td>
+          <td class="num">{{ u.quizCount }}</td>
+          <td class="num">{{ u.bookViewCount }}</td>
+          <td class="nowrap small">
+            <div title="Ro'yxatdan o'tgan">{{ u.createdAt | date: 'dd.MM.yyyy' }}</div>
+            <div class="deleted-at" *ngIf="u.isDeleted">O'chirilgan{{ u.deletedAt ? ': ' + (u.deletedAt | date: 'dd.MM HH:mm') : '' }}</div>
+            <div class="muted" title="Oxirgi faollik" *ngIf="!u.isDeleted && u.lastActivityAt; else noActivity">Faol: {{ u.lastActivityAt | date: 'dd.MM HH:mm' }}</div>
+            <ng-template #noActivity><div class="muted" *ngIf="!u.isDeleted">Faollik yo'q</div></ng-template>
+          </td>
+          <td class="num">
+            <!-- O'chirilgan foydalanuvchida faqat tiklash tugmasi -->
+            <div class="actions" *ngIf="u.isDeleted">
+              <button class="restore-btn" title="Qayta tiklash" (click)="confirmRestore(u)">
+                <mat-icon>restore_from_trash</mat-icon> Tiklash
+              </button>
+            </div>
+            <div class="actions" *ngIf="!u.isDeleted">
+              <button class="btn-icon btn-icon-primary" title="Rol berish" (click)="openRoleDialog(u)">
+                <mat-icon>manage_accounts</mat-icon>
+              </button>
+              <button class="btn-icon btn-icon-warn" title="Tahrirlash va parol" (click)="openEditDialog(u)">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button class="btn-icon btn-icon-success" title="Faollik" (click)="openActivity(u)">
+                <mat-icon>insights</mat-icon>
+              </button>
+              <button class="btn-icon btn-icon-gold" title="Eng faol kitobxon sertifikatini berish" [disabled]="granting === u.id" (click)="grantTopReader(u)">
+                <mat-icon>military_tech</mat-icon>
+              </button>
+              <button class="btn-icon btn-icon-danger" title="O'chirish" [disabled]="u.id === currentUserId" (click)="confirmDelete(u)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="loading" *ngIf="loading && !users.length">Yuklanmoqda...</div>
+    <div class="empty" *ngIf="!loading && !users.length">
+      <mat-icon>person_search</mat-icon>
+      <p>Foydalanuvchi topilmadi</p>
+    </div>
+  </div>
+
+  <div class="pager" *ngIf="totalCount > 0">
+    <span>{{ (pageIndex - 1) * pageSize + 1 }}–{{ (pageIndex - 1) * pageSize + users.length }} / {{ totalCount }}</span>
+    <div class="pager-btns">
+      <button class="btn-icon btn-icon-primary" [disabled]="pageIndex === 1" (click)="goToPage(pageIndex - 1)">
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+      <span class="page-num">{{ pageIndex }} / {{ totalPages }}</span>
+      <button class="btn-icon btn-icon-primary" [disabled]="pageIndex >= totalPages" (click)="goToPage(pageIndex + 1)">
+        <mat-icon>chevron_right</mat-icon>
+      </button>
+    </div>
+  </div>
+</div>

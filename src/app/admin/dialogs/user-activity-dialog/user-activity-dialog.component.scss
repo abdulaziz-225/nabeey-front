@@ -1,0 +1,35 @@
+.mini-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 10px;
+  margin-bottom: 20px;
+
+  div {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  b {
+    font-size: 1.3rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  span {
+    font-size: 0.75rem;
+    color: #64748b;
+  }
+}
+
+h3 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin: 18px 0 8px;
+}
+
+.name {
+  font-weight: 600;
+}

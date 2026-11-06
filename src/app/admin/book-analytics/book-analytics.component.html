@@ -1,0 +1,96 @@
+<div class="page-head">
+  <div>
+    <h1>Kitoblar tahlili</h1>
+    <p>Qaysi kitobga talab ko'p va kimlar qaysi kitobga qiziqyapti</p>
+  </div>
+</div>
+
+<div class="summary">
+  <div class="card"><div class="muted">Kitoblar</div><b>{{ books.length }}</b></div>
+  <div class="card"><div class="muted">Jami ko'rishlar</div><b>{{ totals.views }}</b></div>
+  <div class="card"><div class="muted">Test urinishlari</div><b>{{ totals.attempts }}</b></div>
+  <div class="card"><div class="muted">Hech kim ochmagan kitoblar</div><b>{{ totals.untouched }}</b></div>
+</div>
+
+<div class="layout">
+  <div class="card">
+    <div class="toolbar">
+      <div class="search">
+        <mat-icon>search</mat-icon>
+        <input class="input" [(ngModel)]="search" placeholder="Kitob yoki muallif..." />
+      </div>
+      <span class="muted small">Ustun nomini bosib saralang</span>
+    </div>
+
+    <div class="table-wrap">
+      <table class="data">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Kitob</th>
+            <th *ngFor="let c of columns" class="num sortable" [class.active]="sortKey === c.key" (click)="sortBy(c.key)">
+              {{ c.label }}<mat-icon *ngIf="sortKey === c.key">arrow_downward</mat-icon>
+            </th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let b of visibleBooks; let i = index" class="clickable" [class.selected]="selected?.id === b.id" (click)="select(b)">
+            <td class="muted">{{ i + 1 }}</td>
+            <td>
+              <div class="book-cell">
+                <img [src]="b.imagePath || 'assets/Default_pfp.svg.png'" alt="" />
+                <div>
+                  <div class="name">{{ b.title }}</div>
+                  <div class="muted small">{{ b.author }}<ng-container *ngIf="b.categoryName"> · {{ b.categoryName }}</ng-container></div>
+                </div>
+              </div>
+            </td>
+            <td class="num">{{ b.views }}</td>
+            <td class="num">{{ b.uniqueReaders }}</td>
+            <td class="num">{{ b.quizAttempts }}</td>
+            <td class="num">{{ b.quizAttempts ? b.averageScorePercent + '%' : '—' }}</td>
+            <td class="num"><b>{{ b.demandScore }}</b></td>
+            <td class="bar-cell"><div class="inline-bar"><span [style.width.%]="(b.demandScore / maxScore) * 100"></span></div></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="loading" *ngIf="loading">Yuklanmoqda...</div>
+      <div class="empty" *ngIf="!loading && !visibleBooks.length">Kitob topilmadi</div>
+    </div>
+    <p class="muted small formula">Talab = ko'rishlar + o'quvchilar × 2 + test urinishlari × 3</p>
+  </div>
+
+  <div class="card readers">
+    <ng-container *ngIf="selected; else pick">
+      <h2>{{ selected.title }}</h2>
+      <p class="card-sub">{{ selected.author }} · {{ readers.length }} ta qiziquvchi</p>
+
+      <div class="loading" *ngIf="readersLoading">Yuklanmoqda...</div>
+      <div class="empty" *ngIf="!readersLoading && !readers.length">
+        <mat-icon>person_off</mat-icon>
+        <p>Bu kitobni hali hech kim ochmagan</p>
+      </div>
+
+      <ul class="reader-list">
+        <li *ngFor="let r of readers" (click)="openUser(r)">
+          <div class="reader-main">
+            <div class="name">{{ r.fullName }}</div>
+            <div class="muted small">{{ r.phone }}</div>
+          </div>
+          <div class="reader-meta">
+            <span class="chip" *ngIf="r.views">{{ r.views }} marta ochgan</span>
+            <span class="chip good" *ngIf="r.tookQuiz">Test: {{ r.ball }} ball · {{ r.scorePercent }}%</span>
+            <div class="muted small" *ngIf="r.lastViewedAt">{{ r.lastViewedAt | date: 'dd.MM.yyyy HH:mm' }}</div>
+          </div>
+        </li>
+      </ul>
+    </ng-container>
+    <ng-template #pick>
+      <div class="empty">
+        <mat-icon>touch_app</mat-icon>
+        <p>Qiziquvchilarni ko'rish uchun kitobni tanlang</p>
+      </div>
+    </ng-template>
+  </div>
+</div>

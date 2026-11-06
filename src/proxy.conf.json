@@ -1,0 +1,33 @@
+{
+  "/api": {
+    "target": "https://localhost:7267",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "warn"
+  },
+  "/Images": {
+    "target": "https://localhost:7267",
+    "secure": false,
+    "changeOrigin": true
+  },
+  "/Files": {
+    "target": "https://localhost:7267",
+    "secure": false,
+    "changeOrigin": true
+  },
+  "/Audios": {
+    "target": "https://localhost:7267",
+    "secure": false,
+    "changeOrigin": true
+  },
+  "/Certificates": {
+    "target": "https://localhost:7267",
+    "secure": false,
+    "changeOrigin": true
+  },
+  "/Templates": {
+    "target": "https://localhost:7267",
+    "secure": false,
+    "changeOrigin": true
+  }
+}

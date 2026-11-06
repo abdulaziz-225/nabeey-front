@@ -1,6 +1,6 @@
 <app-home></app-home>
 
-<button class="btn-primary m-2" (click)="openDialog()" *ngIf="userRole === 'Admin'">
+<button class="btn-primary m-2" (click)="openDialog()" *ngIf="userRole === 'Admin' || userRole === 'SuperAdmin'">
  Video Qo'shish
 </button>
 

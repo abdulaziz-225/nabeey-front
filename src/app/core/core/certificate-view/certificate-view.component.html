@@ -1,0 +1,49 @@
+<div class="page">
+  <header class="topbar">
+    <a class="brand" [routerLink]="isLoggedIn ? '/home' : '/login'">
+      <img src="assets/logo.PNG" alt="Kitobsevar" />
+      <span>Kitobsevar</span>
+    </a>
+    <a class="back" *ngIf="isLoggedIn" routerLink="/encourage"><mat-icon>arrow_back</mat-icon> Rag'batlantirish</a>
+  </header>
+
+  <div class="loading" *ngIf="loading">Sertifikat tekshirilmoqda...</div>
+
+  <!-- Kod topilmadi: soxta yoki xato QR -->
+  <div class="status invalid" *ngIf="notFound">
+    <mat-icon>gpp_bad</mat-icon>
+    <div>
+      <h2>Sertifikat topilmadi</h2>
+      <p><b>{{ code }}</b> raqamli sertifikat Kitobsevar tizimida mavjud emas. Bu soxta yoki noto'g'ri kod bo'lishi mumkin.</p>
+    </div>
+  </div>
+
+  <ng-container *ngIf="certificate as c">
+    <div class="status valid">
+      <mat-icon>verified</mat-icon>
+      <div>
+        <h2>Haqiqiy sertifikat</h2>
+        <p>Ushbu <b>{{ isTopReader ? '"Eng faol kitobxon"' : c.threshold + ' ball' }}</b> sertifikati Kitobsevar platformasi tomonidan <b>{{ c.fullName }}</b>ga {{ c.issuedAt | date: 'dd.MM.yyyy' }} sanada berilgan. Raqami: <b>{{ c.code }}</b></p>
+      </div>
+    </div>
+
+    <div class="stage" #stage [style.height.px]="height * scale">
+      <div class="scaler" [style.transform]="'scale(' + scale + ')'">
+        <app-certificate-card #cert
+          [fullName]="c.fullName" [code]="c.code" [issuedAt]="c.issuedAt"
+          [type]="c.type" [threshold]="c.threshold" [template]="c.template!" [qrDataUrl]="qrDataUrl">
+        </app-certificate-card>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn-primary" (click)="download()" [disabled]="downloading">
+        <mat-icon>download</mat-icon> {{ downloading ? 'Tayyorlanmoqda...' : 'PNG yuklab olish' }}
+      </button>
+      <button class="btn-secondary" (click)="copyLink()">
+        <mat-icon>link</mat-icon> Havolani nusxalash
+      </button>
+    </div>
+    <p class="hint">QR kodni telefon kamerasi bilan skanerlang: shu sahifa ochilib, sertifikat haqiqiyligi tasdiqlanadi.</p>
+  </ng-container>
+</div>

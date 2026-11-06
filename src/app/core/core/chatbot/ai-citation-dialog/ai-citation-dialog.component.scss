@@ -1,0 +1,16 @@
+.citation-dialog { color: #17212b; }
+.citation-header { display: flex; justify-content: space-between; gap: 16px; padding: 20px 22px 14px; border-bottom: 1px solid #e2e8f0; }
+.citation-header h2 { margin: 4px 0 0; font-size: 1.1rem; }
+.citation-type { color: #0f766e; font-size: 0.74rem; font-weight: 700; }
+.citation-close { display: grid; place-items: center; width: 34px; height: 34px; border: 0; border-radius: 50%; background: #f1f5f9; color: #475569; cursor: pointer; }
+.citation-content { max-height: 60vh; overflow: auto; padding: 18px 22px; color: #334155; white-space: pre-line; line-height: 1.55; }
+.citation-error { color: #b42318; }
+.book-facts { display: flex; flex-wrap: wrap; gap: 10px 24px; margin: 0 0 14px; }
+.book-facts dt { color: #64748b; font-size: 0.74rem; }
+.book-facts dd { margin: 2px 0 0; font-weight: 600; }
+.source-text { margin: 0; }
+.answer-options { margin-top: 16px; }
+.answer-options h3 { margin: 0 0 8px; font-size: 0.88rem; }
+.answer-options p { margin: 4px 0; }
+.source-file { display: inline-flex; align-items: center; gap: 6px; margin-top: 16px; color: #0f766e; font-weight: 600; }
+.citation-footer { display: flex; justify-content: flex-end; padding: 12px 22px; border-top: 1px solid #e2e8f0; }

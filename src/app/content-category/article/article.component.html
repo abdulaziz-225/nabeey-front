@@ -38,7 +38,7 @@
         </p>
         
         <hr>
-        <div class="w-full overflow-hidden flex items-center justify-end gap-x-5" *ngIf="userRole === 'Admin'">
+        <div class="w-full overflow-hidden flex items-center justify-end gap-x-5" *ngIf="userRole === 'Admin' || userRole === 'SuperAdmin'">
                 
           <button class="bg-blue-500 text-white w-[50px] h-[40px] rounded" (click)="onEdit()"> <mat-icon>edit</mat-icon></button>
           <button class="bg-red-500 text-white w-[50px] h-[40px] rounded" (click)="onDelete()"> <mat-icon>delete</mat-icon></button>
@@ -77,7 +77,7 @@
     </div>
 
     <!-- Admin actions -->
-    <div class="p-4 pt-0" *ngIf="userRole === 'Admin'">
+    <div class="p-4 pt-0" *ngIf="userRole === 'Admin' || userRole === 'SuperAdmin'">
       <div class="w-full flex justify-end items-center gap-3">
         <button class="btn-icon btn-icon-primary" (click)="onEdit()">
           <mat-icon>edit</mat-icon>

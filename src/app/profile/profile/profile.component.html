@@ -1,78 +1,115 @@
-  <nav class="navbar">
-    <div class="navbar-left">
-        <button class="circle-button" (click)="goBack()">
-    <mat-icon>keyboard_backspace</mat-icon>
-        </button>
-  <span class="navbar-brand">Nabeey sahifasiga qaytish</span>
-    </div>
-  </nav>
-
-  <div class="profile-container">
-    <div class="profile-header">
-      <img [src]="profiles.asset.filePath" alt="Profile Image" class="profile-image" />
-      <div class="profile-info" *ngIf="profiles">
-
-
-        <p class="text-sm-[20px] flex items-center gap-4"> Ismi: <span> {{ profiles.firstName }} </span>
-          <button class="btn-primary !py-2 !px-4 !text-sm" (click)="openDialog()">
-            Edit Profile
-          </button>
-        </p>
-
-      <p>Email: {{ profiles.email }}</p>
-      <p>Phone: {{ profiles.phone }}</p>
-    </div>
+<nav class="navbar">
+  <div class="navbar-left">
+    <button class="circle-button" (click)="goBack()" aria-label="Orqaga"><mat-icon>arrow_back</mat-icon></button>
+    <span class="navbar-brand">Profil va faoliyat</span>
   </div>
+</nav>
 
-  <!-- <button mat-raised-button color="primary" (click)="openDialog()">
-    Edit Profile
-  </button> -->
-</div>
-
-<div class="container">
-<div class="mx-20 my-20">
-  <hr class=" font-bold">
-  <!-- <ng-container *ngFor="let article of articles">
-
-    <app-article [article]="article"></app-article>
-  </ng-container> -->
-  <div class="flex flex-wrap ml-5">
-
-
-  <div class="border border-gray-300 rounded-lg p-4 mb-4 w-[280px] ml-10 mt-5"  *ngFor="let article of articles">
-    <!-- User Asset and Name -->
-    <div class="flex items-center justify-between">
-      <div class="flex items-center space-x-2">
-        <img [src]="article.user.asset.filePath" alt="User Image" class="w-10 h-10 rounded-full">
-        <span class="font-semibold">{{ article.user.firstName }}</span>
+<main class="profile-page">
+  <section class="profile-header" *ngIf="profiles as profile">
+    <img [src]="profile.asset.filePath || 'assets/Default_pfp.svg.png'" alt="Profil rasmi" class="profile-image" />
+    <div class="profile-info">
+      <div class="profile-name-row">
+        <h1>{{ profile.firstName }} {{ profile.lastName }}</h1>
+        <button class="btn-secondary edit-profile" (click)="openDialog()"><mat-icon>edit</mat-icon> Profilni tahrirlash</button>
       </div>
-      
-      <button mat-icon-button [matMenuTriggerFor]="menu">
-        <mat-icon class="!text-black">more_vert</mat-icon>
-      </button>
+      <p>{{ profile.email }}</p>
+      <p>{{ profile.phone }}</p>
+    </div>
+  </section>
 
-      <mat-menu #menu="matMenu">
-        <button mat-menu-item (click)="editDialog(true, article)">
-          <mat-icon>edit</mat-icon>
-          <span>Edit</span>
-        </button>
-        <button mat-menu-item (click)="confirmDeleteArticle(article.id)">
-          <mat-icon>delete</mat-icon>
-          <span>Delete</span>
-        </button>
-      </mat-menu>
+  <section class="activity-summary" *ngIf="activity as data">
+    <div class="summary-item score-summary">
+      <span class="summary-label">Jami to‘plangan ball</span>
+      <strong>{{ data.totalBall | number:'1.0-1' }}</strong>
     </div>
-  
-    <!-- Article Content -->
-    <div class="mt-4 h-[240px] w-[240px]">
-      <!-- Article Image -->
-      <img *ngIf="article.image" [src]="article.image.filePath " alt="Article Image" class="h-full w-full mb-2 flex items-center justify-center">
-  
-      <!-- Article Text -->
+    <div class="summary-item"><span class="summary-label">Ishlangan testlar</span><strong>{{ data.quizCount }}</strong></div>
+    <div class="summary-item"><span class="summary-label">AI savol-javoblar</span><strong>{{ data.aiConversationCount }}</strong></div>
+    <div class="summary-item"><span class="summary-label">Ekspert suhbatlari</span><strong>{{ data.expertConversationCount }}</strong></div>
+  </section>
+
+  <section class="history-section">
+    <div class="history-heading">
+      <div><h2>Faoliyat tarixi</h2><p>Testlar, AI va ekspert bilan suhbatlar</p></div>
+      <button class="refresh-button" (click)="loadActivity()" [disabled]="activityLoading" title="Yangilash"><mat-icon>refresh</mat-icon></button>
     </div>
-    <p class="text-gray-700 pt-6"> <span class="!text-black font-semibold"> Article</span> {{ article.text }}</p>
-  </div>
-</div>
-  
-</div>
-</div>
+
+    <div class="history-tabs" role="tablist" aria-label="Faoliyat turlari">
+      <button role="tab" [attr.aria-selected]="activeHistoryTab === 'quizzes'" [class.active]="activeHistoryTab === 'quizzes'" (click)="setHistoryTab('quizzes')">
+        <mat-icon>quiz</mat-icon> Testlar <span>{{ activity?.quizCount || 0 }}</span>
+      </button>
+      <button role="tab" [attr.aria-selected]="activeHistoryTab === 'ai'" [class.active]="activeHistoryTab === 'ai'" (click)="setHistoryTab('ai')">
+        <mat-icon>smart_toy</mat-icon> AI <span>{{ activity?.aiConversationCount || 0 }}</span>
+      </button>
+      <button role="tab" [attr.aria-selected]="activeHistoryTab === 'expert'" [class.active]="activeHistoryTab === 'expert'" (click)="setHistoryTab('expert')">
+        <mat-icon>support_agent</mat-icon> Ekspert <span>{{ activity?.expertConversationCount || 0 }}</span>
+      </button>
+      <button role="tab" [attr.aria-selected]="activeHistoryTab === 'articles'" [class.active]="activeHistoryTab === 'articles'" (click)="setHistoryTab('articles')">
+        <mat-icon>article</mat-icon> Maqolalar <span>{{ articles.length }}</span>
+      </button>
+    </div>
+
+    <div class="history-loading" *ngIf="activityLoading">Faoliyat tarixi yuklanmoqda...</div>
+    <div class="history-error" *ngIf="activityError && !activityLoading">
+      <mat-icon>cloud_off</mat-icon><span>Faoliyat tarixini yuklab bo‘lmadi.</span>
+      <button class="btn-secondary" (click)="loadActivity()">Qayta urinish</button>
+    </div>
+
+    <ng-container *ngIf="!activityLoading && !activityError && activity as data">
+      <div class="history-list" *ngIf="activeHistoryTab === 'quizzes'">
+        <article class="history-row quiz-row" *ngFor="let result of data.quizResults">
+          <span class="row-icon quiz-icon"><mat-icon>menu_book</mat-icon></span>
+          <div class="row-main"><h3>{{ result.quizName }}</h3><p>{{ result.correctAnswers }} ta to‘g‘ri · {{ result.incorrectAnswers }} ta noto‘g‘ri</p></div>
+          <div class="row-result"><strong>{{ result.ball | number:'1.0-1' }} ball</strong><time>{{ result.completedAt | date:'dd.MM.yyyy HH:mm' }}</time></div>
+        </article>
+        <div class="empty-history" *ngIf="!data.quizResults.length"><mat-icon>quiz</mat-icon><p>Hali test natijasi yo‘q</p></div>
+      </div>
+
+      <div class="history-list" *ngIf="activeHistoryTab === 'ai'">
+        <article class="session-item" *ngFor="let session of data.aiSessions">
+          <button type="button" class="session-trigger" (click)="toggleAiSession(session.sessionId)" [attr.aria-expanded]="expandedAiSessionId === session.sessionId">
+            <span class="row-icon ai-icon"><mat-icon>{{ session.mode === 'library' ? 'local_library' : 'smart_toy' }}</mat-icon></span>
+            <span class="session-trigger-copy"><span class="mode-label">{{ session.mode === 'library' ? 'Kutubxona AI' : 'AI yordamchi' }}</span><strong>{{ firstAiQuestion(session.turns) }}</strong></span>
+            <time>{{ session.startedAt | date:'dd.MM.yyyy HH:mm' }}</time>
+            <mat-icon class="session-chevron">{{ expandedAiSessionId === session.sessionId ? 'expand_less' : 'expand_more' }}</mat-icon>
+          </button>
+          <div class="session-transcript" *ngIf="expandedAiSessionId === session.sessionId">
+            <div class="transcript-turn" *ngFor="let turn of session.turns">
+              <span class="transcript-label">Siz</span><p class="history-question">{{ turn.question }}</p>
+              <span class="transcript-label ai-label">{{ session.mode === 'library' ? 'Kutubxona AI' : 'AI yordamchi' }}</span><p class="history-answer">{{ turn.answer }}</p>
+              <time>{{ turn.createdAt | date:'dd.MM.yyyy HH:mm' }}</time>
+            </div>
+          </div>
+        </article>
+        <div class="empty-history" *ngIf="!data.aiSessions.length"><mat-icon>smart_toy</mat-icon><p>Yangi AI suhbatlaringiz shu yerda ko‘rinadi</p></div>
+      </div>
+
+      <div class="history-list" *ngIf="activeHistoryTab === 'expert'">
+        <article class="session-item" *ngFor="let conversation of data.expertConversations">
+          <button type="button" class="session-trigger" (click)="toggleExpertConversation(conversation.id)" [attr.aria-expanded]="expandedExpertConversationId === conversation.id">
+            <span class="row-icon expert-icon"><mat-icon>support_agent</mat-icon></span>
+            <span class="session-trigger-copy"><span class="mode-label">Ekspert bilan suhbat · {{ conversation.status === 'Closed' ? 'Yakunlangan' : 'Ochiq' }}</span><strong>{{ firstUserMessage(conversation.messages) }}</strong></span>
+            <time>{{ conversation.startedAt | date:'dd.MM.yyyy HH:mm' }}</time>
+            <mat-icon class="session-chevron">{{ expandedExpertConversationId === conversation.id ? 'expand_less' : 'expand_more' }}</mat-icon>
+          </button>
+          <div class="session-transcript" *ngIf="expandedExpertConversationId === conversation.id">
+            <div class="expert-message" *ngFor="let message of conversation.messages" [class.from-admin]="message.isFromAdmin">
+              <span>{{ message.isFromAdmin ? 'Ekspert' : 'Siz' }}</span><p>{{ message.text }}</p><time>{{ message.sentAt | date:'dd.MM.yyyy HH:mm' }}</time>
+            </div>
+          </div>
+        </article>
+        <div class="empty-history" *ngIf="!data.expertConversations.length"><mat-icon>support_agent</mat-icon><p>Hali ekspert bilan suhbat bo‘lmagan</p></div>
+      </div>
+    </ng-container>
+
+    <div class="history-list article-list" *ngIf="activeHistoryTab === 'articles'">
+      <article class="article-row" *ngFor="let article of articles; let i = index">
+        <img [src]="article.image?.filePath || 'assets/Default_pfp.svg.png'" alt="" />
+        <div class="row-main"><h3>{{ article.title || 'Maqola' }}</h3><p>{{ article.text }}</p></div>
+        <button class="icon-action" (click)="editDialog(true, article)" title="Tahrirlash"><mat-icon>edit</mat-icon></button>
+        <button class="icon-action danger" (click)="confirmDeleteArticle(article.id)" title="O‘chirish"><mat-icon>delete</mat-icon></button>
+      </article>
+      <div class="empty-history" *ngIf="!articles?.length"><mat-icon>article</mat-icon><p>Hali maqola joylamagansiz</p></div>
+    </div>
+  </section>
+</main>

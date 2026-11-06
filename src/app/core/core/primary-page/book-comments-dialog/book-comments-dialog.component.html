@@ -1,0 +1,134 @@
+<div class="bc-dialog">
+
+  <!-- Sarlavha -->
+  <header class="bc-header">
+    <img class="bc-cover" [src]="book.image?.filePath || defaultAvatar" [alt]="book.title" />
+    <div class="bc-header-info">
+      <h2 class="bc-title">{{ book.title }}</h2>
+      <p class="bc-author">{{ book.author }}</p>
+    </div>
+    <button class="bc-close" (click)="close()" aria-label="Yopish">
+      <mat-icon>close</mat-icon>
+    </button>
+  </header>
+
+  <!-- Reyting: bitta ixcham qator -->
+  <section class="bc-rating">
+    <div class="bc-rating-summary">
+      <span class="bc-rating-avg">{{ rating?.count ? (rating?.average | number:'1.1-1') : '—' }}</span>
+      <app-star-rating [value]="rating?.average || 0" [size]="16"></app-star-rating>
+      <span class="bc-rating-count">({{ rating?.count || 0 }})</span>
+    </div>
+
+    <div class="bc-rating-mine" *ngIf="currentUserId">
+      <span>{{ rating?.myStars ? ratingLabels[(rating?.myStars || 1) - 1] : 'Baholang' }}</span>
+      <app-star-rating [value]="rating?.myStars || 0" [readonly]="false" [size]="22" (rate)="rate($event)"></app-star-rating>
+    </div>
+  </section>
+
+  <!-- Izohlar ro'yxati (faqat shu qism aylanadi) -->
+  <section class="bc-list" #list>
+    <ng-container *ngIf="loading">
+      <div class="bc-skeleton" *ngFor="let s of [1, 2, 3, 4]">
+        <div class="bc-skel-avatar"></div>
+        <div class="bc-skel-lines">
+          <div class="bc-skel-line w-2/3"></div>
+          <div class="bc-skel-line w-1/3"></div>
+        </div>
+      </div>
+    </ng-container>
+
+    <div class="bc-empty" *ngIf="!loading && comments.length === 0">
+      <mat-icon>chat_bubble_outline</mat-icon>
+      <p class="bc-empty-title">Hali izohlar yo'q</p>
+      <p class="bc-empty-text">Birinchi bo'lib fikr bildiring.</p>
+    </div>
+
+    <div class="bc-thread" *ngFor="let root of comments">
+      <ng-container *ngTemplateOutlet="commentTpl; context: { $implicit: root, root: root, isReply: false }"></ng-container>
+
+      <!-- Javoblarni ochish/yopish -->
+      <button class="bc-toggle-replies" *ngIf="root.replies?.length" (click)="toggleReplies(root)">
+        <span class="bc-toggle-line"></span>
+        <ng-container *ngIf="expandedRoots.has(root.id); else showReplies">Javoblarni yashirish</ng-container>
+        <ng-template #showReplies>Javoblarni ko'rish ({{ root.replies.length }})</ng-template>
+      </button>
+
+      <div class="bc-replies" *ngIf="expandedRoots.has(root.id)">
+        <ng-container *ngFor="let reply of root.replies">
+          <ng-container *ngTemplateOutlet="commentTpl; context: { $implicit: reply, root: root, isReply: true }"></ng-container>
+        </ng-container>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bitta izoh (asosiy yoki javob) -->
+  <ng-template #commentTpl let-comment let-root="root" let-isReply="isReply">
+    <article class="bc-item" [class.bc-item-reply]="isReply" [class.bc-new]="comment.id === newCommentId"
+             [attr.data-comment-id]="comment.id">
+      <img class="bc-avatar" [class.bc-avatar-sm]="isReply" [src]="comment.user.imagePath || defaultAvatar"
+           (error)="onAvatarError($event)" alt="" />
+
+      <div class="bc-content">
+        <p class="bc-text">
+          <span class="bc-name">{{ fullName(comment) }}</span>
+          <app-star-rating *ngIf="comment.userStars" class="bc-stars" [value]="comment.userStars" [size]="12"></app-star-rating>
+          <span class="bc-mention" *ngIf="comment.replyTo">@{{ comment.replyTo.firstName }}</span>
+          {{ comment.text }}
+        </p>
+
+        <div class="bc-meta">
+          <span>{{ timeAgo(comment.createdAt) }}</span>
+          <span *ngIf="comment.likeCount" class="bc-meta-strong">{{ comment.likeCount }} ta layk</span>
+          <button class="bc-meta-btn" (click)="startReply(comment, root)">Javob berish</button>
+          <button class="bc-meta-btn bc-meta-delete" *ngIf="canDelete(comment)" (click)="remove(comment, isReply ? root : undefined)">O'chirish</button>
+        </div>
+      </div>
+
+      <button class="bc-like" [class.liked]="comment.likedByMe" (click)="toggleLike(comment)"
+              [attr.aria-pressed]="comment.likedByMe" [title]="comment.likedByMe ? 'Laykni qaytarib olish' : 'Layk'">
+        <mat-icon [class.like-pop]="likePopId === comment.id">{{ comment.likedByMe ? 'favorite' : 'favorite_border' }}</mat-icon>
+      </button>
+    </article>
+  </ng-template>
+
+  <!-- Pastdagi yozish maydoni -->
+  <footer class="bc-input-bar" *ngIf="currentUserId; else loginHint">
+    <div class="bc-replying" *ngIf="replyingTo">
+      <span><b>{{ fullName(replyingTo!) }}</b>'ga javob</span>
+      <button (click)="cancelReply()" aria-label="Javobni bekor qilish">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <div class="bc-input-row">
+      <img class="bc-avatar bc-avatar-sm" [src]="currentUser?.asset?.filePath || defaultAvatar" (error)="onAvatarError($event)" alt="" />
+      <div class="bc-input" [class.bc-input-error]="isOverLimit">
+        <textarea #input
+                  [(ngModel)]="text"
+                  (input)="autoGrow()"
+                  (keydown)="onKeydown($event)"
+                  rows="1"
+                  [placeholder]="replyingTo ? 'Javob yozing...' : 'Izoh qoldiring...'"></textarea>
+        <button class="bc-post" [disabled]="!canSend" (click)="send()">
+          {{ sending ? '...' : 'Joylash' }}
+        </button>
+      </div>
+    </div>
+
+    <div class="bc-limit" *ngIf="length >= warnFrom">
+      <span class="bc-limit-msg" *ngIf="isOverLimit">
+        <mat-icon>error_outline</mat-icon>
+        Izoh {{ maxLength }} belgigacha bo'lishi kerak
+      </span>
+      <span class="bc-counter" [class.bc-counter-error]="isOverLimit">{{ length }}/{{ maxLength }}</span>
+    </div>
+  </footer>
+
+  <ng-template #loginHint>
+    <footer class="bc-input-bar bc-login-hint">
+      <mat-icon>lock</mat-icon>
+      Izoh qoldirish uchun tizimga kiring.
+    </footer>
+  </ng-template>
+</div>

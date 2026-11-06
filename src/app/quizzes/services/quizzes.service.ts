@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs';
 import { QuizQuestions } from '../models/quiz-question';
 import { map, Observable } from 'rxjs';
 import { Quiz } from '../models/quiz';
@@ -11,6 +12,9 @@ import { environment } from 'src/app/environments/environment';
 export class QuizzesService {
 
   private apiUrl: string = environment.apiUrl;
+
+  // Test natijasi ballga yozilganda: bosh sahifadagi "Ballar" tugmasi yangilanadi
+  readonly scoreChanged$ = new Subject<void>();
 
   constructor(private http: HttpClient) { }
 
@@ -26,8 +30,9 @@ export class QuizzesService {
     )
   }
 
-  getLeaderboard(): Observable<any[]> {
-    return this.http.get<any>(`${this.apiUrl}/quiz-result/leaderboard`).pipe(
+  // period: day | week | month | all (umumiy ball uchun parametrsiz)
+  getLeaderboard(period: 'day' | 'week' | 'month' | 'all' = 'all'): Observable<any[]> {
+    return this.http.get<any>(`${this.apiUrl}/quiz-result/leaderboard`, { params: { period } }).pipe(
       map(response => response.data)
     );
   }

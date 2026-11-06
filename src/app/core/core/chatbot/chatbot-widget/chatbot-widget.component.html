@@ -73,10 +73,12 @@
     </ng-container>
 
     <app-ai-chat
-      *ngIf="activeView === 'ai'"
+      *ngIf="activeView === 'ai' || activeView === 'library'"
+      [mode]="activeView === 'library' ? 'library' : 'general'"
       [isMaximized]="isMaximized"
       (toggleMaximize)="toggleMaximize()"
-      (switchToExpert)="openExpertView()">
+      (switchToExpert)="openExpertView()"
+      (switchMode)="openAiMode($event)">
     </app-ai-chat>
   </div>
 

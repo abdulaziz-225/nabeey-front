@@ -1,0 +1,63 @@
+<div class="dlg">
+  <div class="loading" *ngIf="loading">Yuklanmoqda...</div>
+  <div class="empty" *ngIf="error">Ma'lumotni yuklab bo'lmadi</div>
+
+  <ng-container *ngIf="activity as a">
+    <div class="dlg-head">
+      <div class="dlg-icon green"><mat-icon>insights</mat-icon></div>
+      <div>
+        <h2>{{ a.user.firstName }} {{ a.user.lastName }}</h2>
+        <p>{{ a.user.phone }} · {{ a.user.email }}</p>
+        <p class="muted">
+          <span class="role-badge" [ngClass]="'role-' + a.user.userRole">{{ roleName(a.user.userRole) }}</span>
+          · {{ a.user.createdAt | date: 'dd.MM.yyyy' }} da ro'yxatdan o'tgan
+        </p>
+      </div>
+    </div>
+
+    <div class="mini-stats">
+      <div><b>{{ a.user.totalBall }}</b><span>Jami ball</span></div>
+      <div><b>{{ a.user.rating || '—' }}</b><span>Reytingdagi o'rni</span></div>
+      <div><b>{{ a.user.quizCount }}</b><span>Topshirilgan test</span></div>
+      <div><b>{{ a.user.certificateCount }}</b><span>Sertifikat</span></div>
+      <div><b>{{ a.user.bookViewCount }}</b><span>Kitob ochgan</span></div>
+      <div><b>{{ a.user.aiQuestionCount }}</b><span>AI savollar</span></div>
+    </div>
+
+    <h3>Qiziqqan kitoblari</h3>
+    <div class="table-wrap" *ngIf="a.viewedBooks.length; else noViews">
+      <table class="data">
+        <thead><tr><th>Kitob</th><th class="num">Ochgan</th><th>Oxirgi marta</th></tr></thead>
+        <tbody>
+          <tr *ngFor="let b of a.viewedBooks">
+            <td><div class="name">{{ b.title }}</div><div class="muted small">{{ b.author }}</div></td>
+            <td class="num">{{ b.views }}</td>
+            <td class="muted">{{ b.lastViewedAt | date: 'dd.MM.yyyy HH:mm' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <ng-template #noViews><p class="muted">Hali kitob ochmagan</p></ng-template>
+
+    <h3>Test natijalari</h3>
+    <div class="table-wrap" *ngIf="a.quizResults.length; else noQuiz">
+      <table class="data">
+        <thead><tr><th>Test</th><th class="num">Ball</th><th class="num">To'g'ri / Xato</th><th class="num">Natija</th><th>Sana</th></tr></thead>
+        <tbody>
+          <tr *ngFor="let r of a.quizResults">
+            <td class="name">{{ r.quizName }}</td>
+            <td class="num"><b>{{ r.ball }}</b></td>
+            <td class="num">{{ r.correctAnswers }} / {{ r.incorrectAnswers }}</td>
+            <td class="num">{{ r.scorePercent }}%</td>
+            <td class="muted">{{ r.createdAt | date: 'dd.MM.yyyy' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <ng-template #noQuiz><p class="muted">Hali test topshirmagan</p></ng-template>
+  </ng-container>
+
+  <div class="dlg-actions">
+    <button class="btn-secondary" mat-dialog-close>Yopish</button>
+  </div>
+</div>

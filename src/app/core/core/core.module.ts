@@ -16,6 +16,12 @@ import { ChatbotWidgetComponent } from './chatbot/chatbot-widget/chatbot-widget.
 import { ChatAdminComponent } from './chatbot/chat-admin/chat-admin.component';
 import { ChatChoiceDialogComponent } from './chatbot/chat-choice-dialog/chat-choice-dialog.component';
 import { AiChatComponent } from './chatbot/ai-chat/ai-chat.component';
+import { CertificateViewComponent } from './certificate-view/certificate-view.component';
+import { CertificateCardComponent } from './certificate-card/certificate-card.component';
+import { AiCitationDialogComponent } from './chatbot/ai-citation-dialog/ai-citation-dialog.component';
+import { BookCommentsDialogComponent } from './primary-page/book-comments-dialog/book-comments-dialog.component';
+import { BookComponent } from 'src/app/content-category/book/book.component';
+import { LibraryLightsComponent } from './library-lights/library-lights.component';
 
 
 @NgModule({
@@ -33,7 +39,13 @@ import { AiChatComponent } from './chatbot/ai-chat/ai-chat.component';
     ChatbotWidgetComponent,
     ChatAdminComponent,
     ChatChoiceDialogComponent,
-    AiChatComponent
+    AiChatComponent,
+    CertificateViewComponent,
+    CertificateCardComponent,
+    AiCitationDialogComponent,
+    BookCommentsDialogComponent,
+    BookComponent,
+    LibraryLightsComponent
   ],
   imports: [
     CommonModule,
@@ -47,7 +59,9 @@ import { AiChatComponent } from './chatbot/ai-chat/ai-chat.component';
     LayoutComponent,
     FooterComponent,
     ChatbotWidgetComponent,
-    ChatAdminComponent
+    ChatAdminComponent,
+    CertificateCardComponent,
+    BookComponent
   ],
   providers: [
     provideNgxMask(),

@@ -1,0 +1,41 @@
+<div class="page-head">
+  <div>
+    <h1>Faoliyat lentasi</h1>
+    <p>Platformadagi so'nggi harakatlar: ro'yxatdan o'tish, kitob ochish, test va sertifikatlar</p>
+  </div>
+  <button class="btn-secondary" (click)="load()" [disabled]="loading">
+    <mat-icon>refresh</mat-icon> Yangilash
+  </button>
+</div>
+
+<div class="card">
+  <div class="filters">
+    <button class="filter" [class.active]="filter === 'all'" (click)="filter = 'all'">Hammasi</button>
+    <button *ngFor="let t of types" class="filter" [class.active]="filter === t.value" (click)="filter = t.value">
+      <mat-icon>{{ t.icon }}</mat-icon>{{ t.label }}
+    </button>
+  </div>
+
+  <ul class="feed">
+    <li *ngFor="let e of visible" (click)="openUser(e)">
+      <span class="feed-icon" [ngClass]="e.type"><mat-icon>{{ meta(e.type).icon }}</mat-icon></span>
+      <div class="feed-body">
+        <div>
+          <b>{{ e.userFullName }}</b> {{ meta(e.type).verb }}<ng-container *ngIf="e.type !== 'registration' && e.subject">: <span class="subject">{{ e.subject }}</span></ng-container>
+        </div>
+        <div class="muted small" *ngIf="e.detail">{{ e.detail }}</div>
+      </div>
+      <time class="muted small">{{ e.createdAt | date: 'dd.MM.yyyy HH:mm' }}</time>
+    </li>
+  </ul>
+
+  <div class="loading" *ngIf="loading">Yuklanmoqda...</div>
+  <div class="empty" *ngIf="!loading && !visible.length">
+    <mat-icon>history</mat-icon>
+    <p>Hozircha faoliyat yo'q</p>
+  </div>
+
+  <div class="more" *ngIf="!loading && events.length >= take && take < 200">
+    <button class="btn-secondary" (click)="loadMore()">Ko'proq ko'rsatish</button>
+  </div>
+</div>

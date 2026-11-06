@@ -1,0 +1,98 @@
+<div class="page-head">
+  <div>
+    <h1>Sertifikat shablonlari</h1>
+    <p>Sertifikat matni va ranglarini o'zgartiring. O'zgarishlar barcha sertifikatlarda, jumladan avval berilganlarida ham ko'rinadi.</p>
+  </div>
+</div>
+
+<div class="type-tabs">
+  <button *ngFor="let t of types" class="type-tab" [class.active]="active === t.value" (click)="select(t.value)">
+    <mat-icon>{{ t.icon }}</mat-icon>
+    <span>
+      <b>{{ t.label }}</b>
+      <small>{{ t.hint }}</small>
+    </span>
+  </button>
+</div>
+
+<div class="loading" *ngIf="loading">Yuklanmoqda...</div>
+
+<div class="layout" *ngIf="!loading">
+  <form class="card editor" [formGroup]="form" (ngSubmit)="save()">
+    <h2>Matn</h2>
+    <p class="card-sub">Ism, sana va QR kod avtomatik qo'yiladi</p>
+
+    <label class="field">
+      <span>Sarlavha osti <em>{{ form.controls.subtitle.value.length }}/60</em></span>
+      <input class="input" formControlName="subtitle" maxlength="60" />
+    </label>
+
+    <label class="field">
+      <span>Asosiy matn <em>{{ form.controls.body.value.length }}/220</em></span>
+      <textarea class="input area" formControlName="body" rows="4" maxlength="220"></textarea>
+      <small class="muted"><code>{{ '{' }}ball{{ '}' }}</code> yozsangiz, sertifikat bali qo'yiladi</small>
+    </label>
+
+    <label class="field">
+      <span>Motivatsion iqtibos <em>{{ form.controls.quote.value.length }}/180</em></span>
+      <textarea class="input area" formControlName="quote" rows="3" maxlength="180" placeholder="Ixtiyoriy"></textarea>
+    </label>
+
+    <div class="row">
+      <label class="field">
+        <span>Imzo</span>
+        <input class="input" formControlName="signerName" maxlength="40" />
+      </label>
+      <label class="field">
+        <span>Imzo egasi</span>
+        <input class="input" formControlName="signerTitle" maxlength="60" />
+      </label>
+    </div>
+
+    <h2 class="mt">Ranglar</h2>
+    <div class="row">
+      <label class="field color">
+        <span>Asosiy rang <em>ism, burchaklar</em></span>
+        <div class="color-input">
+          <input type="color" formControlName="primaryColor" />
+          <input class="input" [value]="form.controls.primaryColor.value" (change)="onColorText('primaryColor', $any($event.target).value)" maxlength="7" />
+        </div>
+      </label>
+      <label class="field color">
+        <span>Aksent rang <em>ramka, medal</em></span>
+        <div class="color-input">
+          <input type="color" formControlName="accentColor" />
+          <input class="input" [value]="form.controls.accentColor.value" (change)="onColorText('accentColor', $any($event.target).value)" maxlength="7" />
+        </div>
+      </label>
+    </div>
+    <small class="error" *ngIf="form.controls.primaryColor.invalid || form.controls.accentColor.invalid">Rang #RRGGBB ko'rinishida bo'lsin</small>
+
+    <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+    <div class="actions">
+      <button type="button" class="btn-secondary" (click)="reset()" [disabled]="saving">
+        <mat-icon>restart_alt</mat-icon> Standartga qaytarish
+      </button>
+      <button type="submit" class="btn-primary" [disabled]="saving || form.pristine || form.invalid">
+        <mat-icon>save</mat-icon> {{ saving ? 'Saqlanmoqda...' : 'Saqlash' }}
+      </button>
+    </div>
+    <p class="muted small saved" *ngIf="current?.updatedAt">Oxirgi saqlangan: {{ current?.updatedAt | date: 'dd.MM.yyyy HH:mm' }}</p>
+  </form>
+
+  <div class="card preview-card">
+    <div class="preview-head">
+      <h2>Jonli ko'rinish</h2>
+      <span class="chip" *ngIf="form.dirty">Saqlanmagan</span>
+    </div>
+    <div class="stage" #stage [style.height.px]="previewHeight * scale">
+      <div class="scaler" [style.transform]="'scale(' + scale + ')'">
+        <app-certificate-card
+          fullName="Namuna Kitobxon" code="KS-2026-NAMUNA" [issuedAt]="today"
+          [type]="active" [threshold]="100" [template]="preview" [qrDataUrl]="qrDataUrl">
+        </app-certificate-card>
+      </div>
+    </div>
+  </div>
+</div>

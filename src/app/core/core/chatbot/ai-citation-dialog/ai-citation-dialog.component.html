@@ -1,0 +1,37 @@
+<section class="citation-dialog">
+  <header class="citation-header">
+    <div>
+      <span class="citation-type">{{ citation.type }}</span>
+      <h2>{{ source?.title || citation.title }}</h2>
+    </div>
+    <button type="button" class="citation-close" (click)="close()" aria-label="Yopish">
+      <mat-icon>close</mat-icon>
+    </button>
+  </header>
+
+  <div class="citation-content" *ngIf="loading">Manba yuklanmoqda...</div>
+  <div class="citation-content citation-error" *ngIf="!loading && error">{{ error }}</div>
+
+  <div class="citation-content" *ngIf="!loading && !error && source">
+    <dl class="book-facts" *ngIf="citation.type === 'Kitob'">
+      <div *ngIf="source.author"><dt>Muallif</dt><dd>{{ source.author }}</dd></div>
+      <div *ngIf="source.genre"><dt>Janr</dt><dd>{{ source.genre }}</dd></div>
+      <div *ngIf="source.year"><dt>Yil</dt><dd>{{ source.year }}</dd></div>
+    </dl>
+
+    <p class="source-text" *ngIf="sourceText">{{ sourceText }}</p>
+
+    <div class="answer-options" *ngIf="source.answers?.length">
+      <h3>Javob variantlari</h3>
+      <p *ngFor="let answer of source.answers">{{ answer.text }}</p>
+    </div>
+
+    <a class="source-file" *ngIf="fileUrl" [href]="fileUrl" target="_blank" rel="noopener noreferrer">
+      <mat-icon>open_in_new</mat-icon> Kitob faylini ochish
+    </a>
+  </div>
+
+  <footer class="citation-footer">
+    <button type="button" class="btn-secondary" (click)="close()">Yopish</button>
+  </footer>
+</section>

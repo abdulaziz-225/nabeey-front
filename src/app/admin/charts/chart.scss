@@ -1,0 +1,149 @@
+:host {
+  display: block;
+}
+
+.chart-wrap {
+  position: relative;
+  padding-bottom: 4px;
+}
+
+.chart-svg {
+  display: block;
+  width: 100%;
+  overflow: visible;
+}
+
+.grid {
+  stroke: #ebe9e4;
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.baseline {
+  stroke: #c9c7c0;
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.crosshair {
+  stroke: #9a9892;
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+  vector-effect: non-scaling-stroke;
+}
+
+.line {
+  fill: none;
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.hit {
+  fill: transparent;
+  cursor: crosshair;
+}
+
+.dot {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.y-labels {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 28px;
+  pointer-events: none;
+
+  span {
+    position: absolute;
+    right: 0;
+    transform: translateY(-50%);
+    font-size: 11px;
+    color: #6b6a66;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+.x-labels {
+  position: relative;
+  height: 16px;
+  margin-top: -20px;
+  pointer-events: none;
+
+  span {
+    position: absolute;
+    transform: translateX(-50%);
+    font-size: 11px;
+    color: #6b6a66;
+    white-space: nowrap;
+  }
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 10px;
+  font-size: 13px;
+  color: #52514e;
+}
+
+.legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.swatch {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+
+  &.line {
+    height: 3px;
+    width: 14px;
+    border-radius: 2px;
+  }
+}
+
+.chart-tooltip {
+  position: absolute;
+  top: 0;
+  transform: translate(-50%, -100%);
+  background: #fff;
+  border: 1px solid #e2e0da;
+  border-radius: 8px;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.12);
+  padding: 8px 10px;
+  font-size: 12px;
+  color: #0b0b0b;
+  pointer-events: none;
+  white-space: nowrap;
+  z-index: 5;
+
+  .tt-title {
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: #52514e;
+  }
+
+  .tt-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    b {
+      margin-left: auto;
+      padding-left: 12px;
+      font-variant-numeric: tabular-nums;
+    }
+  }
+}

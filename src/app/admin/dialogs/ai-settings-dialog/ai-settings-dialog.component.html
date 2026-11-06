@@ -1,0 +1,66 @@
+<div class="ai-settings">
+  <header class="settings-head">
+    <div class="settings-mark"><mat-icon>tune</mat-icon></div>
+    <div>
+      <h2>AI boshqaruvi</h2>
+      <p>AI yo‘riqnomalari va kutubxona bilim manbalari</p>
+    </div>
+    <button class="close-button" type="button" (click)="close()" aria-label="Yopish">
+      <mat-icon>close</mat-icon>
+    </button>
+  </header>
+
+  <div class="settings-body" *ngIf="!loadingSettings; else loading">
+    <div class="notice" *ngIf="loadError">
+      <mat-icon>cloud_off</mat-icon>
+      <div><strong>Sozlamalar yuklanmadi</strong><span>{{ loadError }} Backend API tayyor bo‘lmaguncha o‘zgarishlar saqlanmaydi.</span></div>
+    </div>
+
+    <section class="settings-section">
+      <div class="section-title"><span>01</span><div><h3>AI javob qoidalari</h3><p>AI qanday javob berishini boshqaruvchi server ko‘rsatmalari</p></div></div>
+      <label class="field-label" for="systemPrompt">Asosiy ko‘rsatma</label>
+      <textarea id="systemPrompt" class="settings-textarea" [(ngModel)]="settings.systemPrompt"
+        placeholder="Masalan: O‘zbek tilida, sodda va hurmat bilan javob ber. Bilmagan ma’lumotni to‘qima."></textarea>
+      <label class="field-label" for="scopeInstructions">Kutubxona rejimi qoidalari</label>
+      <textarea id="scopeInstructions" class="settings-textarea compact" [(ngModel)]="settings.scopeInstructions"
+        placeholder="Javobni faqat topilgan kutubxona manbalariga asosla va manbalarni ko‘rsat."></textarea>
+      <div class="toggle-list">
+        <label class="toggle-row"><span><b>Umumiy AI</b><small>Ochiq mavzulardagi AI suhbatiga ruxsat</small></span><input type="checkbox" [(ngModel)]="settings.generalEnabled"></label>
+        <label class="toggle-row"><span><b>Kutubxona AI</b><small>Kitobsevar kontentidan qidirib javob berishga ruxsat</small></span><input type="checkbox" [(ngModel)]="settings.libraryEnabled"></label>
+      </div>
+    </section>
+
+    <section class="settings-section">
+      <div class="section-title"><span>02</span><div><h3>Bilim manbalari</h3><p>Qaysi kontent indekslanib, AI qidiruvida qatnashadi</p></div></div>
+      <div class="source-list">
+        <label class="source-option"><input type="checkbox" [(ngModel)]="settings.includeBooks"><mat-icon>menu_book</mat-icon><span><b>Kitoblar</b><small>Kitob matni va tavsifi</small></span></label>
+        <label class="source-option"><input type="checkbox" [(ngModel)]="settings.includeArticles"><mat-icon>article</mat-icon><span><b>Maqolalar</b><small>Nashr qilingan maqola kontenti</small></span></label>
+        <label class="source-option"><input type="checkbox" [(ngModel)]="settings.includeQuestions"><mat-icon>quiz</mat-icon><span><b>Savol-javoblar</b><small>Quiz savollari va izohlari</small></span></label>
+      </div>
+      <div class="index-status">
+        <div class="status-copy">
+          <span class="status-dot" [class.status-ready]="libraryStatus?.state === 'completed'" [class.status-running]="libraryStatus?.state === 'running'"></span>
+          <div><b>{{ statusLabel }}</b><small *ngIf="libraryStatus">{{ libraryStatus.indexedItems }} / {{ libraryStatus.totalItems }} ta manba indekslangan</small><small *ngIf="!libraryStatus">Indeks holati mavjud emas</small></div>
+        </div>
+        <button type="button" class="btn-secondary status-refresh" (click)="refreshStatus()" title="Holatni yangilash"><mat-icon>refresh</mat-icon></button>
+      </div>
+      <p class="inline-error" *ngIf="statusError">{{ statusError }}</p>
+      <p class="inline-error" *ngIf="libraryStatus?.error">{{ libraryStatus?.error }}</p>
+      <button type="button" class="btn-secondary reindex-button" (click)="reindex()" [disabled]="reindexing || !settings.libraryEnabled || loadingSettings || !!loadError">
+        <mat-icon>{{ reindexing ? 'hourglass_top' : 'sync' }}</mat-icon>
+        {{ reindexing ? 'Indekslanmoqda' : 'Kutubxonani qayta indekslash' }}
+      </button>
+    </section>
+  </div>
+
+  <ng-template #loading><div class="settings-loading">AI sozlamalari yuklanmoqda...</div></ng-template>
+
+  <footer class="settings-footer">
+    <span class="save-feedback" *ngIf="saved"><mat-icon>check_circle</mat-icon>Saqlangan</span>
+    <span class="save-error" *ngIf="saveError">{{ saveError }}</span>
+    <button type="button" class="btn-secondary" (click)="close()">Yopish</button>
+    <button type="button" class="btn-primary" (click)="save()" [disabled]="saving || loadingSettings || !!loadError || !settings.systemPrompt.trim()">
+      <mat-icon>{{ saving ? 'hourglass_top' : 'save' }}</mat-icon>{{ saving ? 'Saqlanmoqda' : 'Sozlamalarni saqlash' }}
+    </button>
+  </footer>
+</div>

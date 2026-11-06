@@ -1,0 +1,196 @@
+<div class="page-head">
+  <div>
+    <h1>Dashboard</h1>
+    <p>Platformaning umumiy holati va so'nggi 30 kunlik faollik</p>
+  </div>
+  <div class="dashboard-actions">
+    <button class="btn-secondary" (click)="openAiSettings()">
+      <mat-icon>tune</mat-icon> AI sozlamalari
+    </button>
+    <button class="btn-secondary" (click)="load()" [disabled]="loading">
+      <mat-icon>refresh</mat-icon> Yangilash
+    </button>
+  </div>
+</div>
+
+<div class="loading" *ngIf="loading && !stats">Yuklanmoqda...</div>
+<div class="card empty" *ngIf="error">
+  <mat-icon>cloud_off</mat-icon>
+  <p>Ma'lumotlarni yuklab bo'lmadi. Backend ishlayotganini tekshiring.</p>
+</div>
+
+<ng-container *ngIf="stats as s">
+  <!-- Asosiy ko'rsatkichlar -->
+  <div class="tiles">
+    <button type="button" class="tile" (click)="openDetail('users')">
+      <div class="tile-icon blue"><mat-icon>group</mat-icon></div>
+      <div class="tile-label">Jami foydalanuvchilar</div>
+      <div class="tile-value">{{ s.totalUsers }}</div>
+      <div class="tile-foot">+{{ s.newUsersLast7Days }} so'nggi 7 kunda · +{{ s.newUsersLast30Days }} 30 kunda</div>
+      <span class="tile-more">Batafsil <mat-icon>arrow_forward</mat-icon></span>
+    </button>
+    <button type="button" class="tile" (click)="openDetail('active')">
+      <div class="tile-icon green"><mat-icon>bolt</mat-icon></div>
+      <div class="tile-label">Faol foydalanuvchilar (7 kun)</div>
+      <div class="tile-value">{{ s.activeUsersLast7Days }}</div>
+      <div class="tile-foot">Test, kitob yoki AI'dan foydalanganlar</div>
+      <span class="tile-more">Batafsil <mat-icon>arrow_forward</mat-icon></span>
+    </button>
+    <button type="button" class="tile" (click)="openDetail('quiz')">
+      <div class="tile-icon violet"><mat-icon>fact_check</mat-icon></div>
+      <div class="tile-label">Test urinishlari</div>
+      <div class="tile-value">{{ s.totalQuizAttempts }}</div>
+      <div class="tile-foot">O'rtacha natija: {{ s.averageScorePercent }}% · jami {{ s.totalBall }} ball</div>
+      <span class="tile-more">Batafsil <mat-icon>arrow_forward</mat-icon></span>
+    </button>
+    <button type="button" class="tile" (click)="openDetail('views')">
+      <div class="tile-icon orange"><mat-icon>visibility</mat-icon></div>
+      <div class="tile-label">Kitobga qiziqish</div>
+      <div class="tile-value">{{ s.totalBookViews }}</div>
+      <div class="tile-foot">Kitob ochilishlar soni</div>
+      <span class="tile-more">Batafsil <mat-icon>arrow_forward</mat-icon></span>
+    </button>
+    <button type="button" class="tile" (click)="openDetail('certificates')">
+      <div class="tile-icon amber"><mat-icon>workspace_premium</mat-icon></div>
+      <div class="tile-label">Sertifikatlar</div>
+      <div class="tile-value">{{ s.totalCertificates }}</div>
+      <div class="tile-foot">Berilgan sertifikatlar</div>
+      <span class="tile-more">Batafsil <mat-icon>arrow_forward</mat-icon></span>
+    </button>
+    <button type="button" class="tile" (click)="openDetail('ai')">
+      <div class="tile-icon teal"><mat-icon>smart_toy</mat-icon></div>
+      <div class="tile-label">AI yordamchi</div>
+      <div class="tile-value">{{ s.aiQuestionsTotal }}</div>
+      <div class="tile-foot">Bugun: {{ s.aiQuestionsToday }} ta savol</div>
+      <span class="tile-more">Batafsil <mat-icon>arrow_forward</mat-icon></span>
+    </button>
+    <button type="button" class="tile" (click)="openDetail('chats')">
+      <div class="tile-icon rose"><mat-icon>forum</mat-icon></div>
+      <div class="tile-label">Ochiq suhbatlar</div>
+      <div class="tile-value">{{ s.openConversations }}</div>
+      <div class="tile-foot">{{ s.unreadMessages }} ta o'qilmagan xabar</div>
+      <span class="tile-more">Batafsil <mat-icon>arrow_forward</mat-icon></span>
+    </button>
+    <button type="button" class="tile" (click)="openDetail('content')">
+      <div class="tile-icon slate"><mat-icon>library_books</mat-icon></div>
+      <div class="tile-label">Kontent</div>
+      <div class="tile-value">{{ totalContent }}</div>
+      <div class="tile-foot">{{ s.totalBooks }} kitob · {{ s.totalArticles }} xabar · {{ s.totalVideos }} video · {{ s.totalQuizzes }} test · {{ s.totalQuestions }} savol</div>
+      <span class="tile-more">Batafsil <mat-icon>arrow_forward</mat-icon></span>
+    </button>
+  </div>
+
+  <!-- Grafiklar -->
+  <div class="grid-2">
+    <div class="card">
+      <h2>Yangi ro'yxatdan o'tishlar</h2>
+      <p class="card-sub">Kunlik, so'nggi 30 kun</p>
+      <app-column-chart [data]="registrations" seriesName="Ro'yxatdan o'tganlar" [color]="seriesColor"></app-column-chart>
+    </div>
+    <div class="card">
+      <h2>Kunlik faollik</h2>
+      <p class="card-sub">Test urinishlari, kitob ochilishlari va AI savollari</p>
+      <app-line-chart [labels]="activityLabels" [series]="activitySeries" [height]="200"></app-line-chart>
+    </div>
+  </div>
+
+  <div class="grid-3">
+    <div class="card">
+      <h2>Rollar bo'yicha</h2>
+      <p class="card-sub">Foydalanuvchilar taqsimoti</p>
+      <div class="bar-list">
+        <div class="bar-row" *ngFor="let r of roles">
+          <div class="bar-head"><span>{{ r.label }}</span><b>{{ r.count }}</b></div>
+          <div class="inline-bar"><span [style.width.%]="r.percent"></span></div>
+        </div>
+      </div>
+      <a class="card-link" routerLink="/admin/users">Foydalanuvchilarni boshqarish →</a>
+    </div>
+
+    <div class="card span-2">
+      <div class="card-title-row">
+        <div>
+          <h2>Eng talabgir kitoblar</h2>
+          <p class="card-sub">Ko'rishlar, o'quvchilar va test urinishlari asosida</p>
+        </div>
+        <a class="card-link" routerLink="/admin/books">Batafsil →</a>
+      </div>
+      <div class="table-wrap" *ngIf="s.topBooks.length; else noBooks">
+        <table class="data">
+          <thead>
+            <tr><th>#</th><th>Kitob</th><th class="num">Ko'rish</th><th class="num">O'quvchi</th><th class="num">Test</th><th>Talab</th></tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let b of s.topBooks; let i = index">
+              <td class="muted">{{ i + 1 }}</td>
+              <td>
+                <div class="name">{{ b.title }}</div>
+                <div class="muted small">{{ b.author }}</div>
+              </td>
+              <td class="num">{{ b.views }}</td>
+              <td class="num">{{ b.uniqueReaders }}</td>
+              <td class="num">{{ b.quizAttempts }}</td>
+              <td class="bar-cell"><div class="inline-bar"><span [style.width.%]="(b.demandScore / maxBookScore) * 100"></span></div></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <ng-template #noBooks><div class="empty">Hali kitoblar bo'yicha faollik yo'q</div></ng-template>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title-row">
+        <div>
+          <h2>Reyting: eng ko'p ball to'plaganlar</h2>
+          <p class="card-sub">Barcha testlardagi jami ball</p>
+        </div>
+        <a class="card-link" routerLink="/admin/users" [queryParams]="{ sort: 'ball' }">Hammasi →</a>
+      </div>
+      <div class="table-wrap" *ngIf="s.topUsers.length; else noUsers">
+        <table class="data">
+          <thead>
+            <tr><th>O'rin</th><th>Foydalanuvchi</th><th class="num">Ball</th><th class="num">Testlar</th><th class="num">Sertifikat</th></tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let u of s.topUsers">
+              <td><span class="rank" [class.gold]="u.rating === 1" [class.silver]="u.rating === 2" [class.bronze]="u.rating === 3">{{ u.rating }}</span></td>
+              <td>
+                <div class="name">{{ u.firstName }} {{ u.lastName }}</div>
+                <div class="muted small">{{ u.phone }}</div>
+              </td>
+              <td class="num"><b>{{ u.totalBall }}</b></td>
+              <td class="num">{{ u.quizCount }}</td>
+              <td class="num">{{ u.certificateCount }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <ng-template #noUsers><div class="empty">Hali hech kim test topshirmagan</div></ng-template>
+    </div>
+
+    <div class="card">
+      <h2>Bo'limlar faolligi</h2>
+      <p class="card-sub">Har bir bo'limdagi kontent va unga bo'lgan qiziqish</p>
+      <div class="table-wrap" *ngIf="s.categories.length; else noCats">
+        <table class="data">
+          <thead>
+            <tr><th>Bo'lim</th><th class="num">Kitob</th><th class="num">Test</th><th class="num">Urinish</th><th class="num">Ko'rish</th><th>Faollik</th></tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let c of s.categories">
+              <td class="name">{{ c.name }}</td>
+              <td class="num">{{ c.bookCount }}</td>
+              <td class="num">{{ c.quizCount }}</td>
+              <td class="num">{{ c.quizAttempts }}</td>
+              <td class="num">{{ c.bookViews }}</td>
+              <td class="bar-cell"><div class="inline-bar"><span [style.width.%]="((c.quizAttempts + c.bookViews) / maxCategoryActivity) * 100"></span></div></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <ng-template #noCats><div class="empty">Bo'limlar yo'q</div></ng-template>
+    </div>
+  </div>
+</ng-container>

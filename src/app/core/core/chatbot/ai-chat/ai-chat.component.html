@@ -1,8 +1,8 @@
 <div class="chat-header">
   <div class="chat-header-info">
-    <mat-icon>smart_toy</mat-icon>
+    <mat-icon>{{ mode === 'library' ? 'local_library' : 'smart_toy' }}</mat-icon>
     <div>
-      <p class="chat-title">AI yordamchi</p>
+      <p class="chat-title">{{ title }}</p>
       <p class="chat-status status-open" *ngIf="remaining !== null && !isLimitReached">
         Bugun qoldi: {{ remaining }} ta savol
       </p>
@@ -20,6 +20,9 @@
     </button>
     <button class="ai-icon-btn" (click)="toggleMaximize.emit()" [title]="isMaximized ? 'Kichraytirish' : 'Kattalashtirish'">
       <mat-icon>{{ isMaximized ? 'close_fullscreen' : 'open_in_full' }}</mat-icon>
+    </button>
+    <button class="ai-icon-btn" (click)="switchAiMode()" [title]="mode === 'library' ? 'Umumiy AI' : 'Kutubxona AI'">
+      <mat-icon>{{ mode === 'library' ? 'smart_toy' : 'local_library' }}</mat-icon>
     </button>
     <button class="ai-expert-switch-btn" (click)="goToExpert()" title="Ekspertga o'tish">
       <mat-icon>support_agent</mat-icon>
@@ -47,8 +50,8 @@
 
 <div class="chat-body" #chatBody>
   <div *ngIf="messages.length === 0" class="chat-empty">
-    <mat-icon>smart_toy</mat-icon>
-    <p>Kitoblar, mualliflar yoki kutubxona haqida savol bering.</p>
+    <mat-icon>{{ mode === 'library' ? 'local_library' : 'smart_toy' }}</mat-icon>
+    <p>{{ mode === 'library' ? 'Kitobsevar kutubxonasidagi manbalar bo‘yicha savol bering.' : 'Kitoblar, mualliflar yoki kutubxona haqida savol bering.' }}</p>
   </div>
 
   <div *ngFor="let message of messages"
@@ -56,6 +59,13 @@
        [ngClass]="message.role === 'user' ? 'chat-message-user' : 'chat-message-admin'">
     <div class="chat-bubble">
       <p class="chat-bubble-text ai-text">{{ message.content }}</p>
+      <div class="ai-citations" *ngIf="message.citations?.length">
+        <span class="ai-citations-label">Manbalar</span>
+          <button type="button" class="ai-citation-link" *ngFor="let citation of message.citations"
+              (click)="openCitation(citation)" [disabled]="!citation.sourceId">
+          {{ citation.title }}<span *ngIf="citation.page">, {{ citation.page }}-bet</span>
+          </button>
+      </div>
     </div>
   </div>
 

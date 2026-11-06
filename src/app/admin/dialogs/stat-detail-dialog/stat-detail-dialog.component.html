@@ -1,0 +1,254 @@
+<div class="dlg detail">
+  <div class="hero" [ngClass]="meta.tone">
+    <div class="hero-icon"><mat-icon>{{ meta.icon }}</mat-icon></div>
+    <div class="hero-text">
+      <h2>{{ meta.title }}</h2>
+      <p>{{ meta.subtitle }}</p>
+    </div>
+    <div class="hero-value">{{ heroValue }}</div>
+    <button class="close" mat-dialog-close aria-label="Yopish"><mat-icon>close</mat-icon></button>
+  </div>
+
+  <div class="body">
+    <div class="loading" *ngIf="loading">Yuklanmoqda...</div>
+
+    <ng-container [ngSwitch]="kind">
+
+      <!-- ===== Foydalanuvchilar ===== -->
+      <ng-container *ngSwitchCase="'users'">
+        <div class="mini-stats">
+          <div><b>+{{ s.newUsersLast7Days }}</b><span>So'nggi 7 kun</span></div>
+          <div><b>+{{ s.newUsersLast30Days }}</b><span>So'nggi 30 kun</span></div>
+          <div *ngFor="let r of roleOptions"><b>{{ roleCount(r.value) }}</b><span>{{ r.label }}</span></div>
+        </div>
+        <h3>Kunlik ro'yxatdan o'tishlar</h3>
+        <app-column-chart [data]="chart" seriesName="Ro'yxatdan o'tganlar" color="#2a78d6" [height]="170"></app-column-chart>
+        <h3>Eng yangi a'zolar</h3>
+        <ul class="rows" *ngIf="!loading">
+          <li *ngFor="let u of users" (click)="openUser(u.id)">
+            <span class="avatar">{{ (u.firstName || '').charAt(0) }}{{ (u.lastName || '').charAt(0) }}</span>
+            <div class="grow"><div class="name">{{ u.firstName }} {{ u.lastName }}</div><div class="muted small">{{ u.phone }}</div></div>
+            <span class="role-badge" [ngClass]="'role-' + u.userRole">{{ roleName(u.userRole) }}</span>
+            <time class="muted small">{{ u.createdAt | date: 'dd.MM.yyyy' }}</time>
+          </li>
+        </ul>
+      </ng-container>
+
+      <!-- ===== Faol foydalanuvchilar ===== -->
+      <ng-container *ngSwitchCase="'active'">
+        <div class="mini-stats">
+          <div><b>{{ s.activeUsersLast7Days }}</b><span>Faol (7 kun)</span></div>
+          <div><b>{{ activeShare }}%</b><span>Jami a'zolardan</span></div>
+          <div><b>{{ s.totalUsers - s.activeUsersLast7Days }}</b><span>Nofaol</span></div>
+        </div>
+        <div class="share-bar"><span [style.width.%]="activeShare"></span></div>
+        <h3>Faol foydalanuvchilar ro'yxati</h3>
+        <ul class="rows" *ngIf="!loading && users.length; else noActive">
+          <li *ngFor="let u of users" (click)="openUser(u.id)">
+            <span class="avatar">{{ (u.firstName || '').charAt(0) }}{{ (u.lastName || '').charAt(0) }}</span>
+            <div class="grow"><div class="name">{{ u.firstName }} {{ u.lastName }}</div><div class="muted small">{{ u.phone }}</div></div>
+            <div class="chips">
+              <span class="chip" *ngIf="u.quizCount">{{ u.quizCount }} test</span>
+              <span class="chip orange" *ngIf="u.bookViewCount">{{ u.bookViewCount }} kitob</span>
+              <span class="chip teal" *ngIf="u.aiQuestionCount">{{ u.aiQuestionCount }} AI</span>
+            </div>
+            <time class="muted small">{{ u.lastActivityAt | date: 'dd.MM HH:mm' }}</time>
+          </li>
+        </ul>
+        <ng-template #noActive><div class="empty" *ngIf="!loading">So'nggi 7 kunda faol foydalanuvchi yo'q</div></ng-template>
+      </ng-container>
+
+      <!-- ===== Test urinishlari ===== -->
+      <ng-container *ngSwitchCase="'quiz'">
+        <div class="mini-stats">
+          <div><b>{{ s.totalQuizAttempts }}</b><span>Urinishlar</span></div>
+          <div><b>{{ s.averageScorePercent }}%</b><span>O'rtacha natija</span></div>
+          <div><b>{{ s.totalBall }}</b><span>Jami ball</span></div>
+          <div><b>{{ uniqueUsers }}</b><span>Ishtirokchilar</span></div>
+        </div>
+        <h3>Kunlik urinishlar</h3>
+        <app-column-chart [data]="chart" seriesName="Test urinishlari" color="#2a78d6" [height]="150"></app-column-chart>
+        <h3>Testlar kesimida</h3>
+        <div class="bar-list" *ngIf="groups.length; else noQuiz">
+          <div class="bar-row" *ngFor="let g of groups">
+            <div class="bar-head"><span>{{ g.name }}</span><b>{{ g.count }} ta · o'rtacha {{ g.extra }}%</b></div>
+            <div class="inline-bar"><span [style.width.%]="(g.count / maxGroup) * 100"></span></div>
+          </div>
+        </div>
+        <h3 *ngIf="events.length">Oxirgi urinishlar</h3>
+        <ul class="rows">
+          <li *ngFor="let e of events.slice(0, 10)" (click)="openUser(e.userId)">
+            <div class="grow"><div class="name">{{ e.userFullName }}</div><div class="muted small">{{ e.subject }} · {{ e.detail }}</div></div>
+            <span class="score" [class.good]="(e.scorePercent ?? 0) >= 80" [class.mid]="(e.scorePercent ?? 0) >= 50 && (e.scorePercent ?? 0) < 80">{{ e.scorePercent }}%</span>
+            <time class="muted small">{{ e.createdAt | date: 'dd.MM.yyyy' }}</time>
+          </li>
+        </ul>
+        <ng-template #noQuiz><div class="empty" *ngIf="!loading">Hali test topshirilmagan</div></ng-template>
+      </ng-container>
+
+      <!-- ===== Kitobga qiziqish ===== -->
+      <ng-container *ngSwitchCase="'views'">
+        <div class="mini-stats">
+          <div><b>{{ s.totalBookViews }}</b><span>Ochilishlar</span></div>
+          <div><b>{{ uniqueUsers }}</b><span>O'quvchilar</span></div>
+          <div><b>{{ groups.length }}</b><span>Qiziqilgan kitoblar</span></div>
+        </div>
+        <h3>Kunlik ochilishlar</h3>
+        <app-column-chart [data]="chart" seriesName="Kitob ochilishlari" color="#eb6834" [height]="150"></app-column-chart>
+        <h3>Eng ko'p ochilgan kitoblar</h3>
+        <div class="bar-list" *ngIf="groups.length; else noViews">
+          <div class="bar-row" *ngFor="let g of groups">
+            <div class="bar-head"><span>{{ g.name }}</span><b>{{ g.count }}</b></div>
+            <div class="inline-bar"><span [style.width.%]="(g.count / maxGroup) * 100"></span></div>
+          </div>
+        </div>
+        <h3 *ngIf="events.length">Kim qaysi kitobni ochdi</h3>
+        <ul class="rows">
+          <li *ngFor="let e of events.slice(0, 10)" (click)="openUser(e.userId)">
+            <mat-icon class="row-icon orange">menu_book</mat-icon>
+            <div class="grow"><div class="name">{{ e.userFullName }}</div><div class="muted small">{{ e.subject }}<ng-container *ngIf="e.detail"> · {{ e.detail }}</ng-container></div></div>
+            <time class="muted small">{{ e.createdAt | date: 'dd.MM HH:mm' }}</time>
+          </li>
+        </ul>
+        <ng-template #noViews><div class="empty" *ngIf="!loading">Hali hech kim kitob ochmagan</div></ng-template>
+      </ng-container>
+
+      <!-- ===== Sertifikatlar ===== -->
+      <ng-container *ngSwitchCase="'certificates'">
+        <div class="mini-stats">
+          <div><b>{{ certificateCount }}</b><span>Berilgan sertifikat</span></div>
+          <div><b>{{ owners.length }} / {{ s.totalUsers }}</b><span>Foydalanuvchida bor</span></div>
+        </div>
+
+        <h3>Sertifikati borlar</h3>
+        <ul class="rows owners-list" *ngIf="owners.length; else noCert">
+          <li *ngFor="let o of owners" (click)="openPreview(o)">
+            <span class="avatar">{{ o.fullName.charAt(0) }}</span>
+            <div class="grow">
+              <div class="name">{{ o.fullName }}</div>
+              <div class="muted small">{{ o.phone }} · {{ o.totalBall }} ball</div>
+            </div>
+            <span class="cert-count" title="Sertifikatlar soni"><mat-icon>workspace_premium</mat-icon>{{ o.certificates.length }}</span>
+            <button class="btn-icon btn-icon-primary" title="Sertifikatlarni ko'rish" (click)="openPreview(o, $event)">
+              <mat-icon>visibility</mat-icon>
+            </button>
+            <button class="btn-icon btn-icon-success" title="Eng faol kitobxon sertifikatini berish"
+                    [disabled]="granting === o.userId" (click)="grantTopReader(o.userId, o.fullName, $event)">
+              <mat-icon>military_tech</mat-icon>
+            </button>
+          </li>
+        </ul>
+        <ng-template #noCert><div class="empty" *ngIf="!loading">Hali hech kimda sertifikat yo'q</div></ng-template>
+
+        <h3>"Eng faol kitobxon" sertifikatini berish</h3>
+        <p class="muted small section-hint">100 ballga yetganlarga sertifikat avtomatik beriladi. Eng faol kitobxonni esa o'zingiz taqdirlashingiz mumkin.</p>
+        <ul class="rows" *ngIf="candidates.length; else noCandidates">
+          <li *ngFor="let u of candidates" (click)="openUser(u.id)">
+            <span class="avatar">{{ (u.firstName || '').charAt(0) }}{{ (u.lastName || '').charAt(0) }}</span>
+            <div class="grow">
+              <div class="name">{{ u.firstName }} {{ u.lastName }}</div>
+              <div class="muted small">{{ u.totalBall }} ball · {{ u.quizCount }} test · {{ u.bookViewCount }} kitob</div>
+            </div>
+            <span class="chip" *ngIf="hasTopReader(u.id)">Berilgan</span>
+            <button class="btn-icon btn-icon-success" title="Eng faol kitobxon sertifikatini berish"
+                    [disabled]="granting === u.id" (click)="grantTopReader(u.id, u.firstName + ' ' + u.lastName, $event)">
+              <mat-icon>military_tech</mat-icon>
+            </button>
+          </li>
+        </ul>
+        <ng-template #noCandidates><div class="empty" *ngIf="!loading">Hali faol kitobxonlar yo'q</div></ng-template>
+      </ng-container>
+
+      <!-- ===== AI ===== -->
+      <ng-container *ngSwitchCase="'ai'">
+        <div class="mini-stats">
+          <div><b>{{ s.aiQuestionsTotal }}</b><span>Jami savollar</span></div>
+          <div><b>{{ s.aiQuestionsToday }}</b><span>Bugun</span></div>
+          <div><b>{{ users.length }}</b><span>Foydalanuvchilar</span></div>
+        </div>
+        <h3>Kunlik AI savollar</h3>
+        <app-column-chart [data]="chart" seriesName="AI savollar" color="#1baf7a" [height]="150"></app-column-chart>
+        <h3>Eng faol AI foydalanuvchilari</h3>
+        <ul class="rows" *ngIf="!loading && users.length; else noAi">
+          <li *ngFor="let u of users.slice(0, 10)" (click)="openUser(u.id)">
+            <span class="avatar">{{ (u.firstName || '').charAt(0) }}{{ (u.lastName || '').charAt(0) }}</span>
+            <div class="grow"><div class="name">{{ u.firstName }} {{ u.lastName }}</div><div class="muted small">{{ u.phone }}</div></div>
+            <span class="chip teal">{{ u.aiQuestionCount }} ta savol</span>
+          </li>
+        </ul>
+        <ng-template #noAi><div class="empty" *ngIf="!loading">Hali AI'dan foydalanilmagan</div></ng-template>
+      </ng-container>
+
+      <!-- ===== Suhbatlar ===== -->
+      <ng-container *ngSwitchCase="'chats'">
+        <div class="mini-stats">
+          <div><b>{{ s.openConversations }}</b><span>Ochiq</span></div>
+          <div><b>{{ s.unreadMessages }}</b><span>O'qilmagan xabar</span></div>
+          <div><b>{{ conversations.length }}</b><span>Jami suhbatlar</span></div>
+        </div>
+        <h3>Suhbatlar</h3>
+        <ul class="rows" *ngIf="!loading && conversations.length; else noChats">
+          <li *ngFor="let c of conversations.slice(0, 12)" (click)="go('/support')">
+            <mat-icon class="row-icon" [class.rose]="c.status === 'Open'">{{ c.status === 'Open' ? 'mark_chat_unread' : 'chat_bubble_outline' }}</mat-icon>
+            <div class="grow"><div class="name">{{ c.userFullName }}</div><div class="muted small ellipsis">{{ c.lastMessageText || 'Xabar yo’q' }}</div></div>
+            <span class="chip rose" *ngIf="c.unreadCount">{{ c.unreadCount }} yangi</span>
+            <span class="chip" [class.green]="c.status === 'Open'">{{ c.status === 'Open' ? 'Ochiq' : 'Yopilgan' }}</span>
+          </li>
+        </ul>
+        <ng-template #noChats><div class="empty" *ngIf="!loading">Suhbatlar yo'q</div></ng-template>
+      </ng-container>
+
+      <!-- ===== Kontent ===== -->
+      <ng-container *ngSwitchCase="'content'">
+        <div class="content-grid">
+          <button *ngFor="let c of contentItems" class="content-item" (click)="go(c.url)">
+            <mat-icon>{{ c.icon }}</mat-icon>
+            <b>{{ c.value }}</b>
+            <span>{{ c.label }}</span>
+          </button>
+        </div>
+        <h3>Bo'limlar bo'yicha</h3>
+        <div class="bar-list">
+          <div class="bar-row" *ngFor="let c of s.categories">
+            <div class="bar-head"><span>{{ c.name }}</span><b>{{ c.bookCount }} kitob · {{ c.quizCount }} test</b></div>
+            <div class="inline-bar"><span [style.width.%]="((c.bookCount + c.quizCount) / maxCategory) * 100"></span></div>
+          </div>
+        </div>
+      </ng-container>
+    </ng-container>
+  </div>
+
+  <div class="preview" *ngIf="preview as p" (click)="preview = null">
+    <div class="preview-box" (click)="$event.stopPropagation()">
+      <div class="preview-head">
+        <div>
+          <div class="name">{{ p.fullName }}</div>
+          <div class="muted small">{{ p.certificates.length }} ta sertifikat · {{ p.totalBall }} ball</div>
+        </div>
+        <button class="btn-icon btn-icon-success" title="Eng faol kitobxon sertifikatini berish"
+                [disabled]="granting === p.userId" (click)="grantTopReader(p.userId, p.fullName)">
+          <mat-icon>military_tech</mat-icon>
+        </button>
+        <button class="close-btn" (click)="preview = null" aria-label="Yopish"><mat-icon>close</mat-icon></button>
+      </div>
+
+      <ul class="cert-list">
+        <li *ngFor="let c of p.certificates" [ngClass]="c.kind">
+          <mat-icon class="kind-icon">{{ kindIcon(c) }}</mat-icon>
+          <div class="grow">
+            <div class="name">{{ c.title }}</div>
+            <div class="muted small">{{ c.code ? '№ ' + c.code + ' · ' : '' }}{{ c.issuedAt | date: 'dd.MM.yyyy' }}</div>
+          </div>
+          <a *ngIf="certificateLink(c) as link" class="btn-icon btn-icon-primary" [href]="link" target="_blank" rel="noopener" title="Sertifikatni ochish">
+            <mat-icon>visibility</mat-icon>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="dlg-actions" *ngIf="meta.link">
+    <button class="btn-secondary" mat-dialog-close>Yopish</button>
+    <button class="btn-primary" (click)="go(meta.link.url)">{{ meta.link.label }} <mat-icon>arrow_forward</mat-icon></button>
+  </div>
+</div>

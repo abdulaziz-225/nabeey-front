@@ -8,6 +8,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { HttpInterceptorService } from './interceptors/api.interceptor';
+import { LocalhostUrlInterceptor } from './interceptors/localhost-url.interceptor';
 import { RouterModule } from '@angular/router';
 import { MatMenuModule } from '@angular/material/menu';
 import { FormatePhonePipe } from './pipes/formate-phone.pipe';
@@ -21,6 +22,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { SafeUrlPipe } from './pipes/safe-url.pipe';
 import { ConfirmDeleteComponent } from './confirm-delete/confirm-delete.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { StarRatingComponent } from './star-rating/star-rating.component';
 
 // import { MatToolbarModule } from '@angular/material/toolbar'
 
@@ -30,7 +32,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
   declarations: [
     FormatePhonePipe,
     SafeUrlPipe,
-    ConfirmDeleteComponent
+    ConfirmDeleteComponent,
+    StarRatingComponent
   ],
   imports: [
     CommonModule,
@@ -68,6 +71,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     MatSelectModule,
     MatFormFieldModule,
     ConfirmDeleteComponent,
+    StarRatingComponent,
     MatPaginatorModule,
     [SafeUrlPipe]
 
@@ -76,6 +80,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: HttpInterceptorService, multi: true },
     { provide:  HTTP_INTERCEPTORS, useClass: AuthHttpInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: LocalhostUrlInterceptor, multi: true },
 
     { provide: FormatePhonePipe},
     [SafeUrlPipe]

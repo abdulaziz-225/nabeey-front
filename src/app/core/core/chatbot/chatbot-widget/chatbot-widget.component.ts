@@ -7,7 +7,7 @@ import { ChatConversation } from '../../models/chat';
 import { ConfirmDeleteComponent } from 'src/app/shared/shared/confirm-delete/confirm-delete.component';
 import { ChatChoiceDialogComponent } from '../chat-choice-dialog/chat-choice-dialog.component';
 
-type ChatView = 'none' | 'expert' | 'ai';
+type ChatView = 'none' | 'expert' | 'ai' | 'library';
 
 @Component({
   selector: 'app-chatbot-widget',
@@ -65,13 +65,19 @@ export class ChatbotWidgetComponent implements OnInit, OnDestroy {
       maxWidth: '90vw'
     });
 
-    dialogRef.afterClosed().subscribe((choice: 'expert' | 'ai' | undefined) => {
+    dialogRef.afterClosed().subscribe((choice: 'expert' | 'ai' | 'library' | undefined) => {
       if (choice === 'expert') {
         this.openExpertView();
       } else if (choice === 'ai') {
         this.activeView = 'ai';
+      } else if (choice === 'library') {
+        this.activeView = 'library';
       }
     });
+  }
+
+  openAiMode(mode: 'general' | 'library'): void {
+    this.activeView = mode === 'library' ? 'library' : 'ai';
   }
 
   openExpertView(): void {
